@@ -83,11 +83,7 @@ namespace HermaFx
 		/// </summary>
 		public static void IsNotNullNorWhitespace(Expression<Func<string>> reference, string value, string message = null, params object[] args)
 		{
-#if NET_4_0
 			if (string.IsNullOrEmpty(value))
-#else
-			if (StringExtensions.IsNullOrWhiteSpace(value))
-#endif
 			{
 				message = message == null ? GetParameterName(reference) : message;
 				Guard.IsNotNullNorWhitespace(value, message, args);

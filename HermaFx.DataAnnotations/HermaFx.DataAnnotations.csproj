@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +49,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AggregateValidationException.cs" />
+    <Compile Include="AggregateValidationResult.cs" />
     <Compile Include="ContingentValidationAttribute.cs" />
     <Compile Include="EqualToAttribute.cs" />
     <Compile Include="ExtendedValidator.cs" />
@@ -62,7 +64,7 @@
     <Compile Include="OperatorMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegularExpressionIfAttribute.cs" />
-    <Compile Include="requiredIfAttribute.cs" />
+    <Compile Include="RequiredIfAttribute.cs" />
     <Compile Include="RequiredIfEmptyAttribute.cs" />
     <Compile Include="RequiredIfFalseAttribute.cs" />
     <Compile Include="RequiredIfNotAttribute.cs" />
@@ -70,9 +72,14 @@
     <Compile Include="RequiredIfNotRegExMatchAttribute.cs" />
     <Compile Include="RequiredIfRegExMatchAttribute.cs" />
     <Compile Include="RequiredIfTrueAttribute.cs" />
-    <Compile Include="RequiredNotNull.cs" />
     <Compile Include="TimeoutAttribute.cs" />
     <Compile Include="ValidateObjectAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HermaFx.Foundation\HermaFx.Foundation.csproj">
+      <Project>{0c13f477-7360-4831-9d62-9c5b183224c8}</Project>
+      <Name>HermaFx.Foundation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

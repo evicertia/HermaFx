@@ -9,8 +9,7 @@ namespace HermaFx.DataAnnotations
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 	public class TimeoutAttribute : Attribute
 	{
-		public const string DEFAULT_TIMEOUT = "00:01:00";
-		private TimeSpan _timeout = TimeSpan.Parse(DEFAULT_TIMEOUT);
+		private TimeSpan _timeout;
 
 		public TimeSpan Timeout
 		{
@@ -23,6 +22,8 @@ namespace HermaFx.DataAnnotations
 
 		public TimeoutAttribute(string expression)
 		{
+			Guard.IsNotNullNorWhitespace(expression, "expression");
+
 			_timeout = TimeSpan.Parse(expression);
 		}
 

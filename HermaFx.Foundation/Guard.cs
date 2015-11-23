@@ -165,11 +165,7 @@ namespace HermaFx
 		/// <param name="message">The message.</param>
 		public static void IsNotNullNorWhitespace(string instance, string message, params object[] args)
 		{
-#if NET_4_0
 			if (string.IsNullOrWhiteSpace(instance))
-#else
-			if (StringExtensions.IsNullOrWhiteSpace(instance))
-#endif
 			{
 				message = args != null ? string.Format(message, args) : message;
 				throw new ArgumentNullException(message);

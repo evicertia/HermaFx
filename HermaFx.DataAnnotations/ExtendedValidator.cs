@@ -6,13 +6,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HermaFx.DataAnnotations
 {
-	public interface IValidatable
-	{
-		List<ValidationResult> Validate();
-		bool IsValid();
-		void EnsureIsValid();
-	}
-
 	public static class ExtendedValidator
 	{
 		/// <summary>
@@ -25,6 +18,7 @@ namespace HermaFx.DataAnnotations
 			var context = new ValidationContext(obj, serviceProvider: null, items: null);
 			var results = new List<ValidationResult>();
 			Validator.TryValidateObject(obj, context, results, true);
+
 			return results;
 		}
 
