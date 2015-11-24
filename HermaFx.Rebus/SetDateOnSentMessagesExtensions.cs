@@ -9,7 +9,7 @@ using Rebus.Configuration;
 
 namespace HermaFx.Rebus
 {
-	public class SetDateOnSentMessagesExtensions
+	public static class SetDateOnSentMessagesExtensions
 	{
 		public static string MessageDataHeader = "message-date";
 
