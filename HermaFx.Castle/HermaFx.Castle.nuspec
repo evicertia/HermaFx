@@ -15,6 +15,7 @@
 		<dependencies>
 			<dependency id="HermaFx.Foundation" version="0.0.0.0" />
 			<dependency id="HermaFx.DataAnnotations" version="0.0.0.0" />
+			<dependency id="Castle.Core" version="3.3.0" />
 		</dependencies>
 	</metadata>
 	<files>

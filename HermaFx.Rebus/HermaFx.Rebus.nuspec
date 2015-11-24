@@ -15,6 +15,7 @@
 		<dependencies>
 			<dependency id="HermaFx.Foundation" version="0.0.0.0" />
 			<dependency id="HermaFx.DataAnnotations" version="0.0.0.0" />
+			<dependency id="Rebus" version="[0.84.0,0.90)" />
 		</dependencies>
 	</metadata>
 	<files>
