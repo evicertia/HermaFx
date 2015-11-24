@@ -13,13 +13,13 @@ namespace HermaFx.DataAnnotations
 		/// </summary>
 		/// <param name="obj">The object.</param>
 		/// <returns></returns>
-		public static List<ValidationResult> Validate(object obj)
+		public static IEnumerable<ValidationResult> Validate(object obj)
 		{
 			var context = new ValidationContext(obj, serviceProvider: null, items: null);
 			var results = new List<ValidationResult>();
 			Validator.TryValidateObject(obj, context, results, true);
 
-			return results;
+			return AggregateValidationResult.Flatten(results);
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace HermaFx.DataAnnotations
 		/// <exception cref="AggregateValidationException">Validation failed</exception>
 		public static void EnsureIsValid(object obj)
 		{
-			var exceptions = Validate(obj).Select(x => new ValidationException(x.ErrorMessage));
+			var exceptions = Validate(obj).Select(x => new ValidationException(x, null, null));
 
 			if (exceptions != null && exceptions.Any())
 			{
