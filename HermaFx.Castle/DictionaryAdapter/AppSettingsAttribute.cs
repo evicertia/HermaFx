@@ -137,6 +137,35 @@ namespace HermaFx.Castle.DictionaryAdapter
 		}
 		#endregion
 #endif
+
+#if false
+		public static class Test
+		{
+			[AppSettings("A:")]
+			public interface A
+			{
+				string Data { get; set; }
+			}
+
+			[AppSettings("B:")]
+			public interface B
+			{
+				string Data { get; set; }
+			}
+
+			public static void Main()
+			{
+				var dict = new System.Collections.Specialized.NameValueCollection()
+				{
+					{ "A:Data", "Value" },
+					{ "B:Data", "SubValue" }
+				};
+
+				var obja = new DictionaryAdapterFactory().GetAdapter<A>(dict);
+				var objb = new DictionaryAdapterFactory().GetAdapter<B>(dict);
+			}
+		}
+#endif
 	}
 }
 

@@ -84,7 +84,7 @@
     <Compile Include="Cryptography\BitConverterLE.cs" />
     <Compile Include="Cryptography\CryptoHelper.cs" />
     <Compile Include="Cryptography\PKCS8.cs" />
-    <Compile Include="ServiceLocation\IService.cs" />
+    <Compile Include="DesignPatterns\IService.cs" />
     <Compile Include="Drawing\ImageFormatDetector.cs" />
     <Compile Include="Globalization\CultureScope.cs" />
     <Compile Include="RuntimeExtensions\ExceptionExtensions.cs" />
