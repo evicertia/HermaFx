@@ -12,11 +12,11 @@
 		<releaseNotes>See changes for this revision at: https://github.com/evicertia/HermaFx/commit/GIT_COMMIT </releaseNotes>
 		<description>HermaFx Castle extensions.</description>
 		<copyright>Copyright Evidencias Certificadas, S.L. 2010-2016</copyright>
+		<dependencies>
+			<dependency id="HermaFx.Foundation" version="0.0.0.0" />
+			<dependency id="HermaFx.DataAnnotations" version="0.0.0.0" />
+		</dependencies>
 	</metadata>
-	<dependencies>
-		<dependency id="HermaFx.Foundation" version="0.0.0.0" />
-		<dependency id="HermaFx.DataAnnotations" version="0.0.0.0" />
-	</dependencies>
 	<files>
 		<file src="bin\Release\Herma.Castle.*" target="lib\NET45" />
 		<!-- file src="**\*.cs" target="src" / -->

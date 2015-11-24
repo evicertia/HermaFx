@@ -7,7 +7,7 @@ using Castle.Components.DictionaryAdapter;
 
 using PropertyDescriptor = Castle.Components.DictionaryAdapter.PropertyDescriptor;
 
-namespace Castle.Components.DictionaryAdapter
+namespace HermaFx.Castle.DictionaryAdapter
 {
 	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
 	public class AppSettingsAttribute : KeyPrefixAttribute,
