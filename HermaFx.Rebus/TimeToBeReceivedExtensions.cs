@@ -14,7 +14,7 @@ namespace HermaFx.Rebus
 {
 	public static class RebusConfigurerExtensions
 	{
-		public static RebusConfigurer UseTimeToExpireFrom<TAttribute>(this RebusConfigurer configurer, Func<TAttribute, TimeSpan> getter)
+		public static RebusConfigurer SetTimeToBeReceivedFrom<TAttribute>(this RebusConfigurer configurer, Func<TAttribute, TimeSpan> getter)
 			where TAttribute : System.Attribute
 		{
 			Guard.IsNotNull(() => configurer, configurer);
@@ -39,10 +39,10 @@ namespace HermaFx.Rebus
 
 		public static RebusConfigurer UseTimeoutAttribute(this RebusConfigurer configurer)
 		{
-			return configurer.UseTimeToExpireFrom<TimeoutAttribute>(x => x.Timeout);
+			return configurer.SetTimeToBeReceivedFrom<TimeoutAttribute>(x => x.Timeout);
 		}
 
-		public static RebusConfigurer RequireTimeToAs<TAttribute>(this RebusConfigurer configurer)
+		public static RebusConfigurer RequireTimeToBeReceivedUsing<TAttribute>(this RebusConfigurer configurer)
 			where TAttribute : System.Attribute
 		{
 			Guard.IsNotNull(() => configurer, configurer);
@@ -67,7 +67,7 @@ namespace HermaFx.Rebus
 
 		public static RebusConfigurer RequireTimeoutAttribute(this RebusConfigurer configurer)
 		{
-			return RequireTimeToAs<TimeoutAttribute>(configurer);
+			return RequireTimeToBeReceivedUsing<TimeoutAttribute>(configurer);
 		}
 	}
 
