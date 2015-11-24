@@ -14,7 +14,7 @@
 		<copyright>Copyright Evidencias Certificadas, S.L. 2010-2016</copyright>
 	</metadata>
 	<files>
-		<file src="bin\v4.5\Release\Herma.Foundation.*" target="lib\NET45" />
+		<file src="bin\Release\Herma.Foundation.*" target="lib\NET45" />
 		<!-- file src="**\*.cs" target="src" / -->
 	</files>
 </package>

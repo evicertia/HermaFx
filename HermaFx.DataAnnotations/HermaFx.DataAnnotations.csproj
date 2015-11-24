@@ -81,6 +81,9 @@
       <Name>HermaFx.Foundation</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="HermaFx.DataAnnotations.nuspec" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
