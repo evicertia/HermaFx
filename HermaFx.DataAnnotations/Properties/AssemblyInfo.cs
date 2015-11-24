@@ -6,13 +6,14 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HermaFx.DataAnnotations")]
-[assembly: AssemblyDescription("Veritasweb interface.")]
+[assembly: AssemblyDescription("HermaFx DataAnnotations assembly")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Evidencias Certificadas, S.L.")]
-[assembly: AssemblyProduct("AddecoSign")]
-[assembly: AssemblyCopyright("Copyright © ev|certia 2015")]
+[assembly: AssemblyCompany("Evidencias Certificadas S.L.")]
+[assembly: AssemblyProduct("HermaFx Library")]
+[assembly: AssemblyCopyright("Copyright © Evidencias Certificadas S.L. 2010-2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from

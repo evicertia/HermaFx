@@ -16,6 +16,16 @@ namespace HermaFx.DataAnnotations
 			get { return _timeout; }
 		}
 
+		public DateTime When
+		{
+			get { return DateTime.Now + _timeout; }
+		}
+
+		public DateTime UtcWhen
+		{
+			get { return DateTime.UtcNow + _timeout; }
+		}
+
 		public TimeoutAttribute()
 		{
 		}
