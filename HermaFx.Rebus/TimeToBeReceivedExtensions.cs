@@ -2,8 +2,7 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 using HermaFx.DataAnnotations;
 
@@ -41,6 +40,34 @@ namespace HermaFx.Rebus
 		public static RebusConfigurer UseTimeoutAttribute(this RebusConfigurer configurer)
 		{
 			return configurer.UseTimeToExpireFrom<TimeoutAttribute>(x => x.Timeout);
+		}
+
+		public static RebusConfigurer RequireTimeToAs<TAttribute>(this RebusConfigurer configurer)
+			where TAttribute : System.Attribute
+		{
+			Guard.IsNotNull(() => configurer, configurer);
+
+			return configurer.Events(e =>
+			{
+				e.BeforeMessage += (bus, message) =>
+				{
+					if (message == null) return;
+
+					var type = message.GetType();
+					var context = MessageContext.GetCurrent();
+
+					if (type.GetCustomAttribute<TAttribute>() != null
+						&& !context.Headers.ContainsKey(Headers.TimeToBeReceived))
+					{
+						throw new InvalidOperationException("Message is missing 'TimeToBeReceived' header!");
+					}
+				};
+			});
+		}
+
+		public static RebusConfigurer RequireTimeoutAttribute(this RebusConfigurer configurer)
+		{
+			return RequireTimeToAs<TimeoutAttribute>(configurer);
 		}
 	}
 
