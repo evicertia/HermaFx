@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+	<metadata>
+		<id>HermaFx.Castle</id>
+		<version>0.0.0.0</version>
+		<authors>Evidencias Certificadas, S.L.</authors>
+		<owners>Evidencias Certificadas, S.L.</owners>
+		<projectUrl>https://github.com/evicertia/HermaFx</projectUrl>
+		<licenseUrl>http://www.evicertia.com/</licenseUrl>
+		<!-- iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl -->
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<releaseNotes>See changes for this revision at: https://github.com/evicertia/HermaFx/commit/GIT_COMMIT </releaseNotes>
+		<description>HermaFx Castle extensions.</description>
+		<copyright>Copyright Evidencias Certificadas, S.L. 2010-2016</copyright>
+	</metadata>
+	<dependencies>
+		<dependency id="HermaFx.Foundation" version="0.0.0.0" />
+		<dependency id="HermaFx.DataAnnotations" version="0.0.0.0" />
+	</dependencies>
+	<files>
+		<file src="bin\Release\Herma.Castle.*" target="lib\NET45" />
+		<!-- file src="**\*.cs" target="src" / -->
+	</files>
+</package>
