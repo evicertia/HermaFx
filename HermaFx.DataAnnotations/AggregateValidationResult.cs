@@ -10,7 +10,8 @@ namespace HermaFx.DataAnnotations
 	/// </summary>
 	public class AggregateValidationResult : ValidationResult
 	{
-		private const string DefaultErrorMessage = "Object of type {0} has some invalid values.";
+		private const string DefaultErrorMessage = "Some invalid values detected.";
+		private const string TypedErrorMessage = "Object of type {0} has some invalid values.";
 		private const string NestedErrorMessage = "{0} has some invalid values.";
 
 		private readonly List<ValidationResult> _results = new List<ValidationResult>();
@@ -23,15 +24,23 @@ namespace HermaFx.DataAnnotations
 			}
 		}
 
-		internal AggregateValidationResult(string errorMessage) : base(errorMessage) { }
-		internal AggregateValidationResult(string errorMessage, IEnumerable<string> memberNames) : base(errorMessage, memberNames) { }
-		internal AggregateValidationResult(string errorMessage, IEnumerable<ValidationResult> results) 
+		private AggregateValidationResult(string errorMessage, IEnumerable<ValidationResult> results) 
 			: base(errorMessage)
 		{
-			_results.AddRange(results);
+			if (results != null) _results.AddRange(results);
 		}
 
 		#region Factory Ctors
+		public static AggregateValidationResult CreateFor(IEnumerable<ValidationResult> results)
+		{
+			return new AggregateValidationResult(DefaultErrorMessage, results);
+		}
+
+		public static AggregateValidationResult CreateFor(string errorMessage, IEnumerable<ValidationResult> results)
+		{
+			return new AggregateValidationResult(errorMessage, results);
+		}
+
 		public static AggregateValidationResult CreateFor<T>(T obj, IEnumerable<ValidationResult> results = null)
 		{
 			return CreateFor(typeof(T), results);
@@ -40,7 +49,7 @@ namespace HermaFx.DataAnnotations
 		public static AggregateValidationResult CreateFor(Type type, IEnumerable<ValidationResult> results = null)
 		{
 			return new AggregateValidationResult(
-				string.Format(DefaultErrorMessage, type.Name),
+				string.Format(TypedErrorMessage, type.Name),
 				results
 			);
 		}

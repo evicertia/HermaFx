@@ -28,10 +28,9 @@ namespace HermaFx.DataAnnotations
 			public IEnumerable<InnerDto> InnerList { get; set; }
 		}
 
-		[Test]
-		public void ValidatesInnerDto()
+		private static OutterDto BuildDto()
 		{
-			var dto = new OutterDto()
+			return new OutterDto()
 			{
 				AString = null,
 				Inner = new InnerDto()
@@ -46,10 +45,38 @@ namespace HermaFx.DataAnnotations
 					}
 				}
 			};
+		}
+
+		[Test]
+		public void ValidatesInnerDto()
+		{
+			var dto = BuildDto();
 
 			var result = ExtendedValidator.Validate(dto);
 
 			Assert.IsNotNull(result);
+			Assert.That(result, Has.Length.EqualTo(3));
+			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("AString"));
+			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("Inner.Field"));
+			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("InnerList[0].Field"));
+		}
+
+		[Test]
+		public void EnsuresIsValidInnerDto()
+		{
+			var dto = BuildDto();
+
+			var ex = Assert.Throws<AggregateValidationException>(() =>
+			{
+				ExtendedValidator.EnsureIsValid(dto);
+			});
+
+			Assert.That(ex.ValidationExceptions.ToArray(), Has.Length.EqualTo(3));
+
+			Assert.That(ex.ValidationResult, Is.TypeOf<AggregateValidationResult>());
+
+			var result = (ex.ValidationResult as AggregateValidationResult).Results.ToArray();
+
 			Assert.That(result, Has.Length.EqualTo(3));
 			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("AString"));
 			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("Inner.Field"));

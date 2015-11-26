@@ -14,17 +14,25 @@ namespace HermaFx.DataAnnotations
 		public IEnumerable<ValidationException> ValidationExceptions { get; private set; }
 
 		public AggregateValidationException(string errorMessage, IEnumerable<ValidationException> exceptions)
-			: base(errorMessage)
+			: base(AggregateResultsFrom(errorMessage, exceptions), null, null)
 		{
 			ValidationExceptions = exceptions.ToArray();
 		}
 
 		public AggregateValidationException(string errorMessage, AggregateValidationResult validationResult)
-			: base(validationResult.ErrorMessage)
+			: base(validationResult, null, null)
 		{
-			// FIXME: Augment ValidationExceptions with additional details
-			ValidationExceptions = validationResult.Results.Select(x => new ValidationException(x, null, null)).ToArray();
+			ValidationExceptions = validationResult.Flatten().Select(x => new ValidationException(x.ErrorMessage));
 		}
+
+		#region Helper Methods
+		private static AggregateValidationResult AggregateResultsFrom(string message, IEnumerable<ValidationException> exceptions)
+		{
+			Guard.IsNotNull(exceptions, "exceptions");
+
+			return AggregateValidationResult.CreateFor(message, exceptions.Select(x => x.ValidationResult));
+		}
+		#endregion
 
 		#region Factory Ctors
 		public static AggregateValidationException CreateFor<T>(T obj, IEnumerable<ValidationException> exceptions = null)

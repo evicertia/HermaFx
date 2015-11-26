@@ -39,12 +39,12 @@ namespace HermaFx.DataAnnotations
 		/// <exception cref="AggregateValidationException">Validation failed</exception>
 		public static void EnsureIsValid(object obj)
 		{
-			var exceptions = Validate(obj).Select(x => new ValidationException(x, null, null));
+			var results = Validate(obj);
 
-			if (exceptions != null && exceptions.Any())
+			if (results.Any() || results.First() != ValidationResult.Success)
 			{
-				// FIXME: We should be passing more detailes here (like failed class type/name).
-				throw new AggregateValidationException("Validation failed", exceptions);
+				var type = (obj ?? new object()).GetType();
+				throw AggregateValidationException.CreateFor(type, results);
 			}
 		}
 	}
