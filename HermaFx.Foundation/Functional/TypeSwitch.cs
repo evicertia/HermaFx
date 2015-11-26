@@ -41,6 +41,11 @@ namespace HermaFx.DesignPatterns
 				return this;
 			}
 
+			public Switch<TSource, TResult> Returning<TResult>()
+			{
+				return new Switch<TSource, TResult>(value);
+			}
+
 			public void Default(Action<TSource> action)
 			{
 				if (!handled)
