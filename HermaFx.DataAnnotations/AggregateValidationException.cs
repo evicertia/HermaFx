@@ -11,17 +11,20 @@ namespace HermaFx.DataAnnotations
 	{
 		private const string DefaultErrorMessage = "Object of type {0} has some invalid values.";
 
+		public IEnumerable<ValidationResult> ValidationResults { get; private set; }
 		public IEnumerable<ValidationException> ValidationExceptions { get; private set; }
 
 		public AggregateValidationException(string errorMessage, IEnumerable<ValidationException> exceptions)
 			: base(AggregateResultsFrom(errorMessage, exceptions), null, null)
 		{
+			ValidationResults = (base.ValidationResult as AggregateValidationResult).Results;
 			ValidationExceptions = exceptions.ToArray();
 		}
 
 		public AggregateValidationException(string errorMessage, AggregateValidationResult validationResult)
 			: base(validationResult, null, null)
 		{
+			ValidationResults = validationResult.Results;
 			ValidationExceptions = validationResult.Flatten().Select(x => new ValidationException(x.ErrorMessage));
 		}
 
