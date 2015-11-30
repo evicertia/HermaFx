@@ -41,7 +41,7 @@ namespace HermaFx.DataAnnotations
 		{
 			var results = Validate(obj);
 
-			if (results.Any() || results.First() != ValidationResult.Success)
+			if (results.Any() && results.First() != ValidationResult.Success)
 			{
 				var type = (obj ?? new object()).GetType();
 				throw AggregateValidationException.CreateFor(type, results);
