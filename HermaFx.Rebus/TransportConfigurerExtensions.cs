@@ -31,7 +31,7 @@ namespace HermaFx.Rebus
 			return configurer.UseRabbitMq(connectionString, inputQueue, errorQueue);
 		}
 
-		public static RabbitMqOptions UseRabbitMqFromConfigForClient(this RebusTransportConfigurer configurer, string connectionString)
+		public static RabbitMqOptions UseRabbitMqFromConfigWithLocalName(this RebusTransportConfigurer configurer, string connectionString)
 		{
 			return configurer.UseRabbitMqFromConfigWithLocalName(connectionString, DEFAULT_SEPARATOR);
 		}
