@@ -30,10 +30,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="RabbitMQ.Client, Version=3.4.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\packages\RabbitMQ.Client.3.4.0\lib\net35\RabbitMQ.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Rebus">
       <HintPath>..\packages\Rebus.0.84.0\lib\NET45\Rebus.dll</HintPath>
     </Reference>
+    <Reference Include="Rebus.RabbitMQ, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rebus.RabbitMQ.0.84.0\lib\NET45\Rebus.RabbitMQ.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -42,6 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RebusExtensions.cs" />
     <Compile Include="TimeToBeReceivedExtensions.cs" />
+    <Compile Include="TransportConfigurerExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="HermaFx.Rebus.nuspec" />
