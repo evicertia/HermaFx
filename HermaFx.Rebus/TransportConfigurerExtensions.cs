@@ -26,9 +26,9 @@ namespace HermaFx.Rebus
 			section.VerifyPresenceOfInputQueueConfig();
 			section.VerifyPresenceOfErrorQueueConfig();
 			var hostname = GetHostName();
-			var inputQueue = string.Format("{0}{2}{1}", section.InputQueue, hostname);
-			var errorQueue = string.Format("{0}{2}{1}", section.ErrorQueue, hostname);
-			return configurer.UseRabbitMq(connectionString, inputQueue, errorQueue);
+			var inputQueue = string.Format("{0}{2}{1}", section.InputQueue, hostname, separator);
+			var errorQueue = string.Format("{0}{2}{1}", section.ErrorQueue, hostname, separator);
+			return configurer.UseRabbitMq(connectionString, section.InputQueue, section.ErrorQueue);
 		}
 
 		public static RabbitMqOptions UseRabbitMqFromConfigWithLocalName(this RebusTransportConfigurer configurer, string connectionString)
