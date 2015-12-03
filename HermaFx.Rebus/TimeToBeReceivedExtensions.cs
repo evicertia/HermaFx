@@ -25,13 +25,13 @@ namespace HermaFx.Rebus
 				e.MessageSent += (advbus, destination, message) =>
 				{
 					var attribute = message.GetType()
-						.GetCustomAttributes(typeof(TimeoutAttribute), false)
-						.Cast<TimeoutAttribute>()
+						.GetCustomAttributes(typeof(TAttribute), false)
+						.Cast<TAttribute>()
 						.SingleOrDefault();
 
 					if (attribute != null)
 					{
-						advbus.AttachHeader(message, Headers.TimeToBeReceived, getter.ToString());
+						advbus.AttachHeader(message, Headers.TimeToBeReceived, getter(attribute).ToString());
 					}
 				};
 			});
