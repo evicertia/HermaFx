@@ -52,6 +52,7 @@
     <Compile Include="RebusExtensions.cs" />
     <Compile Include="TimeToBeReceivedExtensions.cs" />
     <Compile Include="TransportConfigurerExtensions.cs" />
+    <Compile Include="ValidatingExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="HermaFx.Rebus.nuspec" />
