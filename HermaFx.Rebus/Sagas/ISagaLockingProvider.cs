@@ -15,8 +15,8 @@ namespace HermaFx.Rebus.Sagas
 	/// </remarks>
 	public interface ISagaLockingProvider
 	{
-		ISagaLock TryLock(Saga handler);
-		ISagaLock Lock(Saga handler);
-		ISagaLock Lock(Saga handler, TimeSpan timeout);
+		ISagaLock TryLock(ISagaData data);
+		ISagaLock Lock(ISagaData data);
+		ISagaLock Lock(ISagaData data, TimeSpan timeout);
 	}
 }
