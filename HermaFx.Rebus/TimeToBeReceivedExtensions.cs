@@ -9,12 +9,16 @@ using HermaFx.DataAnnotations;
 using Rebus;
 using Rebus.Shared;
 using Rebus.Configuration;
+using Rebus.Logging;
 
 namespace HermaFx.Rebus
 {
 	public static class RebusConfigurerExtensions
 	{
-		public static RebusConfigurer SetTimeToBeReceivedFrom<TAttribute>(this RebusConfigurer configurer, Func<TAttribute, TimeSpan> getter)
+        private static ILog _log;
+
+        #region SetTimeToBeRecived
+        public static RebusConfigurer SetTimeToBeReceivedFrom<TAttribute>(this RebusConfigurer configurer, Func<TAttribute, TimeSpan> getter)
 			where TAttribute : System.Attribute
 		{
 			Guard.IsNotNull(() => configurer, configurer);
@@ -41,6 +45,28 @@ namespace HermaFx.Rebus
 		{
 			return configurer.SetTimeToBeReceivedFrom<TimeoutAttribute>(x => x.Timeout);
 		}
+		#endregion
+
+		#region RequireTimeToBeReceived
+		private const string MESSAGE_DATE_HEADER = "message-date";
+
+		private static bool MessageHasExpired(IMessageContext context)
+		{
+
+			if (!context.Headers.ContainsKey(Headers.TimeToBeReceived))
+				return false;
+
+			if (!context.Headers.ContainsKey(MESSAGE_DATE_HEADER))
+				throw new InvalidOperationException("Message is missing a MESSAGE_DATE header?!");
+
+			var messageDate = DateTime.Parse(context.Headers[MESSAGE_DATE_HEADER].ToString());
+			var ttl = TimeSpan.Parse(context.Headers[Headers.TimeToBeReceived].ToString());
+
+			if ((messageDate + ttl) > DateTime.UtcNow)
+				return true;
+
+			return false;
+		}
 
 		public static RebusConfigurer RequireTimeToBeReceivedUsing<TAttribute>(this RebusConfigurer configurer)
 			where TAttribute : System.Attribute
@@ -61,6 +87,13 @@ namespace HermaFx.Rebus
 					{
 						throw new InvalidOperationException("Message is missing 'TimeToBeReceived' header!");
 					}
+
+					if (MessageHasExpired(context))
+					{
+						RebusLoggerFactory.Changed += f => _log = f.GetCurrentClassLogger();
+						_log.Debug("The Message with RebusTransportMessageId {0} expired and will be Abort.", context.RebusTransportMessageId);
+						context.Abort();
+					}
 				};
 			});
 		}
@@ -69,6 +102,7 @@ namespace HermaFx.Rebus
 		{
 			return RequireTimeToBeReceivedUsing<TimeoutAttribute>(configurer);
 		}
+		#endregion
 	}
 
 }
