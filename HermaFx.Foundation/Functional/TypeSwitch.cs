@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace HermaFx.DesignPatterns
+namespace HermaFx.Functional
 {
 	// See: http://stackoverflow.com/questions/298976/c-sharp-is-there-a-better-alternative-than-this-to-switch-on-type
 	public static class TypeSwitch
