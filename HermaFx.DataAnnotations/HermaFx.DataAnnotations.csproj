@@ -51,6 +51,7 @@
     <Compile Include="AggregateValidationException.cs" />
     <Compile Include="AggregateValidationResult.cs" />
     <Compile Include="ContingentValidationAttribute.cs" />
+    <Compile Include="MaxElementsAttribute.cs" />
     <Compile Include="EqualToAttribute.cs" />
     <Compile Include="ExtendedValidator.cs" />
     <Compile Include="GreaterThanAttributes.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="IsAttribute.cs" />
     <Compile Include="LessThanAttributes.cs" />
     <Compile Include="LessThanOrEqualToAttributes.cs" />
+    <Compile Include="MinElementsAttribute.cs" />
     <Compile Include="ModelAwareValidationAttribute.cs" />
     <Compile Include="NotEqualToAttribute.cs" />
     <Compile Include="Operator.cs" />
