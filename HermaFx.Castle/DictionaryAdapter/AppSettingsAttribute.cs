@@ -190,28 +190,36 @@ namespace HermaFx.Castle.DictionaryAdapter
 #if false
 		public static class Test
 		{
-			[AppSettings("A:")]
+			[AppSettings("A")]
 			public interface A
 			{
 				string Data { get; set; }
 			}
 
-			[AppSettings("B:")]
+			[AppSettings("B")]
 			public interface B
 			{
 				string Data { get; set; }
 			}
+
+			[AppSettings]
+			public interface C
+			{
+				string Data { get; set; }
+			}			
 
 			public static void Main()
 			{
 				var dict = new System.Collections.Specialized.NameValueCollection()
 				{
 					{ "A:Data", "Value" },
-					{ "B:Data", "SubValue" }
+					{ "B:Data", "SubValue" },
+					{ typeof(C).Namespace + ":Data", "Value" }
 				};
 
 				var obja = new DictionaryAdapterFactory().GetAdapter<A>(dict);
 				var objb = new DictionaryAdapterFactory().GetAdapter<B>(dict);
+				var objc = new DictionaryAdapterFactory().GetAdapter<C>(dict);
 			}
 		}
 #endif		
