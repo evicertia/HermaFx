@@ -27,9 +27,9 @@ namespace HermaFx.DataAnnotations
 		public override bool IsValid(object value)
 		{
 			if (value == null) return true;
-			if (value is Array) return (value as Array).Length > _elements;
-			if (value is ICollection) return (value as ICollection).Count > _elements;
-			if (value is IEnumerable) return (value as IEnumerable).OfType<object>().Count() > _elements;
+			if (value is Array) return (value as Array).Length <= _elements;
+			if (value is ICollection) return (value as ICollection).Count <= _elements;
+			if (value is IEnumerable) return (value as IEnumerable).OfType<object>().Count() <= _elements;
 
 			return false;
 		}
