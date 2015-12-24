@@ -109,7 +109,10 @@ namespace HermaFx.Castle.DictionaryAdapter
 				}
 				else if (defaultValue != null)
 				{
-					storedValue = defaultValue.Value;
+					var @default = defaultValue.Value;
+					storedValue = descriptor.TypeConverter.CanConvertFrom(@default.GetType()) ?
+						descriptor.TypeConverter.ConvertFrom(@default)
+						: Convert.ChangeType(@default, descriptor.PropertyType);
 				}
 			}
 
@@ -187,13 +190,15 @@ namespace HermaFx.Castle.DictionaryAdapter
 		#endregion
 #endif
 
-#if false
+#if true
 		public static class Test
 		{
 			[AppSettings("A")]
 			public interface A
 			{
 				string Data { get; set; }
+				[DefaultValue(10)]
+				uint Number { get; set; }
 			}
 
 			[AppSettings("B")]
