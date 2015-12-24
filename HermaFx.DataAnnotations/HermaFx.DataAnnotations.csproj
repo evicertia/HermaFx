@@ -61,6 +61,7 @@
     <Compile Include="LessThanOrEqualToAttributes.cs" />
     <Compile Include="MinElementsAttribute.cs" />
     <Compile Include="ModelAwareValidationAttribute.cs" />
+    <Compile Include="RegexAttribute.cs" />
     <Compile Include="NotEqualToAttribute.cs" />
     <Compile Include="Operator.cs" />
     <Compile Include="OperatorMetadata.cs" />
