@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HermaFx.DesignPatterns
+namespace HermaFx.Functional
 {
 	public class PatternMatcher<Output>
 	{

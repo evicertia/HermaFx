@@ -10,19 +10,45 @@ using PropertyDescriptor = Castle.Components.DictionaryAdapter.PropertyDescripto
 namespace HermaFx.Castle.DictionaryAdapter
 {
 	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
-	public class AppSettingsAttribute : KeyPrefixAttribute,
+	public class AppSettingsAttribute : DictionaryBehaviorAttribute,
 #if USE_DAVALIDATOR // FIXME: Validating thru DictionaryAdapter's own validation mechanism is not working.
 		//IDictionaryInitializer,
 		//IDictionaryValidator,
 #endif
+		IDictionaryKeyBuilder,
 		IDictionaryPropertyGetter,
 		IPropertyDescriptorInitializer
 	{
+		public const string DEFAULT_PREFIX_SEPARATOR = ":";
+
+		/// <summary>
+		/// Gets or sets the key prefix.
+		/// </summary>
+		/// <value>
+		/// The key prefix.
+		/// </value>
+		private string KeyPrefix { get; set; }
+		/// <summary>
+		/// Gets or sets the prefix separator.
+		/// </summary>
+		/// <value>
+		/// The prefix separator.
+		/// </value>
+		private string PrefixSeparator { get; set; }
+
+		#region .ctors
+
+		public AppSettingsAttribute()
+		{
+			PrefixSeparator = DEFAULT_PREFIX_SEPARATOR;
+		}
 
 		public AppSettingsAttribute(string keyPrefix)
-			: base(keyPrefix)
+			: this()
 		{
+			KeyPrefix = keyPrefix;
 		}
+		#endregion
 
 #if USE_DAVALIDATOR
 		public void Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
@@ -31,10 +57,36 @@ namespace HermaFx.Castle.DictionaryAdapter
 			dictionaryAdapter.AddValidator(this);
 		}
 #endif
+		#region IDictionaryKeyBuilder Members
+
+		private string GetPrefixFor(PropertyDescriptor property)
+		{
+			return string.IsNullOrEmpty(KeyPrefix) ?
+				(property.Property.DeclaringType.Namespace + PrefixSeparator)
+				: (KeyPrefix + PrefixSeparator);
+		}
+
+		public string GetKey(IDictionaryAdapter dictionaryAdapter, string key, PropertyDescriptor property)
+		{
+			return GetPrefixFor(property) + key;
+		}
+
+		#endregion
+
+		#region IPropertyDescriptorInitializer
 
 		public void Initialize(PropertyDescriptor propertyDescriptor, object[] behaviors)
 		{
 			propertyDescriptor.Fetch = true;
+		}
+
+		#endregion
+
+		#region IDictionaryPropertyGetter
+
+		private static bool IsRequired(PropertyDescriptor property, bool ifExists)
+		{
+			return property.Annotations.Any(x => x is RequiredAttribute) && ifExists == false;
 		}
 
 		private bool ValueIsNullOrDefault(PropertyDescriptor descriptor, object value)
@@ -57,7 +109,10 @@ namespace HermaFx.Castle.DictionaryAdapter
 				}
 				else if (defaultValue != null)
 				{
-					storedValue = defaultValue.Value;
+					var @default = defaultValue.Value;
+					storedValue = descriptor.TypeConverter.CanConvertFrom(@default.GetType()) ?
+						descriptor.TypeConverter.ConvertFrom(@default)
+						: Convert.ChangeType(@default, descriptor.PropertyType);
 				}
 			}
 
@@ -79,10 +134,7 @@ namespace HermaFx.Castle.DictionaryAdapter
 			return storedValue;
 		}
 
-		private static bool IsRequired(PropertyDescriptor property, bool ifExists)
-		{
-			return property.Annotations.Any(x => x is RequiredAttribute) && ifExists == false;
-		}
+		#endregion
 
 #if USE_DAVALIDATOR
 		#region IDictionaryValidator
@@ -138,34 +190,44 @@ namespace HermaFx.Castle.DictionaryAdapter
 		#endregion
 #endif
 
-#if false
+#if true
 		public static class Test
 		{
-			[AppSettings("A:")]
+			[AppSettings("A")]
 			public interface A
 			{
 				string Data { get; set; }
+				[DefaultValue(10)]
+				uint Number { get; set; }
 			}
 
-			[AppSettings("B:")]
+			[AppSettings("B")]
 			public interface B
 			{
 				string Data { get; set; }
 			}
+
+			[AppSettings]
+			public interface C
+			{
+				string Data { get; set; }
+			}			
 
 			public static void Main()
 			{
 				var dict = new System.Collections.Specialized.NameValueCollection()
 				{
 					{ "A:Data", "Value" },
-					{ "B:Data", "SubValue" }
+					{ "B:Data", "SubValue" },
+					{ typeof(C).Namespace + ":Data", "Value" }
 				};
 
 				var obja = new DictionaryAdapterFactory().GetAdapter<A>(dict);
 				var objb = new DictionaryAdapterFactory().GetAdapter<B>(dict);
+				var objc = new DictionaryAdapterFactory().GetAdapter<C>(dict);
 			}
 		}
-#endif
+#endif		
 	}
 }
 
