@@ -33,7 +33,7 @@ namespace HermaFx.DataAnnotations
 		[Test]
 		public void ZeroElementsWithEmptyArrayValidates()
 		{
-			ExtendedValidator.EnsureIsValid(new TestClass()
+			ExtendedValidator.EnsureIsValid(new TestClass
 			{
 				ZeroElements = new int[] { }
 			});
@@ -42,7 +42,7 @@ namespace HermaFx.DataAnnotations
 		[Test]
 		public void ZeroElementsWithNonEmptyArrayValidates()
 		{
-			ExtendedValidator.EnsureIsValid(new TestClass()
+			ExtendedValidator.EnsureIsValid(new TestClass
 			{
 				ZeroElements = new int[] { 1 }
 			});
@@ -51,7 +51,7 @@ namespace HermaFx.DataAnnotations
 		[Test]
 		public void ZeroElementsWithNonEmptyListValidates()
 		{
-			ExtendedValidator.EnsureIsValid(new TestClass()
+			ExtendedValidator.EnsureIsValid(new TestClass
 			{
 				ZeroElements = (new int[] { 1, }).ToList()
 			});
@@ -60,7 +60,7 @@ namespace HermaFx.DataAnnotations
 		[Test]
 		public void ZeroElementsWithNonEmptyIEnumerableValidates()
 		{
-			ExtendedValidator.EnsureIsValid(new TestClass()
+			ExtendedValidator.EnsureIsValid(new TestClass
 			{
 				ZeroElements = Enumerable.Range(0, 1)
 			});
@@ -71,7 +71,7 @@ namespace HermaFx.DataAnnotations
 		{
 			Assert.Throws<AggregateValidationException>(() =>
 			{
-				ExtendedValidator.EnsureIsValid(new TestClass()
+				ExtendedValidator.EnsureIsValid(new TestClass
 				{
 					OneElements = new int[] { }
 				});
@@ -83,7 +83,7 @@ namespace HermaFx.DataAnnotations
 		{
 			Assert.Throws<AggregateValidationException>(() =>
 			{
-				ExtendedValidator.EnsureIsValid(new TestClass()
+				ExtendedValidator.EnsureIsValid(new TestClass
 				{
 					OneElements = (new int[] { }).ToList()
 				});
@@ -95,7 +95,7 @@ namespace HermaFx.DataAnnotations
 		{
 			Assert.Throws<AggregateValidationException>(() =>
 			{
-				ExtendedValidator.EnsureIsValid(new TestClass()
+				ExtendedValidator.EnsureIsValid(new TestClass
 				{
 					OneElements = Enumerable.Range(0, 0)
 				});
@@ -105,7 +105,7 @@ namespace HermaFx.DataAnnotations
 		[Test]
 		public void OneElementsWithSingleItemValidates()
 		{
-			ExtendedValidator.EnsureIsValid(new TestClass()
+			ExtendedValidator.EnsureIsValid(new TestClass
 			{
 				OneElements = new int[] { 1 }
 			});
@@ -114,7 +114,7 @@ namespace HermaFx.DataAnnotations
 		[Test]
 		public void OneElementsWithTwoItemsValidates()
 		{
-			ExtendedValidator.EnsureIsValid(new TestClass()
+			ExtendedValidator.EnsureIsValid(new TestClass
 			{
 				OneElements = new int[] { 1, 2 }
 			});
@@ -125,7 +125,7 @@ namespace HermaFx.DataAnnotations
 		{
 			Assert.Throws<AggregateValidationException>(() =>
 			{
-				ExtendedValidator.EnsureIsValid(new TestClass()
+				ExtendedValidator.EnsureIsValid(new TestClass
 				{
 					FiveElements = new int[] { 1, 2, 3, 4 }
 				});
@@ -135,7 +135,7 @@ namespace HermaFx.DataAnnotations
 		[Test]
 		public void FiveElementsWithFiveItemValidates()
 		{
-			ExtendedValidator.EnsureIsValid(new TestClass()
+			ExtendedValidator.EnsureIsValid(new TestClass
 			{
 				FiveElements = new int[] { 1, 2, 3, 4, 5 }
 			});
@@ -144,7 +144,7 @@ namespace HermaFx.DataAnnotations
 		[Test]
 		public void FiveElementsWithSixItemsValidates()
 		{
-			ExtendedValidator.EnsureIsValid(new TestClass()
+			ExtendedValidator.EnsureIsValid(new TestClass
 			{
 				OneElements = new int[] { 1, 2, 3, 4, 5, 6 }
 			});
