@@ -40,6 +40,9 @@ namespace HermaFx.DataAnnotations
 								return true;
 							else if (value == null && dependentValue != null)
 								return false;
+							else if (value is Enum && dependentValue is Enum)
+								// TODO: Is FlagAttribute checking needed in this case??
+								return (dependentValue as Enum).HasFlag(value as Enum);
 
 							return value.Equals(dependentValue);
 						}
@@ -54,6 +57,9 @@ namespace HermaFx.DataAnnotations
 								return true;
 							else if (value == null && dependentValue == null)
 								return false;
+							else if (value is Enum && dependentValue is Enum)
+								// TODO: Is FlagAttribute checking needed in this case??
+								return !(dependentValue as Enum).HasFlag(value as Enum);
 
 							return !value.Equals(dependentValue);
 						}
