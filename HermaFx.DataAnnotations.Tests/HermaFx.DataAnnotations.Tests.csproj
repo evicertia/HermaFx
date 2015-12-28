@@ -53,6 +53,8 @@
     <Compile Include="RequiredIfAttributeTest.cs" />
     <Compile Include="RequiredIfEmptyAttributeTest.cs" />
     <Compile Include="RequiredIfFalseAttributeTest.cs" />
+    <Compile Include="RequiredIfNotHasFlagAttributeTest.cs" />
+    <Compile Include="RequiredIfHasFlagAttributeTest.cs" />
     <Compile Include="RequiredIfNotAttributeTest.cs" />
     <Compile Include="RequiredIfNotEmptyAttributeTest.cs" />
     <Compile Include="RequiredIfNotRegExMatchAttributeTest.cs" />

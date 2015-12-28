@@ -18,6 +18,8 @@ namespace HermaFx.DataAnnotations
 		GreaterThanOrEqualTo,
 		LessThanOrEqualTo,
 		RegExMatch,
-		NotRegExMatch
+		NotRegExMatch,
+		HasFlag,
+		NotHasFlag
 	}
 }

@@ -130,7 +130,41 @@ namespace HermaFx.DataAnnotations
 							return !Regex.Match((value ?? "").ToString(), dependentValue.ToString()).Success;
 						}
 					}
+				},
+				{
+					Operator.HasFlag, new OperatorMetadata()
+					{
+						ErrorMessage = "has flag",
+						IsValid = (value, dependentValue) => {
+							if (value == null && dependentValue == null)
+								return true;
+							else if (value == null && dependentValue != null)
+								return false;
+
+							Guard.Against<ArgumentOutOfRangeException>(!(value is Enum), "Value should be an (bit-flags) enum.");
+
+							var dependentEnumValue = Enum.ToObject(value.GetType(), dependentValue) as Enum;
+							return dependentEnumValue.HasFlag(value as Enum);
+						}
+					}
+				},
+				{
+				Operator.NotHasFlag, new OperatorMetadata()
+				{
+					ErrorMessage = "not has flag",
+					IsValid = (value, dependentValue) => {
+						if (value == null && dependentValue != null)
+							return true;
+						else if (value == null && dependentValue == null)
+							return false;
+
+						Guard.Against<ArgumentOutOfRangeException>(!(value is Enum), "Value should be an (bit-flags) enum.");
+
+						var dependentEnumValue = Enum.ToObject(value.GetType(), dependentValue) as Enum;
+						return !dependentEnumValue.HasFlag(value as Enum);
+					}
 				}
+				},
 			};
 		}
 	}

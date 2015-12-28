@@ -70,6 +70,8 @@
     <Compile Include="RequiredIfAttribute.cs" />
     <Compile Include="RequiredIfEmptyAttribute.cs" />
     <Compile Include="RequiredIfFalseAttribute.cs" />
+    <Compile Include="RequiredIfNotHasFlagAttribute.cs" />
+    <Compile Include="RequiredIfHasFlagAttribute.cs" />
     <Compile Include="RequiredIfNotAttribute.cs" />
     <Compile Include="RequiredIfNotEmptyAttribute.cs" />
     <Compile Include="RequiredIfNotRegExMatchAttribute.cs" />

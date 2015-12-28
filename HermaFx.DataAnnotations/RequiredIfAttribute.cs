@@ -14,6 +14,10 @@ namespace HermaFx.DataAnnotations
 	{
 		public Operator Operator { get; private set; }
 		public object DependentValue { get; private set; }
+		/// <summary>
+		/// Gets or sets a flag indicating whether the attribute should allow empty strings.
+		/// </summary>
+		public bool AllowEmptyStrings { get; set; }
 		protected OperatorMetadata Metadata { get; private set; }
 
 		public RequiredIfAttribute(string dependentProperty, Operator @operator, object dependentValue)
@@ -52,8 +56,11 @@ namespace HermaFx.DataAnnotations
 		public override bool IsValid(object value, object dependentValue, object container)
 		{
 			if (Metadata.IsValid(dependentValue, DependentValue))
-				return value != null && !string.IsNullOrEmpty(value.ToString().Trim());
-
+			{
+				if (value == null) return false;
+				if (value is string) return AllowEmptyStrings ? true : (value as string).Length > 0;
+			}
+				
 			return true;
 		}
 
