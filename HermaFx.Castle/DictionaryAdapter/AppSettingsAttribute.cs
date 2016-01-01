@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Reflection;
+
 using Castle.Components.DictionaryAdapter;
 
 using PropertyDescriptor = Castle.Components.DictionaryAdapter.PropertyDescriptor;
@@ -99,6 +101,21 @@ namespace HermaFx.Castle.DictionaryAdapter
 		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, object storedValue,
 				PropertyDescriptor descriptor, bool ifExists)
 		{
+			var attr = descriptor.PropertyType.GetCustomAttribute<AppSettingsAttribute>();
+
+			if (attr != null)
+			{
+				var desc = new PropertyDescriptor(new[] {
+					new AppSettingsAttribute()
+					{
+						KeyPrefix = key,
+						PrefixSeparator = attr.PrefixSeparator ?? DEFAULT_PREFIX_SEPARATOR
+					}
+				});
+
+				storedValue = dictionaryAdapter.This.Factory.GetAdapter(descriptor.PropertyType, dictionaryAdapter.This.Dictionary, desc);
+			}
+
 			if (ValueIsNullOrDefault(descriptor, storedValue))
 			{
 				var defaultValue = descriptor.Annotations.OfType<DefaultValueAttribute>().SingleOrDefault();
@@ -188,45 +205,6 @@ namespace HermaFx.Castle.DictionaryAdapter
 		{
 		}
 		#endregion
-#endif
-
-#if true
-		public static class Test
-		{
-			[AppSettings("A")]
-			public interface A
-			{
-				string Data { get; set; }
-				[DefaultValue(10)]
-				uint Number { get; set; }
-			}
-
-			[AppSettings("B")]
-			public interface B
-			{
-				string Data { get; set; }
-			}
-
-			[AppSettings]
-			public interface C
-			{
-				string Data { get; set; }
-			}			
-
-			public static void Main()
-			{
-				var dict = new System.Collections.Specialized.NameValueCollection()
-				{
-					{ "A:Data", "Value" },
-					{ "B:Data", "SubValue" },
-					{ typeof(C).Namespace + ":Data", "Value" }
-				};
-
-				var obja = new DictionaryAdapterFactory().GetAdapter<A>(dict);
-				var objb = new DictionaryAdapterFactory().GetAdapter<B>(dict);
-				var objc = new DictionaryAdapterFactory().GetAdapter<C>(dict);
-			}
-		}
 #endif		
 	}
 }
