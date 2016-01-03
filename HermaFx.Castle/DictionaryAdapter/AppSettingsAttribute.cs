@@ -126,11 +126,16 @@ namespace HermaFx.Castle.DictionaryAdapter
 				}
 				else if (defaultValue != null)
 				{
-					var @default = defaultValue.Value;
-					storedValue = descriptor.TypeConverter.CanConvertFrom(@default.GetType()) ?
-						descriptor.TypeConverter.ConvertFrom(@default)
-						: Convert.ChangeType(@default, descriptor.PropertyType);
+					storedValue = defaultValue.Value;
 				}
+			}
+
+			// Convert value if needed.
+			if (storedValue != null && !descriptor.PropertyType.IsAssignableFrom(storedValue.GetType()))
+			{
+				storedValue = descriptor.TypeConverter.CanConvertFrom(storedValue.GetType()) ?
+					descriptor.TypeConverter.ConvertFrom(storedValue)
+					: Convert.ChangeType(storedValue, descriptor.PropertyType);
 			}
 
 #if !USE_DAVALIDATOR

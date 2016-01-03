@@ -61,6 +61,7 @@
     <Compile Include="RequiredIfRegExMatchAttributeTest.cs" />
     <Compile Include="RequiredIfTrueAttributeTest.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="ValidateElementsUsingTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
