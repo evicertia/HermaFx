@@ -50,7 +50,8 @@ namespace HermaFx.ComponentModel
 		public const string DEFAULT_SEPARATOR = ",";
 		private string _separator;
 		private StringSplitOptions _options;
-		private TypeConverter _converter = TypeDescriptor.GetConverter(typeof(T));
+
+		public Type Converter { get; set; }
 
 		public StringArrayConverter(string separator, StringSplitOptions options)
 		{
@@ -61,6 +62,16 @@ namespace HermaFx.ComponentModel
 		public StringArrayConverter()
 			: this(DEFAULT_SEPARATOR, StringSplitOptions.None)
 		{
+		}
+
+		private TypeConverter GetConverter()
+		{
+			if (Converter != null)
+			{
+				return (TypeConverter)Activator.CreateInstance(Converter);
+			}
+				
+			return TypeDescriptor.GetConverter(typeof(T));
 		}
 
 		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
@@ -79,8 +90,9 @@ namespace HermaFx.ComponentModel
 
 			if (!string.IsNullOrWhiteSpace(s))
 			{
+				var converter = GetConverter();
 				return ((string)value).Split(new[] { _separator }, _options)
-					.Select(x => _converter.ConvertFrom(x))
+					.Select(x => converter.ConvertFrom(x))
 					.Cast<T>()
 					.ToArray();
 			}
