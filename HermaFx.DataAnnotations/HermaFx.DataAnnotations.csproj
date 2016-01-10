@@ -52,6 +52,7 @@
     <Compile Include="AggregateValidationResult.cs" />
     <Compile Include="IPAddressAttribute.cs" />
     <Compile Include="NotDefaultAttribute.cs" />
+    <Compile Include="ContainsStringAttribute.cs" />
     <Compile Include="ValidateElementsUsingAttribute.cs" />
     <Compile Include="ContingentValidationAttribute.cs" />
     <Compile Include="MaxElementsAttribute.cs" />
