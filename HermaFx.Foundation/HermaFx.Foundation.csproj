@@ -96,6 +96,7 @@
     <Compile Include="RuntimeExtensions\ReflectionExtensions.cs" />
     <Compile Include="RuntimeExtensions\StreamExtensions.cs" />
     <Compile Include="RuntimeExtensions\SysDate.cs" />
+    <Compile Include="RuntimeExtensions\TypeExtensions.cs" />
     <Compile Include="X509Certificates\CertificateString.cs" />
     <Compile Include="ServiceLocation\ServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
