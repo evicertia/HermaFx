@@ -108,7 +108,7 @@
     <Compile Include="TextEncoders\ZBase32Encoder.cs" />
     <Compile Include="Threading\LockHelpers.cs" />
     <Compile Include="Utils\GenericDisposable.cs" />
-    <Compile Include="Utils\GuidCombGenerator.cs" />
+    <Compile Include="Utils\AdvancedGuidGenerator.cs" />
     <Compile Include="Utils\TempFile.cs" />
   </ItemGroup>
   <ItemGroup>
