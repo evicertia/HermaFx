@@ -38,7 +38,7 @@ namespace HermaFx.Castle.DictionaryAdapter
 		[AppSettings("B")]
 		public interface B
 		{
-			string Data { get; set; }
+			string Beta { get; set; }
 		}
 
 		[AppSettings]
@@ -68,9 +68,9 @@ namespace HermaFx.Castle.DictionaryAdapter
 			{ "A:Data", "Value" },
 			{ "A:StringList", "a,b,c" },
 			{ "A:IntList", "1,2,3,4" },
-			{ "B:Data", "SubValue" },
+			{ "B:Beta", "SubValue" },
 			{ typeof(C).Namespace + ":Data", "Value" },
-			{ typeof(E).Namespace + ":Other:Data", "SubValue" }
+			{ typeof(E).Namespace + ":Other:Beta", "SubValue" }
 
 		};
 
@@ -86,7 +86,21 @@ namespace HermaFx.Castle.DictionaryAdapter
 			var objc = new DictionaryAdapterFactory().GetAdapter<C>(_dict);
 			var obje = new DictionaryAdapterFactory().GetAdapter<E>(_dict);
 
-			Assert.AreEqual(obje.Other.Data, "SubValue");
+			Assert.AreEqual(obje.Other.Beta, "SubValue");
+		}
+
+		[Test]
+		public void NestedTest()
+		{
+			var dict = new NameValueCollection()
+			{
+				{ "B:Beta", "Invalid1" },
+				{ "Other:Beta", "Invalid2" },
+				{ typeof(E).Namespace + ":Other:Beta", "SubValue" }
+			};
+
+			var obje = new DictionaryAdapterFactory().GetAdapter<E>(_dict);
+			Assert.AreEqual("SubValue", obje.Other.Beta);
 		}
 
 	}

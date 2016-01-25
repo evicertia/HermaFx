@@ -105,13 +105,13 @@ namespace HermaFx.Castle.DictionaryAdapter
 
 			if (attr != null)
 			{
-				var desc = new PropertyDescriptor(new[] {
-					new AppSettingsAttribute()
-					{
-						KeyPrefix = key,
-						PrefixSeparator = attr.PrefixSeparator ?? DEFAULT_PREFIX_SEPARATOR
-					}
-				});
+				var nattr = new AppSettingsAttribute()
+				{
+					KeyPrefix = key,
+					PrefixSeparator = attr.PrefixSeparator ?? DEFAULT_PREFIX_SEPARATOR
+				};
+				var desc = new PropertyDescriptor(new[] { nattr });
+				//desc.AddBehavior(nattr);
 
 				storedValue = dictionaryAdapter.This.Factory.GetAdapter(descriptor.PropertyType, dictionaryAdapter.This.Dictionary, desc);
 			}
