@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Specialized;
@@ -44,7 +45,7 @@ namespace HermaFx.Castle.DictionaryAdapter
 		[AppSettings]
 		public interface C
 		{
-			string Data { get; set; }
+			string Charlie { get; set; }
 		}
 
 		[AppSettings]
@@ -53,13 +54,18 @@ namespace HermaFx.Castle.DictionaryAdapter
 			string Data { get; set; }
 		}
 
+		public interface Nested
+		{
+			string Inner { get; set; }
+		}
+
 		[AppSettings]
 		public interface E
 		{
 			string Data { get; set; }
 
-			[Required]
-			B Other { get; set; }
+			[Setting, Required]
+			Nested Nested { get; set; }
 		}
 		#endregion
 
@@ -69,8 +75,8 @@ namespace HermaFx.Castle.DictionaryAdapter
 			{ "A:StringList", "a,b,c" },
 			{ "A:IntList", "1,2,3,4" },
 			{ "B:Beta", "SubValue" },
-			{ typeof(C).Namespace + ":Data", "Value" },
-			{ typeof(E).Namespace + ":Other:Beta", "SubValue" }
+			{ typeof(C).Namespace + ":Charlie", "C-Value" },
+			{ typeof(E).Namespace + ":Nested:Inner", "SubValue" }
 
 		};
 
@@ -86,7 +92,8 @@ namespace HermaFx.Castle.DictionaryAdapter
 			var objc = new DictionaryAdapterFactory().GetAdapter<C>(_dict);
 			var obje = new DictionaryAdapterFactory().GetAdapter<E>(_dict);
 
-			Assert.AreEqual(obje.Other.Beta, "SubValue");
+			Assert.AreEqual("SubValue", obje.Nested.Inner);
+			Assert.AreEqual("C-Value", objc.Charlie);
 		}
 
 		[Test]
@@ -94,13 +101,13 @@ namespace HermaFx.Castle.DictionaryAdapter
 		{
 			var dict = new NameValueCollection()
 			{
-				{ "B:Beta", "Invalid1" },
-				{ "Other:Beta", "Invalid2" },
-				{ typeof(E).Namespace + ":Other:Beta", "SubValue" }
+				{ "B:Inner", "Invalid1" },
+				{ "Other:Inner", "Invalid2" },
+				{ typeof(E).Namespace + ":Nested:Inner", "SubValue" }
 			};
 
-			var obje = new DictionaryAdapterFactory().GetAdapter<E>(_dict);
-			Assert.AreEqual("SubValue", obje.Other.Beta);
+			var obje = new DictionaryAdapterFactory().GetAdapter<E>(dict);
+			Assert.AreEqual("SubValue", obje.Nested.Inner);
 		}
 
 	}

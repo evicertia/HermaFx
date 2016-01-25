@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,7 +12,7 @@ using PropertyDescriptor = Castle.Components.DictionaryAdapter.PropertyDescripto
 
 namespace HermaFx.Castle.DictionaryAdapter
 {
-	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
+	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = false)]
 	public class AppSettingsAttribute : DictionaryBehaviorAttribute,
 #if USE_DAVALIDATOR // FIXME: Validating thru DictionaryAdapter's own validation mechanism is not working.
 		//IDictionaryInitializer,
@@ -101,17 +102,22 @@ namespace HermaFx.Castle.DictionaryAdapter
 		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, object storedValue,
 				PropertyDescriptor descriptor, bool ifExists)
 		{
-			var attr = descriptor.PropertyType.GetCustomAttribute<AppSettingsAttribute>();
+			Guard.Against<InvalidOperationException>(
+				descriptor.PropertyType.GetCustomAttribute<AppSettingsAttribute>() != null,
+				"A interface used as nested settings property cannot be decorated with 'AppSettings' attribute."
+			);
+
+			var attr = descriptor.Property.GetCustomAttribute<SettingAttribute>();
 
 			if (attr != null)
 			{
 				var nattr = new AppSettingsAttribute()
 				{
 					KeyPrefix = key,
-					PrefixSeparator = attr.PrefixSeparator ?? DEFAULT_PREFIX_SEPARATOR
+					PrefixSeparator = this.PrefixSeparator //attr.PrefixSeparator ?? DEFAULT_PREFIX_SEPARATOR
 				};
 				var desc = new PropertyDescriptor(new[] { nattr });
-				//desc.AddBehavior(nattr);
+				desc.AddBehavior(nattr);
 
 				storedValue = dictionaryAdapter.This.Factory.GetAdapter(descriptor.PropertyType, dictionaryAdapter.This.Dictionary, desc);
 			}
