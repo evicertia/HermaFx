@@ -36,13 +36,13 @@ namespace HermaFx.Utils
 			var days = BitConverter.GetBytes(span.Days);
 			var time = BitConverter.GetBytes((int)(timestamp.TimeOfDay.Ticks * 300 / TimeSpan.TicksPerSecond));  // convert from .NET resolution to SQL Server resolution
 
-			Array.Copy(days, 0, days, 10, 2);
-			Array.Copy(time, 0, days, 12, 4);
+			Array.Copy(days, 0, result, 10, 2);
+			Array.Copy(time, 0, result, 12, 4);
 
 			if (BitConverter.IsLittleEndian)
 			{
-				Array.Reverse(days, 10, 2);
-				Array.Reverse(days, 12, 4);
+				Array.Reverse(result, 10, 2);
+				Array.Reverse(result, 12, 4);
 			}
 #endif
 			return new Guid(result);

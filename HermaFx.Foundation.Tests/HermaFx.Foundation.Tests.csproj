@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvancedGuidGeneratorTests.cs" />
     <Compile Include="Base32EncodingTests.cs" />
     <Compile Include="GuardTests.cs" />
     <Compile Include="Cryptography\CryptoHelperTests.cs" />
