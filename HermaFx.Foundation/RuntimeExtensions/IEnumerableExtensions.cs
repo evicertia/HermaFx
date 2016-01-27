@@ -95,5 +95,19 @@ namespace HermaFx
 
 			return !list.Any();
 		}
+
+		/// <summary>
+		/// Returns an empty enumeration if the <paramref name="source"/> is null. 
+		/// Otherwise, returns the <paramref name="source"/>.
+		/// </summary>
+		/// <nuget id="netfx-System.Collections.Generic.IEnumerable.EmptyIfNull" />
+		/// <param name="source" this="true">The enumerable to check if it's null</param>
+		public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> source)
+		{
+			if (source == null)
+				return Enumerable.Empty<T>();
+
+			return source;
+		}
 	}
 }

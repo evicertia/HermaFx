@@ -18,7 +18,7 @@ namespace HermaFx.DesignPatterns
 		}
 
 		#region static helper methods..
-		public static T[] GetFields<W>()
+		private static T[] GetFields<W>()
 				where W : ReadOnlyCollection<T>
 		{
 			// Fill _entries list..
