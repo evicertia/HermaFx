@@ -7,15 +7,37 @@ using System.Reflection;
 namespace HermaFx.DesignPatterns
 {
 	[Serializable]
-	public abstract class EnhancedEnumType<L, T> : ReadOnlyCollection<T>
+	public abstract class EnhancedEnumType<L, T> : ReadOnlyCollection<T>, IEnhancedEnumTypeDescriptor<T>
 			where L : EnhancedEnumType<L, T>
 	{
+		#region Fields
 		private static T[] _entries = GetFields<L>();
+		#endregion
 
-		public EnhancedEnumType()
-			: base(_entries)
+		#region .ctors
+		static EnhancedEnumType()
+		{
+			Guard.Against<InvalidOperationException>(_entries.Length == 0, "EnhancedEnumType {0} has no elements?!", typeof(L).Name);
+		}
+
+		public EnhancedEnumType(Func<T, object> memberKeyGetter)
+			: this(memberKeyGetter, null)
 		{
 		}
+
+		public EnhancedEnumType(Func<T, object> memberKeyGetter, Func<T, object, bool> memberKeyMatcher)
+			: base(_entries)
+		{
+			MemberKeyGetter = memberKeyGetter;
+			MemberKeyMatcher = memberKeyMatcher ?? ((x, value) => memberKeyGetter(x) == value);
+			MemberType = memberKeyGetter(_entries.First()).GetType();
+
+			Guard.Against<InvalidOperationException>(
+				_entries.Count() == _entries.Select(x => MemberKeyGetter(x)).Distinct().Count(),
+				"One or more EnhancedEnum members have duplicated keys"
+			);
+		}
+		#endregion
 
 		#region static helper methods..
 		private static T[] GetFields<W>()
@@ -32,6 +54,22 @@ namespace HermaFx.DesignPatterns
 					.ToArray();
 		}
 		#endregion
+
+		#region IEnhancedEnumTypeDescriptor<T> Members
+
+		public Type MemberType { get; private set; }
+		public Func<T, object> MemberKeyGetter { get; private set; }
+		public Func<T, object, bool> MemberKeyMatcher { get; private set; }
+
+		#endregion
 	}
+
+	public interface IEnhancedEnumTypeDescriptor<T>
+	{
+		Type MemberType { get; }
+		Func<T, object> MemberKeyGetter { get; }
+		Func<T, object, bool> MemberKeyMatcher { get; }
+	}
+
 
 }
