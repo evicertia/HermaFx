@@ -33,7 +33,7 @@ namespace HermaFx.DesignPatterns
 			MemberType = memberKeyGetter(_entries.First()).GetType();
 
 			Guard.Against<InvalidOperationException>(
-				_entries.Count() == _entries.Select(x => MemberKeyGetter(x)).Distinct().Count(),
+				_entries.Count() != _entries.Select(x => MemberKeyGetter(x)).Distinct().Count(),
 				"One or more EnhancedEnum members have duplicated keys"
 			);
 		}
