@@ -29,7 +29,7 @@ namespace HermaFx.DesignPatterns
 			: base(_entries)
 		{
 			MemberKeyGetter = memberKeyGetter;
-			MemberKeyMatcher = memberKeyMatcher ?? ((x, value) => memberKeyGetter(x) == value);
+			MemberKeyMatcher = memberKeyMatcher ?? ((x, value) => object.Equals(memberKeyGetter(x), value));
 			MemberType = memberKeyGetter(_entries.First()).GetType();
 
 			Guard.Against<InvalidOperationException>(
