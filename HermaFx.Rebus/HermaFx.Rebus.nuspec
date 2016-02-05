@@ -21,6 +21,6 @@
 	</metadata>
 	<files>
 		<file src="bin\Release\Herma.Rebus.*" target="lib\NET45" />
-		<!-- file src="**\*.cs" target="src" / -->
+		<file src="**\*.cs" target="src" />
 	</files>
 </package>

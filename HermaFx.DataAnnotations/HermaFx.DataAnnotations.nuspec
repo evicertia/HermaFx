@@ -18,6 +18,6 @@
 	</metadata>
 	<files>
 		<file src="bin\Release\Herma.DataAnnotations.*" target="lib\NET45" />
-		<!-- file src="**\*.cs" target="src" / -->
+		<file src="**\*.cs" target="src" />
 	</files>
 </package>
