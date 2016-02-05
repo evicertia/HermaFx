@@ -17,6 +17,8 @@ namespace HermaFx.X509Certificates
 	public class CertificateString 
 	{
 		private IDictionary<string, string> _entries = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+		private readonly string _certificateString = null;
+		private X509Certificate2 _certificate = null;
 
 		public StoreName? StoreName { get; private set; }
 		public StoreLocation? StoreLocation { get; private set; }
@@ -31,6 +33,8 @@ namespace HermaFx.X509Certificates
 		{
 			if (string.IsNullOrEmpty(certificateString))
 				throw new ArgumentNullException("certificateString");
+
+			_certificateString = certificateString;
 
 			// FIXME: Allow escaped semicolon caracters (ie. \; or semicolons between quotes "...;...")
 			var list = certificateString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -72,20 +76,19 @@ namespace HermaFx.X509Certificates
 				KeyContainerName = _entries["KeyContainerName"];
 		}
 
-		public static X509Certificate2 GetCertificate(string certificateString)
+		public X509Certificate2 _GetCertificate()
 		{
-			var cs = new CertificateString(certificateString);
-			var sn = cs.StoreName.GetValueOrDefault(SysX509.StoreName.My);
-			var sl = cs.StoreLocation.GetValueOrDefault(SysX509.StoreLocation.LocalMachine);
-			var xft = cs.X509FindType.GetValueOrDefault(SysX509.X509FindType.FindByThumbprint);
 			X509Store store = null;
 			X509Certificate2Collection certs = null;
+			var sn = this.StoreName.GetValueOrDefault(SysX509.StoreName.My);
+			var sl = this.StoreLocation.GetValueOrDefault(SysX509.StoreLocation.LocalMachine);
+			var xft = this.X509FindType.GetValueOrDefault(SysX509.X509FindType.FindByThumbprint);
 
 			try
 			{
-				if (cs.X509FindBy != null)
+				if (this.X509FindBy != null)
 				{
-					switch (cs.X509FindBy.Value)
+					switch (this.X509FindBy.Value)
 					{
 						default:
 							throw new NotImplementedException("Unsupported X509FindBy method.");
@@ -95,17 +98,17 @@ namespace HermaFx.X509Certificates
 				// Try by looking up in store..
 				store = new X509Store(sn, sl);
 				store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-				certs = store.Certificates.Find(xft, cs.X509FindValue, false);
+				certs = store.Certificates.Find(xft, this.X509FindValue, false);
 
 				if (certs == null || certs.Count == 0)
 				{
-					var str = string.Format("No valid certificate found for: {0}", certificateString);
+					var str = string.Format("No valid certificate found for: {0}", _certificateString);
 					throw new ApplicationException(str);
 				}
 
 				if (certs.Count > 1)
 				{
-					var str = string.Format("More than one matching certificate found for: {0}", certificateString);
+					var str = string.Format("More than one matching certificate found for: {0}", _certificateString);
 					throw new ApplicationException(str);
 				}
 
@@ -119,10 +122,10 @@ namespace HermaFx.X509Certificates
 
 				// Fix to avoid mono's bug #1201
 				// See: https://github.com/mono/mono/commit/b52404b35394c9941b521622564e3dc061c95118
-				if (!string.IsNullOrEmpty(cs.KeyContainerName))
+				if (!string.IsNullOrEmpty(this.KeyContainerName))
 				{
 					var csp = new CspParameters();
-					csp.KeyContainerName = cs.KeyContainerName;
+					csp.KeyContainerName = this.KeyContainerName;
 					csp.Flags = CspProviderFlags.UseExistingKey;
 					csp.Flags = csp.Flags | (sl == SysX509.StoreLocation.LocalMachine ? CspProviderFlags.UseMachineKeyStore : 0);
 					certs[0].PrivateKey = new RSACryptoServiceProvider(csp);
@@ -137,5 +140,18 @@ namespace HermaFx.X509Certificates
 			}
 		}
 
+		public X509Certificate2 GetCertificate()
+		{
+			if (_certificate == null)
+				return _certificate = _GetCertificate();
+
+			return _certificate;
+		}
+
+		public static X509Certificate2 GetCertificate(string certificateString)
+		{
+			var cs = new CertificateString(certificateString);
+			return cs.GetCertificate();
+		}
 	}
 }
