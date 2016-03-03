@@ -5,29 +5,29 @@ using System.Text;
 
 namespace HermaFx.Utils
 {
-	public class GenericDisposable : IDisposable
+	public class Disposable : IDisposable
 	{
 		private readonly Action _disposeAction;
 
-		public GenericDisposable(Action disposeAction)
+		public Disposable(Action disposeAction)
 		{
 			_disposeAction = disposeAction;
 		}
 
-		public GenericDisposable(Action createAction, Action disposeAction)
+		public Disposable(Action createAction, Action disposeAction)
 		{
 			createAction();
 			_disposeAction = disposeAction;
 		}
 
-		public static GenericDisposable<T> Create<T>(Func<T> createAction, Action<T> disposeAction)
+		public static Disposable<T> Create<T>(Func<T> createAction, Action<T> disposeAction)
 		{
-			return new GenericDisposable<T>(createAction, disposeAction);
+			return new Disposable<T>(createAction, disposeAction);
 		}
 
-		public static GenericDisposable For(Action createAction, Action disposeAction)
+		public static Disposable For(Action createAction, Action disposeAction)
 		{
-			return new GenericDisposable(createAction, disposeAction);
+			return new Disposable(createAction, disposeAction);
 		}
 
 		public void Dispose()
@@ -37,14 +37,14 @@ namespace HermaFx.Utils
 		}
 	}
 
-	public class GenericDisposable<T> : IDisposable
+	public class Disposable<T> : IDisposable
 	{
 		private readonly T _instance;
 		private readonly Action<T> _disposeAction;
 
 		public T Instance { get { return _instance; } }
 
-		public GenericDisposable(Func<T> createAction, Action<T> disposeAction)
+		public Disposable(Func<T> createAction, Action<T> disposeAction)
 		{
 			_instance = createAction();
 			_disposeAction = disposeAction;

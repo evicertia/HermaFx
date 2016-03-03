@@ -110,7 +110,7 @@
     <Compile Include="Text\Base32Encoder.cs" />
     <Compile Include="Text\ZBase32Encoder.cs" />
     <Compile Include="Threading\LockHelpers.cs" />
-    <Compile Include="Utils\GenericDisposable.cs" />
+    <Compile Include="Utils\Disposable.cs" />
     <Compile Include="Utils\AdvancedGuidGenerator.cs" />
     <Compile Include="Utils\TempFile.cs" />
   </ItemGroup>
