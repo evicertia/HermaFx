@@ -99,6 +99,7 @@
     <Compile Include="RuntimeExtensions\SysDate.cs" />
     <Compile Include="RuntimeExtensions\TypeExtensions.cs" />
     <Compile Include="Text\EncodingConverter.cs" />
+    <Compile Include="Text\EncodingResolverAttribute.cs" />
     <Compile Include="Text\IEncodingResolver.cs" />
     <Compile Include="X509Certificates\CertificateString.cs" />
     <Compile Include="ServiceLocation\ServiceLocator.cs" />

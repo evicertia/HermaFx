@@ -24,9 +24,17 @@ namespace HermaFx.Text
 
 		}
 
-		private Encoding GetEncoding(string name)
+		private IEncodingResolver GetResolver(ITypeDescriptorContext context)
 		{
-			if (_resolver != null && !AllEncodings.Any(x => x == name.ToLowerInvariant()))
+			var attr = context.PropertyDescriptor.Attributes.OfType<EncodingResolverAttribute>().SingleOrDefault();
+			return attr != null ? attr.GetResolver() : _resolver;
+		}
+
+		private Encoding GetEncoding(ITypeDescriptorContext context, string name)
+		{
+			var resolver = GetResolver(context);
+
+			if (resolver != null && !AllEncodings.Any(x => x == name.ToLowerInvariant()))
 				return _resolver.GetEncoding(name);
 
 			return Encoding.GetEncoding(name);
@@ -51,7 +59,7 @@ namespace HermaFx.Text
 			Guard.IsNotNull(value, nameof(value));
 			Guard.Against<NotSupportedException>(!CanConvertFrom(context, value.GetType()), "Cannot convert from value: {0}", value);
 
-			return value is Encoding ? value : GetEncoding(value as string);
+			return value is Encoding ? value : GetEncoding(context, value as string);
 		}
 
 		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
@@ -67,7 +75,7 @@ namespace HermaFx.Text
 			var name = value as string;
 			if (name != null)
 			{
-				return destinationType == typeof(string) ? value : GetEncoding(name);
+				return destinationType == typeof(string) ? value : GetEncoding(context, name);
 			}
 
 			return base.ConvertTo(context, culture, value, destinationType);
