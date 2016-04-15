@@ -98,6 +98,8 @@
     <Compile Include="RuntimeExtensions\StreamExtensions.cs" />
     <Compile Include="RuntimeExtensions\SysDate.cs" />
     <Compile Include="RuntimeExtensions\TypeExtensions.cs" />
+    <Compile Include="Text\EncodingConverter.cs" />
+    <Compile Include="Text\IEncodingResolver.cs" />
     <Compile Include="X509Certificates\CertificateString.cs" />
     <Compile Include="ServiceLocation\ServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -105,8 +107,8 @@
     <Compile Include="RuntimeExtensions\EnumExtensions.cs" />
     <Compile Include="RuntimeExtensions\IEnumerableExtensions.cs" />
     <Compile Include="RuntimeExtensions\StringExtensions.cs" />
-    <Compile Include="TextEncoders\Base32Encoder.cs" />
-    <Compile Include="TextEncoders\ZBase32Encoder.cs" />
+    <Compile Include="Text\Base32Encoder.cs" />
+    <Compile Include="Text\ZBase32Encoder.cs" />
     <Compile Include="Threading\LockHelpers.cs" />
     <Compile Include="Utils\GenericDisposable.cs" />
     <Compile Include="Utils\AdvancedGuidGenerator.cs" />
