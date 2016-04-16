@@ -5,7 +5,7 @@ using System.Linq;
 namespace HermaFx.Text
 {
 	[AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-	sealed class EncodingResolverAttribute : Attribute, IEncodingResolver
+	public class EncodingResolverAttribute : Attribute, IEncodingResolver
 	{
 		private readonly Type _resolver;
 		private readonly Encoding[] _encodings;
