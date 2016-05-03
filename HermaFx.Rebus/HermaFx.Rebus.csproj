@@ -50,6 +50,7 @@
     <Compile Include="MessageDateExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RebusExtensions.cs" />
+    <Compile Include="SimpleContainerAdapter.cs" />
     <Compile Include="TimeToBeReceivedExtensions.cs" />
     <Compile Include="TransportConfigurerExtensions.cs" />
     <Compile Include="ValidatingExtensions.cs" />
