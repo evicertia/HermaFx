@@ -11,12 +11,12 @@ namespace HermaFx.DataAnnotations
 	{
 		private const string _defaultErrorMessage = "There should be at least {0} elements.";
 
-		private uint _elements;
+		public uint Elements;
 
 		public MinElementsAttribute(uint elements)
 			: base(() => GetErrorMessage(elements))
 		{
-			_elements = elements;
+			Elements = elements;
 		}
 
 		private static string GetErrorMessage(uint elements)
@@ -27,9 +27,9 @@ namespace HermaFx.DataAnnotations
 		public override bool IsValid(object value)
 		{
 			if (value == null) return true;
-			if (value is Array) return (value as Array).Length >= _elements;
-			if (value is ICollection) return (value as ICollection).Count >= _elements;
-			if (value is IEnumerable) return (value as IEnumerable).OfType<object>().Count() >= _elements;
+			if (value is Array) return (value as Array).Length >= Elements;
+			if (value is ICollection) return (value as ICollection).Count >= Elements;
+			if (value is IEnumerable) return (value as IEnumerable).OfType<object>().Count() >= Elements;
 
 			return false;
 		}
