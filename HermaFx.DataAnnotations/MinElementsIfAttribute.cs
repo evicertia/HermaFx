@@ -7,53 +7,63 @@ using System.Text;
 
 namespace HermaFx.DataAnnotations
 {
-	public class MinElementsIfAttribute : RequiredIfAttribute
+	public class MinElementsIfAttribute : ContingentValidationAttribute
 	{
-		private const string _defaultErrorMessage = "There should be at least {0} elements.";
-
-		public uint Elements { get; set; }
+		public Operator Operator { get; private set; }
+		public object DependentValue { get; private set; }
+		private MinElementsAttribute MinElements{ get; set; }
+		/// <summary>
+		/// Gets or sets a flag indicating whether the attribute should allow empty strings.
+		/// </summary>
+		public bool AllowEmptyStrings { get; set; }
+		protected OperatorMetadata Metadata { get; private set; }
 
 		public MinElementsIfAttribute(uint elements, string dependentProperty, Operator @operator, object dependentValue)
-			: base(dependentProperty, @operator, dependentValue)
+			: base(dependentProperty)
 		{
-			Elements = elements;
+			Operator = @operator;
+			DependentValue = dependentValue;
+			Metadata = OperatorMetadata.Get(Operator);
+			MinElements = new MinElementsAttribute(elements);
 		}
 
 		public MinElementsIfAttribute(uint elements, string dependentProperty, object dependentValue)
 			: this(elements, dependentProperty, Operator.EqualTo, dependentValue) { }
-
-		public override bool IsValid(object value, object dependentValue, object container)
-		{
-			if (Metadata.IsValid(dependentValue, DependentValue))
-			{
-				if (value == null) return false;
-				if (value is Array) return (value as Array).Length >= Elements;
-				if (value is ICollection) return (value as ICollection).Count >= Elements;
-				if (value is IEnumerable) return (value as IEnumerable).OfType<object>().Count() >= Elements;
-			}
-
-			return true;
-		}
-
-		protected override IEnumerable<KeyValuePair<string, object>> GetClientValidationParameters()
-		{
-			return base.GetClientValidationParameters()
-				.Union(new[] {
-					new KeyValuePair<string, object>("Elements", Elements),
-				});
-		}
 
 		public override string FormatErrorMessage(string name)
 		{
 			if (string.IsNullOrEmpty(ErrorMessageResourceName) && string.IsNullOrEmpty(ErrorMessage))
 				ErrorMessage = DefaultErrorMessage;
 
-			return string.Format(ErrorMessageString, name, DependentProperty, DependentValue, Elements);
+			return MinElements.ErrorMessage;
+		}
+
+		public override string ClientTypeName
+		{
+			get { return "MinElementsIf"; }
+		}
+
+		protected override IEnumerable<KeyValuePair<string, object>> GetClientValidationParameters()
+		{
+			return base.GetClientValidationParameters()
+				.Union(new[] {
+					new KeyValuePair<string, object>("Operator", Operator.ToString()),
+					new KeyValuePair<string, object>("DependentValue", DependentValue),
+					new KeyValuePair<string, object>("Elements", MinElements.Elements),
+				});
+		}
+
+		public override bool IsValid(object value, object dependentValue, object container)
+		{
+			if (Metadata.IsValid(dependentValue, DependentValue))
+				return MinElements.IsValid(value);
+
+			return true;
 		}
 
 		public override string DefaultErrorMessage
 		{
-			get { return String.Format("There should be at least {0} elements.", Elements); }
+			get { return MinElements.ErrorMessage; }
 		}
 	}
 }

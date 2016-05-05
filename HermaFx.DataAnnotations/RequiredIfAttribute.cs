@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 // Source Code licensed under MS-PL.
-// Derived from: MVC Foolproof Validation (http://foolproof.codeplex.com/)  
+// Derived from: MVC Foolproof Validation (http://foolproof.codeplex.com/)
 # endregion
 using System;
 using System.Collections.Generic;
@@ -60,7 +60,7 @@ namespace HermaFx.DataAnnotations
 				if (value == null) return false;
 				if (value is string) return AllowEmptyStrings ? true : (value as string).Length > 0;
 			}
-				
+
 			return true;
 		}
 

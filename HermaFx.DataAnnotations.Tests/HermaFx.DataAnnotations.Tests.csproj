@@ -50,6 +50,7 @@
     <Compile Include="NotEqualToAttributeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegularExpressionIfAttributeTest.cs" />
+    <Compile Include="MinElementsIfAttributeTest.cs" />
     <Compile Include="RequiredIfAttributeTest.cs" />
     <Compile Include="RequiredIfEmptyAttributeTest.cs" />
     <Compile Include="RequiredIfFalseAttributeTest.cs" />
