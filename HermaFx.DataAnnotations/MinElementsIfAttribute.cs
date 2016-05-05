@@ -49,7 +49,7 @@ namespace HermaFx.DataAnnotations
 				.Union(new[] {
 					new KeyValuePair<string, object>("Operator", Operator.ToString()),
 					new KeyValuePair<string, object>("DependentValue", DependentValue),
-					new KeyValuePair<string, object>("Elements", MinElements.Elements),
+					new KeyValuePair<string, object>("Elements", MinElements.Count),
 				});
 		}
 

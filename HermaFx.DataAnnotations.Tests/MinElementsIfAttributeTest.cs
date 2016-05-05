@@ -4,6 +4,7 @@ using System;
 
 namespace HermaFx.DataAnnotations
 {
+	#region MinElementsIf
 	[TestFixture]
 	public class MinElementsIfAttributeTest
 	{
@@ -28,6 +29,7 @@ namespace HermaFx.DataAnnotations
 			public string[] Value2 { get; set; }
 		}
 
+		#region Tests
 		[Test]
 		public void IsValidTest()
 		{
@@ -38,7 +40,7 @@ namespace HermaFx.DataAnnotations
 		[Test]
 		public void IsValidTestComplex()
 		{
-			var model = new ComplexModel() {Value1 = new ComplexModel.SubModel() {InnerValue = "hello"}, Value2 = new string[] { "bla", "bla2", "bla3" } };
+			var model = new ComplexModel() {Value1 = new ComplexModel.SubModel() { InnerValue = "hello" }, Value2 = new string[] { "bla", "bla2", "bla3" } };
 			Assert.IsTrue(model.IsValid("Value2"));
 		}
 
@@ -76,5 +78,50 @@ namespace HermaFx.DataAnnotations
 			var model = new Model() { Value1 = null };
 			Assert.IsTrue(model.IsValid("Value2"));
 		}
+		#endregion
 	}
+	#endregion
+
+	#region MinElementsIfHasFlag
+	[TestFixture]
+	public class MinElementsIfHasFlagAttributeTest
+	{
+		[Flags]
+		public enum AnEnum
+		{
+			A = (1 << 0),
+			B = (1 << 1),
+			C = (1 << 2)
+		}
+
+		class Model : ModelBase<MinElementsIfHasFlagAttribute>
+		{
+			public AnEnum Value1 { get; set; }
+
+			[MinElementsIfHasFlag(3, "Value1", (AnEnum.A | AnEnum.B))]
+			public string[] Value2 { get; set; }
+		}
+
+		[Test]
+		public void IsValidTest()
+		{
+			var model = new Model() { Value1 = AnEnum.A, Value2 = new string[] { "hello1", "hello2", "hello3" } };
+			Assert.IsTrue(model.IsValid("Value2"));
+		}
+
+		[Test]
+		public void IsValid2Test()
+		{
+			var model = new Model() { Value1 = AnEnum.C, Value2 = null };
+			Assert.IsTrue(model.IsValid("Value2"));
+		}
+
+		[Test]
+		public void IsValidIfValueIsNullTest()
+		{
+			var model = new Model() { Value1 = AnEnum.B, Value2 = null };
+			Assert.IsTrue(model.IsValid("Value2"));
+		}
+	}
+	#endregion
 }
