@@ -12,6 +12,7 @@ namespace HermaFx.DataAnnotations
 		private const string _defaultErrorMessage = "There should be at most {0} elements.";
 
 		private uint _elements;
+		public uint Count { get { return _elements; } }
 
 		public MaxElementsAttribute(uint elements)
 			: base(() => GetErrorMessage(elements))
