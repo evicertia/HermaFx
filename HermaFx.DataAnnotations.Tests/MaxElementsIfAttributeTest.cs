@@ -4,19 +4,19 @@ using System;
 
 namespace HermaFx.DataAnnotations
 {
-	#region MinElementsIf
+	#region MaxElementsIf
 	[TestFixture]
-	public class MinElementsIfAttributeTest
+	public class MaxElementsIfAttributeTest
 	{
-		private class Model : ModelBase<MinElementsIfAttribute>
+		private class Model : ModelBase<MaxElementsIfAttribute>
 		{
 			public string Value1 { get; set; }
 
-			[MinElementsIf(3, "Value1", "hello")]
+			[MaxElementsIf(3, "Value1", "hello")]
 			public string[] Value2 { get; set; }
 		}
 
-		private class ComplexModel : ModelBase<MinElementsIfAttribute>
+		private class ComplexModel : ModelBase<MaxElementsIfAttribute>
 		{
 			public class SubModel
 			{
@@ -25,7 +25,7 @@ namespace HermaFx.DataAnnotations
 
 			public SubModel Value1 { get; set; }
 
-			[MinElementsIf(3, "Value1.InnerValue", "hello")]
+			[MaxElementsIf(3, "Value1.InnerValue", "hello")]
 			public string[] Value2 { get; set; }
 		}
 
@@ -47,14 +47,14 @@ namespace HermaFx.DataAnnotations
 		[Test]
 		public void IsNotValidTest()
 		{
-			var model = new Model() { Value1 = "hello", Value2 = new string[] { "hello", "hello2" } };
+			var model = new Model() { Value1 = "hello", Value2 = new string[] { "hello", "hello2", "hello3", "hello4" } };
 			Assert.IsFalse(model.IsValid("Value2"));
 		}
 
 		[Test]
 		public void IsNotValidTestComplex()
 		{
-			var model = new ComplexModel() { Value1 = new ComplexModel.SubModel() { InnerValue = "hello" }, Value2 = new string[] { "bla", "bla2" } };
+			var model = new ComplexModel() { Value1 = new ComplexModel.SubModel() { InnerValue = "hello" }, Value2 = new string[] { "bla", "bla2", "bla3", "bla4" } };
 			Assert.IsFalse(model.IsValid("Value2"));
 		}
 
@@ -66,14 +66,14 @@ namespace HermaFx.DataAnnotations
 		}
 
 		[Test]
-		public void IsNotRequiredToHaveMinElementsTest()
+		public void IsNotRequiredToHaveMaxElementsTest()
 		{
 			var model = new Model() { Value1 = "goodbye" };
 			Assert.IsTrue(model.IsValid("Value2"));
 		}
 
 		[Test]
-		public void IsNotRequiredToHaveMinElementsWithValue1NullTest()
+		public void IsNotRequiredToHaveMaxElementsWithValue1NullTest()
 		{
 			var model = new Model() { Value1 = null };
 			Assert.IsTrue(model.IsValid("Value2"));
@@ -82,15 +82,15 @@ namespace HermaFx.DataAnnotations
 	}
 	#endregion
 
-	#region MinElementsIfNot
+	#region MaxElementsIfNot
 	[TestFixture]
-	public class MinElementsIfNotAttributeTest
+	public class MaxElementsIfNotAttributeTest
 	{
-		private class Model : ModelBase<MinElementsIfNotAttribute>
+		private class Model : ModelBase<MaxElementsIfNotAttribute>
 		{
 			public string Value1 { get; set; }
 
-			[MinElementsIfNot(3, "Value1", "hello")]
+			[MaxElementsIfNot(3, "Value1", "hello")]
 			public string[] Value2 { get; set; }
 		}
 
@@ -102,9 +102,16 @@ namespace HermaFx.DataAnnotations
 		}
 
 		[Test]
-		public void IsNotValidTest()
+		public void IsValid2Test()
 		{
 			var model = new Model() { Value1 = "goodbye", Value2 = new string[] { "" } };
+			Assert.IsTrue(model.IsValid("Value2"));
+		}
+
+		[Test]
+		public void IsNotValidTest()
+		{
+			var model = new Model() { Value1 = "goodbye", Value2 = new string[] { "hello1", "hello2", "hello3", "hello4" } };
 			Assert.IsFalse(model.IsValid("Value2"));
 		}
 
@@ -116,14 +123,14 @@ namespace HermaFx.DataAnnotations
 		}
 
 		[Test]
-		public void IsNotRequiredToHaveMinElementsTest()
+		public void IsNotRequiredToHaveMaxElementsTest()
 		{
 			var model = new Model() { Value1 = "hello" };
 			Assert.IsTrue(model.IsValid("Value2"));
 		}
 
 		[Test]
-		public void IsNotRequiredToHaveMinElementsWithValue1NullTest()
+		public void IsNotRequiredToHaveMaxElementsWithValue1NullTest()
 		{
 			var model = new Model() { Value1 = null };
 			Assert.IsTrue(model.IsValid("Value2"));
@@ -131,9 +138,9 @@ namespace HermaFx.DataAnnotations
 	}
 	#endregion
 
-	#region MinElementsIfHasFlag
+	#region MaxElementsIfHasFlag
 	[TestFixture]
-	public class MinElementsIfHasFlagAttributeTest
+	public class MaxElementsIfHasFlagAttributeTest
 	{
 		[Flags]
 		public enum AnEnum
@@ -143,11 +150,11 @@ namespace HermaFx.DataAnnotations
 			C = (1 << 2)
 		}
 
-		class Model : ModelBase<MinElementsIfHasFlagAttribute>
+		class Model : ModelBase<MaxElementsIfHasFlagAttribute>
 		{
 			public AnEnum Value1 { get; set; }
 
-			[MinElementsIfHasFlag(3, "Value1", (AnEnum.A | AnEnum.B))]
+			[MaxElementsIfHasFlag(3, "Value1", (AnEnum.A | AnEnum.B))]
 			public string[] Value2 { get; set; }
 		}
 
@@ -166,9 +173,16 @@ namespace HermaFx.DataAnnotations
 		}
 
 		[Test]
-		public void IsNotValidTest()
+		public void IsValid3Test()
 		{
 			var model = new Model() { Value1 = AnEnum.A, Value2 = new string[] { "hello1", "hello2" } };
+			Assert.IsTrue(model.IsValid("Value2"));
+		}
+
+		[Test]
+		public void IsNotValidTest()
+		{
+			var model = new Model() { Value1 = AnEnum.A, Value2 = new string[] { "hello1", "hello2", "hello3", "hello4" } };
 			Assert.IsFalse(model.IsValid("Value2"));
 		}
 
@@ -181,9 +195,9 @@ namespace HermaFx.DataAnnotations
 	}
 	#endregion
 
-	#region MinElementsIfNotHasFlag
+	#region MaxElementsIfNotHasFlag
 	[TestFixture]
-	public class MinElementsIfNotHasFlagAttributeTest
+	public class MaxElementsIfNotHasFlagAttributeTest
 	{
 		[Flags]
 		public enum AnEnum
@@ -193,11 +207,11 @@ namespace HermaFx.DataAnnotations
 			C = (1 << 2)
 		}
 
-		class Model : ModelBase<MinElementsIfNotHasFlagAttribute>
+		class Model : ModelBase<MaxElementsIfNotHasFlagAttribute>
 		{
 			public AnEnum Value1 { get; set; }
 
-			[MinElementsIfNotHasFlag(3, "Value1", (AnEnum.A | AnEnum.B))]
+			[MaxElementsIfNotHasFlag(3, "Value1", (AnEnum.A | AnEnum.B))]
 			public string[] Value2 { get; set; }
 		}
 
@@ -216,9 +230,16 @@ namespace HermaFx.DataAnnotations
 		}
 
 		[Test]
-		public void IsNotValidTest()
+		public void IsValid3Test()
 		{
 			var model = new Model() { Value1 = AnEnum.C, Value2 = new string[] { "hello", "hello2" } };
+			Assert.IsTrue(model.IsValid("Value2"));
+		}
+
+		[Test]
+		public void IsNotValidTest()
+		{
+			var model = new Model() { Value1 = AnEnum.C, Value2 = new string[] { "hello", "hello2", "hello3", "hello4" } };
 			Assert.IsFalse(model.IsValid("Value2"));
 		}
 

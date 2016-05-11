@@ -51,7 +51,11 @@
     <Compile Include="AggregateValidationException.cs" />
     <Compile Include="AggregateValidationResult.cs" />
     <Compile Include="IPAddressAttribute.cs" />
+    <Compile Include="MaxElementsIfAttribute.cs" />
     <Compile Include="MinElementsIfAttribute.cs" />
+    <Compile Include="MaxElementsIfHasFlagAttribute.cs" />
+    <Compile Include="MaxElementsIfNotAttribute.cs" />
+    <Compile Include="MaxElementsIfNotHasFlagAttribute.cs" />
     <Compile Include="NotDefaultAttribute.cs" />
     <Compile Include="ContainsStringAttribute.cs" />
     <Compile Include="MinElementsIfNotAttribute.cs" />
