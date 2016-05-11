@@ -46,6 +46,7 @@
     <Compile Include="LessThanOrEqualToAttributeTest.cs" />
     <Compile Include="MaxElementsTests.cs" />
     <Compile Include="ExtendedValidatorTests.cs" />
+    <Compile Include="MaxElementsIfAttributeTest.cs" />
     <Compile Include="MinElementsTests.cs" />
     <Compile Include="NotEqualToAttributeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
