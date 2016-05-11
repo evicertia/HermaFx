@@ -11,7 +11,7 @@ namespace HermaFx.DataAnnotations
 	{
 		public Operator Operator { get; private set; }
 		public object DependentValue { get; private set; }
-		private MinElementsAttribute MinElements{ get; set; }
+		private MinElementsAttribute MinElements { get; set; }
 		/// <summary>
 		/// Gets or sets a flag indicating whether the attribute should allow empty strings.
 		/// </summary>
