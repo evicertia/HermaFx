@@ -120,9 +120,11 @@ namespace HermaFx.DataAnnotations
 				}
 			}
 
-			return results.Count == 0 ? 
+			return results.Count == 0 ?
 				ValidationResult.Success
-				: AggregateValidationResult.CreateFor(context, results);
+				: ErrorMessage != null ?
+					AggregateValidationResult.CreateFor(ErrorMessage, results)
+					: AggregateValidationResult.CreateFor(context, results);
 		}
 	}
 }
