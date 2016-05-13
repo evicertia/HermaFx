@@ -58,7 +58,7 @@ namespace HermaFx.DataAnnotations
 		{
 			return new AggregateValidationResult(
 				string.Format(NestedErrorMessage, context.DisplayName ?? context.MemberName),
-				results: results				
+				results: results
 			);
 		}
 		#endregion
