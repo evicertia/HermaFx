@@ -72,6 +72,8 @@
     <Compile Include="DesignPatterns\EnhancedEnumType.cs" />
     <Compile Include="Functional\PatternMatcher.cs" />
     <Compile Include="Functional\TypeSwitch.cs" />
+    <Compile Include="Globalization\Currencies.cs" />
+    <Compile Include="Globalization\Currency.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="Guard.Expressions.cs" />
     <Compile Include="Reflection\Accessor.cs" />
