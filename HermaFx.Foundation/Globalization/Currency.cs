@@ -48,7 +48,7 @@ namespace HermaFx.Globalization
 			return _cleanNumberFormatInfos[culture.Name];
 		}
 
-		private string Format(IFormatProvider provider, decimal amount, bool hideSymbol)
+		private string FormatInternal(IFormatProvider provider, decimal amount, bool hideSymbol)
 		{
 			provider = provider ?? GetNumberFormatInfo();
 
@@ -57,21 +57,23 @@ namespace HermaFx.Globalization
 					: string.Format(provider, "{0} {1:c}", Symbol, amount);
 		}
 
-		public string Format(IFormatProvider provider, short amount, bool hideSymbol = false) => Format(provider, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(IFormatProvider provider, ushort amount, bool hideSymbol = false) => Format(provider, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(IFormatProvider provider, int amount, bool hideSymbol = false) => Format(provider, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(IFormatProvider provider, uint amount, bool hideSymbol = false) => Format(provider, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(IFormatProvider provider, long amount, bool hideSymbol = false) => Format(provider, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(IFormatProvider provider, ulong amount, bool hideSymbol = false) => Format(provider, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(IFormatProvider provider, double amount, bool hideSymbol = false) => Format(provider, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(IFormatProvider provider, short amount, bool hideSymbol = false) => FormatInternal(provider, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(IFormatProvider provider, ushort amount, bool hideSymbol = false) => FormatInternal(provider, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(IFormatProvider provider, int amount, bool hideSymbol = false) => FormatInternal(provider, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(IFormatProvider provider, uint amount, bool hideSymbol = false) => FormatInternal(provider, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(IFormatProvider provider, long amount, bool hideSymbol = false) => FormatInternal(provider, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(IFormatProvider provider, ulong amount, bool hideSymbol = false) => FormatInternal(provider, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(IFormatProvider provider, double amount, bool hideSymbol = false) => FormatInternal(provider, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(IFormatProvider provider, decimal amount, bool hideSymbol = false) => FormatInternal(provider, amount, hideSymbol);
 
-		public string Format(short amount, bool hideSymbol = false) => Format(null, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(ushort amount, bool hideSymbol = false) => Format(null, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(int amount, bool hideSymbol = false) => Format(null, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(uint amount, bool hideSymbol = false) => Format(null, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(long amount, bool hideSymbol = false) => Format(null, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(ulong amount, bool hideSymbol = false) => Format(null, Convert.ToDecimal(amount), hideSymbol);
-		public string Format(double amount, bool hideSymbol = false) => Format(null, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(short amount, bool hideSymbol = false) => FormatInternal(null, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(ushort amount, bool hideSymbol = false) => FormatInternal(null, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(int amount, bool hideSymbol = false) => FormatInternal(null, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(uint amount, bool hideSymbol = false) => FormatInternal(null, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(long amount, bool hideSymbol = false) => FormatInternal(null, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(ulong amount, bool hideSymbol = false) => FormatInternal(null, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(double amount, bool hideSymbol = false) => FormatInternal(null, Convert.ToDecimal(amount), hideSymbol);
+		public string Format(decimal amount, bool hideSymbol = false) => FormatInternal(null, amount, hideSymbol);
 
 		#endregion
 
