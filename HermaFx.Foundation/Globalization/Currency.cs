@@ -53,8 +53,8 @@ namespace HermaFx.Globalization
 			provider = provider ?? GetNumberFormatInfo();
 
 			return hideSymbol ? string.Format(provider, "{0:c}", amount)
-				: SymbolBeforeValue ? string.Format(provider, "{0:c} {1}", amount, Symbol)
-					: string.Format(provider, "{0} {1:c}", Symbol, amount);
+				: SymbolBeforeValue ? string.Format(provider, "{0} {1:c}", Symbol, amount)
+					: string.Format(provider, "{0:c} {1}", amount, Symbol);
 		}
 
 		public string Format(IFormatProvider provider, short amount, bool hideSymbol = false) => FormatInternal(provider, Convert.ToDecimal(amount), hideSymbol);
