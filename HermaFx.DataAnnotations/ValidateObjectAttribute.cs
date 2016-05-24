@@ -83,6 +83,7 @@ namespace HermaFx.DataAnnotations
 
 		protected override ValidationResult IsValid(object value, ValidationContext context)
 		{
+			context = context ?? new ValidationContext(value);
 			var seen = TryGetSeenHashFrom(context);
 
 			//_Log.DebugFormat("Trying to validate {0}", value.ToString());
