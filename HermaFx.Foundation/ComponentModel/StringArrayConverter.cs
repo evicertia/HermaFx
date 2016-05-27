@@ -38,7 +38,7 @@ namespace HermaFx.ComponentModel
 
 			if (!string.IsNullOrWhiteSpace(s))
 			{
-				return ((string)value).Split(new[] { _separator }, _options);
+				return ((string)value).Split(new[] { _separator }, _options).Select(x => x?.Trim()).ToArray();
 			}
 
 			return base.ConvertFrom(context, culture, value);
@@ -103,12 +103,26 @@ namespace HermaFx.ComponentModel
 			{
 				var converter = GetConverter();
 				return ((string)value).Split(new[] { _separator }, _options)
+					.Select(x => x?.Trim())
 					.Select(x => converter.ConvertFrom(x))
 					.Cast<T>()
 					.ToArray();
 			}
 
 			return base.ConvertFrom(context, culture, value);
+		}
+	}
+
+	public class StringArrayConverter<T, C> : StringArrayConverter<T>
+	{
+		public StringArrayConverter(string separator, StringSplitOptions options)
+			: base(separator, options, typeof(C))
+		{
+		}
+
+		public StringArrayConverter()
+			: this(DEFAULT_SEPARATOR, StringSplitOptions.None)
+		{
 		}
 	}
 }

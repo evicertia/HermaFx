@@ -6,8 +6,7 @@
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EE555B7F-CB54-4495-897F-5CA11A6B8D2D}</ProjectGuid>
-    <!-- ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids -->
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HermaFx</RootNamespace>
@@ -56,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AdvancedGuidGeneratorTests.cs" />
     <Compile Include="Base32EncodingTests.cs" />
+    <Compile Include="ComponentModel\StringArrayConverterTests.cs" />
     <Compile Include="GuardTests.cs" />
     <Compile Include="Cryptography\CryptoHelperTests.cs" />
     <Compile Include="ZBase32EncodingTests.cs" />
