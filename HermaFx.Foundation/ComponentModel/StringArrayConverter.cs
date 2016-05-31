@@ -50,24 +50,11 @@ namespace HermaFx.ComponentModel
 		public const string DEFAULT_SEPARATOR = ",";
 		private string _separator;
 		private StringSplitOptions _options;
-		private Type _converter;
 
-		public StringArrayConverter(string separator, StringSplitOptions options, Type converter)
+		public StringArrayConverter(string separator, StringSplitOptions options)
 		{
 			_separator = separator;
 			_options = options;
-			_converter = converter;
-		}
-
-		public StringArrayConverter(string separator, StringSplitOptions options)
-			: this(separator, options, null)
-		{
-		}
-
-		public StringArrayConverter(Type converter)
-			: this(DEFAULT_SEPARATOR, StringSplitOptions.None)
-		{
-			_converter = converter;
 		}
 
 		public StringArrayConverter()
@@ -75,13 +62,8 @@ namespace HermaFx.ComponentModel
 		{
 		}
 
-		private TypeConverter GetConverter()
+		protected virtual TypeConverter GetConverter()
 		{
-			if (_converter != null)
-			{
-				return (TypeConverter)Activator.CreateInstance(_converter);
-			}
-				
 			return TypeDescriptor.GetConverter(typeof(T));
 		}
 
@@ -114,15 +96,29 @@ namespace HermaFx.ComponentModel
 	}
 
 	public class StringArrayConverter<T, C> : StringArrayConverter<T>
+		where C : TypeConverter
 	{
 		public StringArrayConverter(string separator, StringSplitOptions options)
-			: base(separator, options, typeof(C))
+			: base(separator, options)
 		{
 		}
 
 		public StringArrayConverter()
 			: this(DEFAULT_SEPARATOR, StringSplitOptions.None)
 		{
+		}
+
+		protected override TypeConverter GetConverter()
+		{
+			var converter = typeof(C);
+			var args = new[] { typeof(Type) };
+			var ctor = converter.GetConstructor(args);
+
+			// XXX: Converters may have a .ctor accepting destination type as parameter. (pruiz)
+			return (ctor != null ?
+				TypeDescriptor.CreateInstance(null, converter, args, new object[] { typeof(T) })
+				: TypeDescriptor.CreateInstance(null, converter, null, null))
+				as TypeConverter;
 		}
 	}
 }
