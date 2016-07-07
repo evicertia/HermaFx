@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Web.Mvc;
 using System.Web.Routing;
 
+using HermaFx.Mvc;
+
 namespace HermaFx.MvcDemo
 {
 	public class Global : System.Web.HttpApplication
@@ -13,6 +15,8 @@ namespace HermaFx.MvcDemo
 		{
 			FilterConfig.Configure(GlobalFilters.Filters);
 			RouteConfig.Configure(RouteTable.Routes);
+			ViewEngines.Engines.Clear();
+			ViewEngines.Engines.Add(new FeatureBasedRazorViewEngine());
 		}
 
 		protected void Session_Start(object sender, EventArgs e)
