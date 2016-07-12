@@ -62,6 +62,7 @@
     <Compile Include="RequiredIfNotRegExMatchAttributeTest.cs" />
     <Compile Include="RequiredIfRegExMatchAttributeTest.cs" />
     <Compile Include="RequiredIfTrueAttributeTest.cs" />
+    <Compile Include="ShouldBeAttributeTests.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="ValidateElementsUsingTests.cs" />
   </ItemGroup>

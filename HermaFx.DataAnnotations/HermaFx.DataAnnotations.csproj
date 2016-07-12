@@ -60,6 +60,7 @@
     <Compile Include="MinElementsIfNotAttribute.cs" />
     <Compile Include="MinElementsIfHasFlagAttribute.cs" />
     <Compile Include="MinElementsIfNotHasFlagAttribute.cs" />
+    <Compile Include="ShouldBeAttribute.cs" />
     <Compile Include="ValidateElementsUsingAttribute.cs" />
     <Compile Include="ContingentValidationAttribute.cs" />
     <Compile Include="MaxElementsAttribute.cs" />
