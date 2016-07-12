@@ -68,7 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionSessionStateAttribute.cs" />
     <Compile Include="FeatureBasedRazorViewEngine.cs" />
+    <Compile Include="PreserveRestoreModelStateAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
