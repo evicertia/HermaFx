@@ -18,12 +18,14 @@
 @section Title{	@messages.Title }
 @section header
 {
+@*
 	@Html.Css("select2.min.css")
 	@Html.Css("select2-bootstrap.min.css")
 
 	@Html.Script("~/Scripts/select2.min.js")
 	@Html.Script("~/Scripts/i18n/select2.i18n." + CultureInfo.CurrentCulture.TwoLetterISOLanguageName + ".js")
 	@Html.ScriptBlock("TestControls.js")
+*@
 }
 @using (Bootstrap.Form(MVC.Test.ActionNames.Controls, MVC.Test.Name, FormMethod.Post).Begin())
 {
@@ -37,11 +39,13 @@
 		</div>
 	</div>
 	<div class="btn-group" role="group" aria-label="...">
+@*
 		@Html.ButtonFor(x => x.ActionSubmit, TestIndex._Action.Clear, x =>
    { x.InnerText = messages.Clear; x.Category = VisualState.Warning; x.Kind = ButtonKind.ButtonSubmit;})
 		@Html.ButtonFor(x => x.ActionSubmit, TestIndex._Action.Clear2, x =>
    { x.InnerText = messages.Clear2; x.Category = VisualState.Warning; x.Kind = ButtonKind.ButtonSubmit;})
 		@Html.ButtonFor(x => x.ActionSubmit, TestIndex._Action.Submit, x =>
    { x.InnerText = messages.Submit; x.Category = VisualState.Primary; x.Kind = ButtonKind.ButtonSubmit;})
+*@
 	</div>
 }
