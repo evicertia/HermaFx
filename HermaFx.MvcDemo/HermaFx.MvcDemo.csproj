@@ -193,6 +193,10 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Facilities\FluentBootstrap\BootstrapConfigExtensions.cs" />
+    <Compile Include="Facilities\FluentBootstrap\BootstrapHelperExtensions.cs" />
+    <Compile Include="Facilities\FluentBootstrap\ButtonExtensions.cs" />
+    <Compile Include="Facilities\FluentBootstrap\ComponentBuilderExtensions.cs" />
     <Compile Include="Features\Home\HomeController.cs" />
     <Compile Include="Features\Test\TestController.cs" />
     <Compile Include="Features\Test\TestIndex.cs" />
@@ -245,9 +249,7 @@
       <Name>HermaFx.Mvc</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Facilities\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

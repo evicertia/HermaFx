@@ -15,7 +15,7 @@ namespace FluentBootstrap.Mvc
 		private static readonly PropertyInfo _HtmlHelperAccessor = typeof(MvcBootstrapConfig<>).GetProperty("HtmlHelper", BindingFlags.Instance | BindingFlags.NonPublic);
 
 		/*public static HtmlHelper<TModel> GetHtmlHelper<TModel>(this MvcBootstrapConfig<TModel> config)
-		{
+		{	
 			return (HtmlHelper<TModel>)_HtmlHelperAccessor.GetValue(config);
 		}*/
 	}
