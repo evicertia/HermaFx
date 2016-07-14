@@ -32,7 +32,7 @@ namespace HermaFx.MvcDemo.Features
 
 		[HttpGet, RestoreModelState]
 		[ActionSessionState(SessionStateBehavior.Default)]
-		public virtual ViewResult Controls()
+		public virtual ViewResult Index()
 		{
 			return View(TestStubs.PopulateControlData());
 		}
@@ -40,21 +40,16 @@ namespace HermaFx.MvcDemo.Features
 		[HttpPost]
 		[ValidateModelState, ValidateAntiForgeryToken]
 		[ActionSessionState(SessionStateBehavior.Default)]
-		public virtual RedirectToRouteResult Controls(TestIndex model)
+		public virtual RedirectToRouteResult Index(TestIndex model)
 		{
 			switch (model.ActionSubmit)
 			{
-				case TestIndex._Action.Submit: return ControlTestSubmit(model);
+				case TestIndex._Action.Submit:
+					AddSuccessMessage("Submmit success");
+					return RedirectToAction(MVC.Home.Index());
 				default: throw new WebSiteException("Unknown action?!");
 			}
 		}
-
-		private RedirectToRouteResult ControlTestSubmit(TestIndex model)
-		{
-			AddSuccessMessage("Submmit success");
-			return RedirectToAction(MVC.Test.Controls());
-		}
-
 		#endregion
 	}
 

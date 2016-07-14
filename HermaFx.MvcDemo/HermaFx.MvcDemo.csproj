@@ -205,16 +205,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mvc\AlertsBarExtensions.cs" />
-    <Compile Include="Mvc\HomeController.generated.cs">
-      <DependentUpon>T4MVC.tt</DependentUpon>
-    </Compile>
     <Compile Include="Mvc\HandleErrorAttribute.cs" />
     <Compile Include="Mvc\CustomViewPage.cs" />
     <Compile Include="Mvc\CustomController.cs" />
     <Compile Include="Mvc\CustomControllerActivator.cs" />
     <Compile Include="Mvc\CustomControllerFactory.cs" />
-    <Compile Include="Plumbing\WebSiteException.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Mvc\HomeController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
     <Compile Include="Mvc\SharedController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
@@ -226,6 +224,8 @@
     <Compile Include="Mvc\TestController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="Plumbing\WebSiteException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\ISettings.cs" />
   </ItemGroup>
   <ItemGroup>

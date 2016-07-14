@@ -23,10 +23,16 @@ using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using T4MVC;
+
+
+
 namespace HermaFx.MvcDemo.Features
 {
+
     public partial class TestController
     {
+
+
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         protected TestController(Dummy d) { }
 
@@ -57,6 +63,9 @@ namespace HermaFx.MvcDemo.Features
         }
 
 
+
+
+
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public TestController Actions { get { return MVC.Test; } }
         [GeneratedCode("T4MVC", "2.0")]
@@ -72,70 +81,104 @@ namespace HermaFx.MvcDemo.Features
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNamesClass
         {
-            public readonly string Controls = "Controls";
+
+
+            public readonly string Index = "Index";
+
         }
+
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
-            public const string Controls = "Controls";
+
+            public const string Index = "Index";
+
         }
 
 
-        static readonly ActionParamsClass_Controls s_params_Controls = new ActionParamsClass_Controls();
+
+
+        static readonly ActionParamsClass_Index s_params_Index = new ActionParamsClass_Index();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_Controls ControlsParams { get { return s_params_Controls; } }
+        public ActionParamsClass_Index IndexParams { get { return s_params_Index; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_Controls
+        public class ActionParamsClass_Index
         {
+
+
             public readonly string model = "model";
+
         }
+
+
+
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewsClass Views { get { return s_views; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewsClass
         {
-            static readonly _ViewNamesClass s_ViewNames = new _ViewNamesClass();
-            public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
-            public class _ViewNamesClass
-            {
-                public readonly string TestIndex = "TestIndex";
-            }
-            public readonly string TestIndex = "~/Features/Test/TestIndex.cshtml";
+
+static readonly _ViewNamesClass s_ViewNames = new _ViewNamesClass();
+public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
+public class _ViewNamesClass
+{
+public readonly string TestIndex = "TestIndex";
+            
+}
+public readonly string TestIndex = "~/Features/Test/TestIndex.cshtml";
+
         }
     }
+
 
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
     public partial class T4MVC_TestController : HermaFx.MvcDemo.Features.TestController
     {
         public T4MVC_TestController() : base(Dummy.Instance) { }
 
-        [NonAction]
-        partial void ControlsOverride(T4MVC_System_Web_Mvc_ViewResult callInfo);
 
         [NonAction]
-        public override System.Web.Mvc.ViewResult Controls()
+        partial void IndexOverride(T4MVC_System_Web_Mvc_ViewResult callInfo);
+
+        [NonAction]
+        public override System.Web.Mvc.ViewResult Index()
         {
-            var callInfo = new T4MVC_System_Web_Mvc_ViewResult(Area, Name, ActionNames.Controls);
-            ControlsOverride(callInfo);
+            var callInfo = new T4MVC_System_Web_Mvc_ViewResult(Area, Name, ActionNames.Index);
+
+            IndexOverride(callInfo);
+
             return callInfo;
+
         }
 
-        [NonAction]
-        partial void ControlsOverride(T4MVC_System_Web_Mvc_RedirectToRouteResult callInfo, HermaFx.MvcDemo.Features.TestIndex model);
 
         [NonAction]
-        public override System.Web.Mvc.RedirectToRouteResult Controls(HermaFx.MvcDemo.Features.TestIndex model)
+        partial void IndexOverride(T4MVC_System_Web_Mvc_RedirectToRouteResult callInfo, HermaFx.MvcDemo.Features.TestIndex model);
+
+        [NonAction]
+        public override System.Web.Mvc.RedirectToRouteResult Index(HermaFx.MvcDemo.Features.TestIndex model)
         {
-            var callInfo = new T4MVC_System_Web_Mvc_RedirectToRouteResult(Area, Name, ActionNames.Controls);
+            var callInfo = new T4MVC_System_Web_Mvc_RedirectToRouteResult(Area, Name, ActionNames.Index);
+
+
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "model", model);
-            ControlsOverride(callInfo, model);
+
+
+            IndexOverride(callInfo, model);
+
             return callInfo;
+
         }
+
 
     }
+
+
 }
+
+
 
 #endregion T4MVC
 #pragma warning restore 1591, 3008, 3009, 0108, 0114

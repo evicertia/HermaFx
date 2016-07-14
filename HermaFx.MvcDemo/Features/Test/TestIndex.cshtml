@@ -25,7 +25,7 @@
 	@Html.Script("~/Scripts/i18n/select2.i18n." + CultureInfo.CurrentCulture.TwoLetterISOLanguageName + ".js")
 	@Html.ScriptBlock("TestControls.js")
 }
-@using (var form = Bootstrap.Form(MVC.Test.ActionNames.Controls, MVC.Test.Name, FormMethod.Post).Begin())
+@using (var form = Bootstrap.Form(MVC.Test.Index(), FormMethod.Post).Begin())
 {
 	@Html.AntiForgeryToken()
 	<div class="row">
