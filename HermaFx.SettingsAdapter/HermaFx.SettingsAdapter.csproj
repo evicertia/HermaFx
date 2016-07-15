@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="HermaFx.SettingsAdapter.nuspec" />
+    <None Include="ILMerge.excludes" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -71,14 +72,9 @@
   <UsingTask AssemblyFile="$(SolutionDir)packages\ILMerge.Tools.MSBuildToolTask.2.14.1208.49\tools\ILMerge.Tools.MSBuildToolTask.dll" TaskName="ILMerge.Tools.MSBuildToolTask.ILMergeTool" />
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
-        <InputAssemblies Include="$(OutputPath)\Castle.Core.dll" />
+      <InputAssemblies Include="$(OutputPath)\Castle.Core.dll" />
     </ItemGroup>
-    <ILMergeTool
-            Internalize="true"
-            SearchDirectories="$(MSBuildProjectDirectory)\$(OutputPath.TrimEnd('\'))"
-            InputAssemblies="@(IntermediateAssembly);@(InputAssemblies)"
-            ToolPath="$(SolutionDir)packages\ILMerge.Tools.2.14.1208\tools\ILMerge.exe"
-            OutputFile="$(OutputPath)\$(AssemblyName).dll" />
+    <ILMergeTool Internalize="true" SearchDirectories="$(MSBuildProjectDirectory)\$(OutputPath.TrimEnd('\'))" InputAssemblies="@(IntermediateAssembly);@(InputAssemblies)" ExcludeFile="$(MSBuildProjectDirectory)\ILMerge.excludes" ToolPath="$(SolutionDir)packages\ILMerge.Tools.2.14.1208\tools\ILMerge.exe" OutputFile="$(OutputPath)\$(AssemblyName).dll" />
   </Target>
   <!-- /ILMerge -->
 </Project>
