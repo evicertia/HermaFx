@@ -67,4 +67,18 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <!-- ILMerge -->
+  <UsingTask AssemblyFile="$(SolutionDir)packages\ILMerge.Tools.MSBuildToolTask.2.14.1208.49\tools\ILMerge.Tools.MSBuildToolTask.dll" TaskName="ILMerge.Tools.MSBuildToolTask.ILMergeTool" />
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+        <InputAssemblies Include="$(OutputPath)\Castle.Core.dll" />
+    </ItemGroup>
+    <ILMergeTool
+            Internalize="true"
+            SearchDirectories="$(MSBuildProjectDirectory)\$(OutputPath.TrimEnd('\'))"
+            InputAssemblies="@(IntermediateAssembly);@(InputAssemblies)"
+            ToolPath="$(SolutionDir)packages\ILMerge.Tools.2.14.1208\tools\ILMerge.exe"
+            OutputFile="$(OutputPath)\$(AssemblyName).dll" />
+  </Target>
+  <!-- /ILMerge -->
 </Project>
