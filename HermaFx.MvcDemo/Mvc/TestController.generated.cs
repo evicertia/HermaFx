@@ -34,6 +34,10 @@ namespace HermaFx.MvcDemo.Features
 
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public TestController() { }
+
+
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         protected TestController(Dummy d) { }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]

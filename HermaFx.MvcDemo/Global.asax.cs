@@ -3,8 +3,10 @@ using System;
 using System.Diagnostics;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.Configuration;
 
 using HermaFx.Mvc;
+using HermaFx.Settings;
 
 namespace HermaFx.MvcDemo
 {
@@ -13,8 +15,10 @@ namespace HermaFx.MvcDemo
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
+			var settings = new SettingsAdapter().Create<ISettings>(WebConfigurationManager.AppSettings);
 			FilterConfig.Configure(GlobalFilters.Filters);
 			RouteConfig.Configure(RouteTable.Routes);
+			ControllerBuilder.Current.SetControllerFactory(new Mvc.CustomControllerFactory(settings));
 			ViewEngines.Engines.Clear();
 			ViewEngines.Engines.Add(new FeatureBasedRazorViewEngine());
 		}

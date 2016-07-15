@@ -15,13 +15,21 @@ namespace HermaFx.MvcDemo.Mvc
 	public class CustomControllerFactory : DefaultControllerFactory
 	{
 		private static readonly global::Common.Logging.ILog _Log = global::Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		private readonly ISettings _settings;
 
 #if false
 		private readonly IWindsorContainer _container;
 
-		public VeritasControllerFactory(IWindsorContainer container)
+		public CustomControllerFactory(IWindsorContainer container)
 		{
 			this._container = container;
+		}
+#else
+		public CustomControllerFactory(ISettings settings)
+		{
+			Guard.IsNotNull(settings, nameof(settings));
+
+			_settings = settings;
 		}
 #endif
 
@@ -92,6 +100,15 @@ namespace HermaFx.MvcDemo.Mvc
 			}
 
 			_container.Release(controller);
+		}
+#else
+		protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
+		{
+			_Log.InfoFormat("Resolving controller of type: {0}", controllerType.IfNotNull(x => x.Name));
+
+			var result = base.GetControllerInstance(requestContext, controllerType);
+			(result as CustomController).IfNotNull(x => x.Settings = _settings);
+			return result;
 		}
 #endif
 	}

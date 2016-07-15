@@ -20,13 +20,6 @@ namespace HermaFx.MvcDemo.Features
 	{
 		private static readonly global::Common.Logging.ILog _Log = global::Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 		//private IUploadManager _manager;
-		private ISettings _settings;
-
-		public TestController(/*IUploadManager manager, */ ISettings settings)
-		{
-			//_manager = manager;
-			_settings = settings;
-		}
 
 		#region ControlTest
 
