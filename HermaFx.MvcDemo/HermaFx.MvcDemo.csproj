@@ -248,6 +248,10 @@
       <Project>{36fb4448-8b60-4a08-a79f-f20ffcce6a8b}</Project>
       <Name>HermaFx.Mvc</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HermaFx.SettingsAdapter\HermaFx.SettingsAdapter.csproj">
+      <Project>{25cde825-0c23-4e8d-bdf0-4aa8cc07c393}</Project>
+      <Name>HermaFx.SettingsAdapter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

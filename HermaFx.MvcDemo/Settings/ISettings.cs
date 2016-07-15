@@ -8,12 +8,12 @@ using System.Text;
 using HermaFx;
 using HermaFx.ComponentModel;
 using HermaFx.DataAnnotations;
-using HermaFx.Castle.DictionaryAdapter;
+using HermaFx.Settings;
 using System.Configuration;
 
 namespace HermaFx.MvcDemo
 {
-	//[AppSettings]
+	[Settings]
 	public interface ISettings
 	{
 		[Required]
