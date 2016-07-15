@@ -82,6 +82,7 @@
     <Compile Include="Reflection\ReflectionHelper.cs" />
     <Compile Include="Reflection\SingleProperty.cs" />
     <Compile Include="RuntimeExtensions\DateTimeExtensions.cs" />
+    <Compile Include="RuntimeExtensions\NameValueCollectionExtensions.cs" />
     <Compile Include="RuntimeExtensions\RandomExtensions.cs" />
     <Compile Include="Cryptography\ASN1.cs" />
     <Compile Include="Cryptography\ASN1Convert.cs" />
