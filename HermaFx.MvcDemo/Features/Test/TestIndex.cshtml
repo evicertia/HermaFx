@@ -18,11 +18,13 @@
 @section Title{	@messages.Title }
 @section header
 {
+	@*
 	@Html.Style("select2.min.css")
 	@Html.Style("select2-bootstrap.min.css")
 
 	@Html.Script("~/Scripts/select2.min.js")
 	@Html.Script("~/Scripts/i18n/select2.i18n." + CultureInfo.CurrentCulture.TwoLetterISOLanguageName + ".js")
+	*@
 	@Html.ScriptBlock("TestControls.js")
 }
 @using (var form = Bootstrap.Form(MVC.Test.Index(), FormMethod.Post).Begin())
