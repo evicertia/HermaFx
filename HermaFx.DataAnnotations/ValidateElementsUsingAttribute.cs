@@ -120,10 +120,18 @@ namespace HermaFx.DataAnnotations
 				}
 			}
 
+			if (results.Count == 0)
+			{
+				return ValidationResult.Success;
+			}
+			else
+			{
+				return AggregateValidationResult.CreateFor(ErrorMessage ?? context, results);
+			}
 			return results.Count == 0 ?
 				ValidationResult.Success
 				: ErrorMessage != null ?
-					AggregateValidationResult.CreateFor(ErrorMessage, results)
+					AggregateValidationResult.CreateFor(this.FormatErrorMessage(ErrorMessage), results)
 					: AggregateValidationResult.CreateFor(context, results);
 		}
 	}
