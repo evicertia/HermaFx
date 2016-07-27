@@ -9,7 +9,7 @@ namespace HermaFx.Globalization
 	public class Countries : EnhancedEnumType<Countries, Country>
 	{
 		#region .ctor
-		public Countries() : base(x => x.Iso3)
+		public Countries() : base(x => x.IsoCode3)
 		{
 		}
 		#endregion
@@ -362,7 +362,7 @@ namespace HermaFx.Globalization
 		{
 			get
 			{
-				return this.Single(x => x.Iso3.Equals(value, StringComparison.InvariantCultureIgnoreCase));
+				return this.Single(x => x.IsoCode3.Equals(value, StringComparison.InvariantCultureIgnoreCase));
 			}
 		}
 

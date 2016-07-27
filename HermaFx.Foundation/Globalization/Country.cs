@@ -13,46 +13,46 @@ namespace HermaFx.Globalization
 	{
 		#region Fields
 		private Func<string> _name;
-		private Func<string> _officialNameEn;
+		private Func<string> _displayName;
 		#endregion
 
 		#region Properties
 		/// <summary>
 		/// Alpha-2 codes from ISO 3166-1
 		/// </summary>
-		public string Iso2 { get; private set; }
+		public string IsoCode2 { get; private set; }
 		/// <summary>
 		/// Alpha-3 codes from ISO 3166-1 (synonymous with World Bank Codes)
 		/// </summary>
-		public string Iso3 { get; private set; }
+		public string IsoCode3 { get; private set; }
 		/// <summary>
 		/// Numeric codes from ISO 3166-1 (synonymous with UN Statistics M49 Codes)
 		/// </summary>
-		public string IsoNum { get; private set; }
+		public string IsoNumber { get; private set; }
 		/// <summary>
 		/// Codes assigned by the International Telecommunications Union
 		/// </summary>
-		public string Itu { get; private set; }
+		public string ItuCode { get; private set; }
 		/// <summary>
 		/// MAchine-Readable Cataloging codes from the Library of Congress
 		/// </summary>
-		public string Marc { get; private set; }
+		public string MarcCode { get; private set; }
 		/// <summary>
 		/// Country abbreviations by the World Meteorological Organization
 		/// </summary>
-		public string Wmo { get; private set; }
+		public string WmoCode { get; private set; }
 		/// <summary>
 		/// Distinguishing signs of vehicles in international traffic
 		/// </summary>
-		public string Ds { get; private set; }
+		public string DsCode { get; private set; }
 		/// <summary>
 		/// Country code from ITU-T recommendation E.164, sometimes followed by area code
 		/// </summary>
-		public string Dial { get; private set; }
+		public string PhonePrefix { get; private set; }
 		/// <summary>
 		/// Codes from the U.S. standard FIPS PUB 10-4
 		/// </summary>
-		public string Fips { get; private set; }
+		public string FipsCode { get; private set; }
 		/// <summary>
 		/// ISO 4217 currency alphabetic code
 		/// </summary>
@@ -80,15 +80,15 @@ namespace HermaFx.Globalization
 		/// <summary>
 		/// Capital city from Geonames
 		/// </summary>
-		public string Capital { get; private set; }
+		public string CapitalCity { get; private set; }
 		/// <summary>
 		/// Continent from Geonames
 		/// </summary>
 		public string Continent { get; private set; }
 		/// <summary>
-		/// Top level domain from Geonames
+		/// Top level domain (TLD) from Geonames
 		/// </summary>
-		public string Tld { get; private set; }
+		public string TopLevelDomain { get; private set; }
 		/// <summary>
 		/// Languages from Geonames
 		/// </summary>
@@ -97,17 +97,16 @@ namespace HermaFx.Globalization
 		/// Indicates if the country is a member of the European Union
 		/// </summary>
 		/// <seealso cref="http://europa.eu/about-eu/countries/index_en.htm"/>
-		public bool IsMemberOfEu { get; private set; }
+		public bool EuropeanUnionMember { get; private set; }
 
 		public string Name => _name();
-		public string OfficialNameEn => _officialNameEn();
+		public string DisplayName => _displayName();
 		#endregion
 
 		#region .ctor
-		public Country(string iso3, Func<string> name, Func<string> officialNameEn, string iso2, string isoNum,
-			string itu, string marc, string wmo, string ds, string dial, string fips,
-			string currencyAlphabetic, string currencyCountry, string currencyMinorUnit,
-			string currencyName, string currencyNumeric,
+		public Country(string iso3, Func<string> name, Func<string> displayName, 
+			string iso2, string isoNum, string itu, string marc, string wmo, string ds, string dial, string fips,
+			string currencyAlphabetic, string currencyCountry, string currencyMinorUnit, string currencyName, string currencyNumeric,
 			string isIndependent, string capital, string continent, string tld, string[] languages, bool isMemberOfEu)
 		{
 			Guard.IsNotNullNorWhitespace(iso3, nameof(iso3));
@@ -115,28 +114,28 @@ namespace HermaFx.Globalization
 			Guard.IsNotNullNorWhitespace(iso2, nameof(iso2));
 			Guard.IsNotNullNorWhitespace(fips, nameof(fips));
 
-			Iso3 = iso3;
+			IsoCode3 = iso3;
 			_name = name;
-			_officialNameEn = officialNameEn;
-			Iso2= iso2;
-			IsoNum = isoNum;
-			Itu = itu;
-			Marc = marc;
-			Wmo = wmo;
-			Ds = ds;
-			Dial = dial;
-			Fips = fips;
+			_displayName = displayName;
+			IsoCode2= iso2;
+			IsoNumber = isoNum;
+			ItuCode = itu;
+			MarcCode = marc;
+			WmoCode = wmo;
+			DsCode = ds;
+			PhonePrefix = dial;
+			FipsCode = fips;
 			CurrencyAlphabetic = currencyAlphabetic;
 			CurrencyCountry = currencyCountry;
 			CurrencyMinorUnit = currencyMinorUnit;
 			CurrencyName = currencyName;
 			CurrencyNumeric = currencyNumeric;
 			IsIndependent = isIndependent;
-			Capital = capital;
+			CapitalCity = capital;
 			Continent = continent;
-			Tld = tld;
+			TopLevelDomain = tld;
 			Languages = languages;
-			IsMemberOfEu = isMemberOfEu;
+			EuropeanUnionMember = isMemberOfEu;
 		}
 		#endregion
 	}
