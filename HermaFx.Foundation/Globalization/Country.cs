@@ -113,7 +113,6 @@ namespace HermaFx.Globalization
 			Guard.IsNotNullNorWhitespace(iso3, nameof(iso3));
 			Guard.IsNotNull(name, nameof(name));
 			Guard.IsNotNullNorWhitespace(iso2, nameof(iso2));
-			Guard.IsNotNullNorWhitespace(fips, nameof(fips));
 
 			IsoCode3 = iso3;
 			_name = name;
