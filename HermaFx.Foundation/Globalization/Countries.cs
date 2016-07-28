@@ -72,9 +72,38 @@ namespace HermaFx.Globalization
 				Continent = row[22],
 				Tld = row[23],
 				Languages = row[24]
-			})
-			.OrderBy(row => row.Iso3)
-			.Select(x =>
+			}).ToList();
+
+			/// We modify Namibia entry due to wrong source data because Namibia dont have Iso2 value filled.
+			var Namibia = countries.Single(c => c.Iso3 == "NAM");
+
+			countries.Remove(Namibia);
+			countries.Add(new
+			{
+				Name = Namibia.Name,
+				Official_Name_EN = Namibia.Official_Name_EN,
+				Iso2 = "NA",
+				Iso3 = Namibia.Iso3,
+				IsoNum = Namibia.IsoNum,
+				Itu = Namibia.Itu,
+				Marc = Namibia.Marc,
+				Wmo = Namibia.Wmo,
+				Ds = Namibia.Ds,
+				Dial = Namibia.Dial,
+				Fips = Namibia.Fips,
+				CurrencyAlphabetic = Namibia.CurrencyAlphabetic,
+				CurrencyCountry = Namibia.CurrencyCountry,
+				CurrencyMinorUnit = Namibia.CurrencyCountry,
+				CurrencyName = Namibia.CurrencyName,
+				CurrencyNumeric = Namibia.CurrencyNumeric,
+				IsIndependent = Namibia.IsIndependent,
+				Capital = Namibia.Capital,
+				Continent = Namibia.Continent,
+				Tld = Namibia.Tld,
+				Languages = Namibia.Languages
+			});
+
+			countries.OrderBy(row => row.Iso3).Select(x =>
 						string.Format("public static Country {0} = new Country(\"{0}\", () => \"{1}\",() => \"{2}\", \"{3}\", \"{4}\", \"{5}\", \"{6}\"" +
 							", \"{7}\", \"{8}\", \"{9}\", \"{10}\", \"{11}\", \"{12}\", \"{13}\", \"{14}\", \"{15}\", {16}" +
 							", {17}, \"{18}\", \"{19}\", \"{20}\", new string[] {{\"{21}\"}} , {22});",
@@ -264,7 +293,7 @@ namespace HermaFx.Globalization
 		public static Country MWI = new Country("MWI", () => "Malawi", () => "Malawi", "MW", "454", "MWI", "mw", "MW", "MW", "265", "MI", "MWK", "MALAWI", "2", "Kwacha", "454", true, null, "Lilongwe", "AF", ".mw", new string[] { "ny", "yao", "tum", "swk" }, false);
 		public static Country MYS = new Country("MYS", () => "Malaysia", () => "Malaysia", "MY", "458", "MLA", "my", "MS", "MAL", "60", "MY", "MYR", "MALAYSIA", "2", "Malaysian Ringgit", "458", true, null, "Kuala Lumpur", "AS", ".my", new string[] { "ms-MY", "en", "zh", "ta", "te", "ml", "pa", "th" }, false);
 		public static Country MYT = new Country("MYT", () => "Mayotte", () => "Mayotte", "YT", "175", "MYT", "ot", "", "", "262", "MF", "EUR", "MAYOTTE", "2", "Euro", "978", false, "Part of FR", "Mamoudzou", "AF", ".yt", new string[] { "fr-YT" }, false);
-		public static Country NAM = new Country("NAM", () => "Namibia", () => "Namibia", "", "516", "NMB", "sx", "NM", "NAM", "264", "WA", "ZAR", "NAMIBIA", "2", "Rand", "710", true, null, "Windhoek", "AF", ".na", new string[] { "en-NA", "af", "de", "hz", "naq" }, false);
+		public static Country NAM = new Country("NAM", () => "Namibia", () => "Namibia", "NA", "516", "NMB", "sx", "NM", "NAM", "264", "WA", "ZAR", "NAMIBIA", "NAMIBIA", "Rand", "710", true, null, "Windhoek", "AF", ".na", new string[] { "en-NA", "af", "de", "hz", "naq" }, false);
 		public static Country NCL = new Country("NCL", () => "New Caledonia", () => "New Caledonia", "NC", "540", "NCL", "nl", "NC", "F", "687", "NC", "XPF", "NEW CALEDONIA", "0", "CFP Franc", "953", false, "Territory of FR", "Noumea", "OC", ".nc", new string[] { "fr-NC" }, false);
 		public static Country NER = new Country("NER", () => "Niger", () => "Niger", "NE", "562", "NGR", "ng", "NR", "RN", "227", "NG", "XOF", "NIGER", "0", "CFA Franc BCEAO", "952", true, null, "Niamey", "AF", ".ne", new string[] { "fr-NE", "ha", "kr", "dje" }, false);
 		public static Country NFK = new Country("NFK", () => "Norfolk Island", () => "Norfolk Island", "NF", "574", "NFK", "nx", "NF", "AUS", "672", "NF", "AUD", "NORFOLK ISLAND", "2", "Australian Dollar", "036", false, "Territory of AU", "Kingston", "OC", ".nf", new string[] { "en-NF" }, false);
