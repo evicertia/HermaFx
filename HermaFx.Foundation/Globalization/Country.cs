@@ -76,7 +76,8 @@ namespace HermaFx.Globalization
 		/// <summary>
 		/// Country status, based on the CIA World Factbook
 		/// </summary>
-		public string IsIndependent { get; private set; }
+		public bool Sovereign { get; private set; }
+		public string SovereignDetails { get; private set; }
 		/// <summary>
 		/// Capital city from Geonames
 		/// </summary>
@@ -104,15 +105,14 @@ namespace HermaFx.Globalization
 		#endregion
 
 		#region .ctor
-		public Country(string iso3, Func<string> name, Func<string> displayName, 
+		public Country(string iso3, Func<string> name, Func<string> displayName,
 			string iso2, string isoNum, string itu, string marc, string wmo, string ds, string dial, string fips,
 			string currencyAlphabetic, string currencyCountry, string currencyMinorUnit, string currencyName, string currencyNumeric,
-			string isIndependent, string capital, string continent, string tld, string[] languages, bool isMemberOfEu)
+			bool sovereign, string sovereignDetails, string capital, string continent, string tld, string[] languages, bool isMemberOfEu)
 		{
 			Guard.IsNotNullNorWhitespace(iso3, nameof(iso3));
 			Guard.IsNotNull(name, nameof(name));
 			Guard.IsNotNullNorWhitespace(iso2, nameof(iso2));
-			Guard.IsNotNullNorWhitespace(fips, nameof(fips));
 
 			IsoCode3 = iso3;
 			_name = name;
@@ -130,7 +130,8 @@ namespace HermaFx.Globalization
 			CurrencyMinorUnit = currencyMinorUnit;
 			CurrencyName = currencyName;
 			CurrencyNumeric = currencyNumeric;
-			IsIndependent = isIndependent;
+			Sovereign = sovereign;
+			SovereignDetails = sovereignDetails;
 			CapitalCity = capital;
 			Continent = continent;
 			TopLevelDomain = tld;
