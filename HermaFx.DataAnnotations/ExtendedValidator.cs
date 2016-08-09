@@ -32,6 +32,11 @@ namespace HermaFx.DataAnnotations
 			};
 		}
 
+		private static bool ShouldValidateAllProperties(ValidationContext context)
+		{
+			return (bool)(context.Items?.GetValueOrDefault(VALIDATE_ALL_PROPERTIES_KEY, null) ?? true);
+		}
+
 		private static IEnumerable<ValidationResult> ValidateClass(object value, ValidationContext context)
 		{
 			var results = new List<ValidationResult>();
@@ -41,7 +46,7 @@ namespace HermaFx.DataAnnotations
 			return results;
 		}
 
-		private static IEnumerable<ValidationResult> ValidateProperties(object value, ValidationContext context, bool validateAllProperties)
+		private static IEnumerable<ValidationResult> ValidateProperties(object value, ValidationContext context)
 		{
 			if (value == null) return Enumerable.Empty<ValidationResult>();
 
@@ -81,13 +86,13 @@ namespace HermaFx.DataAnnotations
 				// Now let's try nested validation...
 				if (value2 != null)
 				{
-					if (validateAllProperties)
+					if (ShouldValidateAllProperties(context))
 					{
 						Validator.TryValidateObject(value2, newctx, results);
 					}
 					else if (property.GetCustomAttribute<ValidateObjectAttribute>() != null)
 					{
-						results.AddRange(ValidateRecursing(value2, newctx, validateAllProperties));
+						results.AddRange(ValidateRecursing(value2, newctx));
 					}
 				}
 			}
@@ -95,10 +100,11 @@ namespace HermaFx.DataAnnotations
 			return results;
 		}
 
-		internal static IEnumerable<ValidationResult> ValidateRecursing(object value, ValidationContext context, bool validateAllProperties)
+		internal static IEnumerable<ValidationResult> ValidateRecursing(object value, ValidationContext context)
 		{
 			context = context ?? new ValidationContext(value);
 			var seen = TryGetSeenHashFrom(context);
+			var validateAllProperties = ShouldValidateAllProperties(context);
 
 			//_Log.DebugFormat("Trying to validate {0}", value.ToString());
 			if (value == null || seen.IfNotNull(x => x.Contains(value)))
@@ -126,7 +132,7 @@ namespace HermaFx.DataAnnotations
 						MemberName = context.MemberName.IfNotNull(x => string.Format("{0}[{1}]", x, idx2))
 					};
 					if (validateAllProperties) results.AddRange(ValidateClass(item, newctx));
-					results.AddRange(ValidateProperties(item, newctx, validateAllProperties));
+					results.AddRange(ValidateProperties(item, newctx));
 				}
 			}
 			else
@@ -137,7 +143,7 @@ namespace HermaFx.DataAnnotations
 					MemberName = context.MemberName
 				};
 				if (validateAllProperties) results.AddRange(ValidateClass(value, newctx));
-				results.AddRange(ValidateProperties(value, newctx, validateAllProperties));
+				results.AddRange(ValidateProperties(value, newctx));
 			}
 
 			return results;
@@ -162,7 +168,7 @@ namespace HermaFx.DataAnnotations
 
 			if (!validateAllProperties)
 			{
-				results.AddRange(ValidateRecursing(obj, context, validateAllProperties));
+				results.AddRange(ValidateRecursing(obj, context));
 			}
 			else
 			{
