@@ -13,6 +13,7 @@ namespace HermaFx.DataAnnotations
 {
 	public class ValidateObjectAttribute : ValidationAttribute
 	{
+#if false
 		private static readonly string ITEMS_KEY = typeof(ValidateObjectAttribute).Name + "::Seen";
 
 		private static HashSet<object> TryGetSeenHashFrom(ValidationContext context)
@@ -127,6 +128,20 @@ namespace HermaFx.DataAnnotations
 			}
 
 			if (results.Count != 0)
+			{
+				//_Log.DebugFormat("Validation failed for: {0} | {1} | {2}", validationContext.ObjectType, validationContext.DisplayName, validationContext.MemberName);
+
+				return AggregateValidationResult.CreateFor(context, results);
+			}
+
+			return ValidationResult.Success;
+		}
+#endif
+		protected override ValidationResult IsValid(object value, ValidationContext context)
+		{
+			var results = ExtendedValidator.ValidateRecursing(value, context, true);
+
+			if (results.Count() != 0)
 			{
 				//_Log.DebugFormat("Validation failed for: {0} | {1} | {2}", validationContext.ObjectType, validationContext.DisplayName, validationContext.MemberName);
 
