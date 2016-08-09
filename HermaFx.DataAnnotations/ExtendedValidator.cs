@@ -86,9 +86,11 @@ namespace HermaFx.DataAnnotations
 				// Now let's try nested validation...
 				if (value2 != null)
 				{
-					if (ShouldValidateAllProperties(context))
+					var validateAllProperties = ShouldValidateAllProperties(context);
+
+					if (validateAllProperties)
 					{
-						Validator.TryValidateObject(value2, newctx, results);
+						Validator.TryValidateObject(value2, newctx, results, validateAllProperties);
 					}
 					else if (property.GetCustomAttribute<ValidateObjectAttribute>() != null)
 					{
@@ -186,15 +188,7 @@ namespace HermaFx.DataAnnotations
 		/// <returns></returns>
 		public static IEnumerable<ValidationResult> Validate(object obj)
 		{
-#if false
-			var context = new ValidationContext(obj, serviceProvider: null, items: null);
-			var results = new List<ValidationResult>();
-			Validator.TryValidateObject(obj, context, results, true);
-
-			return AggregateValidationResult.Flatten(results);
-#else
 			return Validate(obj, true);
-#endif
 		}
 
 		/// <summary>
