@@ -13,7 +13,7 @@ using PropertyDescriptor = Castle.Components.DictionaryAdapter.PropertyDescripto
 namespace HermaFx.Settings
 {
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = false)]
-	public class SettingsBehavior : DictionaryBehaviorAttribute,
+	internal class SettingsBehavior : DictionaryBehaviorAttribute,
 #if USE_DAVALIDATOR // FIXME: Validating thru DictionaryAdapter's own validation mechanism is not working.
 		//IDictionaryInitializer,
 		//IDictionaryValidator,
