@@ -54,16 +54,15 @@ namespace HermaFx.Rebus
 			bus.Reply(message);
 		}
 
-		public static void ReplyToOriginator<TResponse>(this IBus bus, IMessageContext messageContext, TResponse response)
+		public static void ReplyTo<TMessage>(this IBus bus, string originator, string correlationId, TMessage message)
 		{
 			Guard.IsNotNull(bus, nameof(bus));
-			Guard.IsNotNull(messageContext, nameof(messageContext));
-			Guard.IsNotNull(response, nameof(response));
+			Guard.IsNotNull(originator, nameof(originator));
+			Guard.IsNotNull(correlationId, nameof(correlationId));
+			Guard.IsNotNull(message, nameof(message));
 
-			var correlationKey = Headers.CorrelationId;
-
-			bus.AttachHeader(response, correlationKey, messageContext.Headers[correlationKey]?.ToString());
-			bus.Advanced.Routing.Send(messageContext.ReturnAddress, response);
+			bus.AttachHeader(message, Headers.CorrelationId, correlationId);
+			bus.Advanced.Routing.Send(originator, message);
 		}
 	}
 }
