@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Rebus;
+using Rebus.Shared;
 
 namespace HermaFx.Rebus
 {
@@ -51,6 +52,18 @@ namespace HermaFx.Rebus
 			if (customizer != null) customizer(message);
 
 			bus.Reply(message);
+		}
+
+		public static void ReplyToOriginator<TResponse>(this IBus bus, IMessageContext messageContext, TResponse response)
+		{
+			Guard.IsNotNull(bus, nameof(bus));
+			Guard.IsNotNull(messageContext, nameof(messageContext));
+			Guard.IsNotNull(response, nameof(response));
+
+			var correlationKey = Headers.CorrelationId;
+
+			bus.AttachHeader(response, correlationKey, messageContext.Headers[correlationKey]?.ToString());
+			bus.Advanced.Routing.Send(messageContext.ReturnAddress, response);
 		}
 	}
 }
