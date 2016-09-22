@@ -57,8 +57,8 @@ namespace HermaFx.Rebus
 		public static void ReplyTo<TMessage>(this IBus bus, string originator, string correlationId, TMessage message)
 		{
 			Guard.IsNotNull(bus, nameof(bus));
-			Guard.IsNotNull(originator, nameof(originator));
-			Guard.IsNotNull(correlationId, nameof(correlationId));
+			Guard.IsNotNullNorEmpty(originator, nameof(originator));
+			Guard.IsNotNullNorEmpty(correlationId, nameof(correlationId));
 			Guard.IsNotNull(message, nameof(message));
 
 			bus.AttachHeader(message, Headers.CorrelationId, correlationId);
