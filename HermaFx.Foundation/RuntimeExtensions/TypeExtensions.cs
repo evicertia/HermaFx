@@ -9,6 +9,7 @@ namespace HermaFx
 		//a thread-safe way to hold default instances created at run-time
 		private static ConcurrentDictionary<Type, object> typeDefaults = new ConcurrentDictionary<Type, object>();
 
+		// Extracted from : http://stackoverflow.com/a/7881481
 		public static object GetDefault(this Type type)
 		{
 			Guard.IsNotNull(type, nameof(type));
@@ -23,7 +24,7 @@ namespace HermaFx
 				throw new ArgumentException($"The supplied value type <{type}> contains generic parameters, so the default value cannot be retrieved");
 			}
 
-			// If the Type is a primitive type, or if it is another publicly-visible value type (i.e. struct), return a 
+			// If the Type is a primitive type, or if it is another publicly-visible value type (i.e. struct), return a
 			//  default instance of the value type
 			if (type.IsPrimitive || !type.IsNotPublic)
 			{
