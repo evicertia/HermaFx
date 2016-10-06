@@ -11,6 +11,11 @@ namespace HermaFx.DataAnnotations
 	{
 		private const string _defaultErrorMessage = "The field {0} requires a non-default value";
 
+		public NotDefaultAttribute()
+				: base(() => _defaultErrorMessage)
+		{
+		}
+
 		public override bool IsValid(object value)
 		{
 			if (value == null) return true;
@@ -18,14 +23,5 @@ namespace HermaFx.DataAnnotations
 
 			return !object.Equals(value, value.GetType().GetDefault());
 		}
-
-		public override string FormatErrorMessage(string name)
-		{
-			if (string.IsNullOrEmpty(ErrorMessageResourceName) && string.IsNullOrEmpty(ErrorMessage))
-				ErrorMessage = _defaultErrorMessage;
-
-			return string.Format(ErrorMessageString, name);
-		}
-
 	}
 }
