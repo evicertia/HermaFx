@@ -5,7 +5,7 @@ using System;
 namespace HermaFx.DataAnnotations
 {
 	[TestFixture]
-	public class NotDefaultTest
+	public class NotDefaultFixture
 	{
 		private class Model
 		{
