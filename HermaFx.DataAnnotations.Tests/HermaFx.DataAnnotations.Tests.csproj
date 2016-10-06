@@ -76,6 +76,7 @@
     <Compile Include="ExtendedValidatorTests.cs" />
     <Compile Include="MaxElementsIfAttributeTest.cs" />
     <Compile Include="MinElementsTests.cs" />
+    <Compile Include="NotDefaultFixture.cs" />
     <Compile Include="NotEqualToAttributeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegularExpressionIfAttributeTest.cs" />
