@@ -6,16 +6,17 @@ namespace HermaFx
 {
 	public static class TypeExtension
 	{
-		//a thread-safe way to hold default instances created at run-time
+		//A thread-safe way to hold default instances created at run-time
 		private static ConcurrentDictionary<Type, object> typeDefaults = new ConcurrentDictionary<Type, object>();
 
-		// Extracted from : http://stackoverflow.com/a/7881481
+		// Copied from : http://stackoverflow.com/a/7881481
 		public static object GetDefault(this Type type)
 		{
+
 			Guard.IsNotNull(type, nameof(type));
 
-			// If no Type was supplied, if the Type was a reference type, or if the Type was a System.Void, return null
-			if (type == null || !type.IsValueType || type == typeof(void))
+			// If the Type was a reference type, or if the Type was a System.Void, return null
+			if (!type.IsValueType || type == typeof(void))
 				return null;
 
 			// If the supplied Type has generic parameters, its default value cannot be determined
@@ -35,8 +36,7 @@ namespace HermaFx
 				catch (Exception e)
 				{
 					throw new ArgumentException(
-					$"The Activator.CreateInstance method could not create a default instance of the supplied value type <{type}>\n\n"+
-					$"Exception message:{e.Message}", e);
+						$"The Activator.CreateInstance method could not create a default instance of the supplied value type <{type}>", e);
 				}
 			}
 
