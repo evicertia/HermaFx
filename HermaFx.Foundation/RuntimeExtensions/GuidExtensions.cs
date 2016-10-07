@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using HermaFx.Text;
+
 namespace HermaFx
 {
 	public static class GuidExtensions
@@ -18,6 +20,23 @@ namespace HermaFx
 
 			result = default(Guid);
 			return false;
+		}
+
+		public static string ToZBase32String(this Guid guid)
+		{
+			return new ZBase32Encoder().Encode(guid.ToByteArray());
+		}
+
+		public static string ToBase64String(this Guid guid)
+		{
+			return Convert.ToBase64String(guid.ToByteArray());
+		}
+
+		public static string ToBase64String(this Guid guid, bool trimmed)
+		{
+			var result = Convert.ToBase64String(guid.ToByteArray());
+
+			return trimmed ? result.TrimEnd('=') : result;
 		}
 	}
 }

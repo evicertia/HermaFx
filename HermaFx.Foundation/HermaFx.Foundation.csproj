@@ -107,6 +107,7 @@
     <Compile Include="Text\EncodingResolverAttribute.cs" />
     <Compile Include="Text\IEncodingResolver.cs" />
     <Compile Include="Utils\BackOffWaiter.cs" />
+    <Compile Include="Utils\AdvancedGuidParser.cs" />
     <Compile Include="X509Certificates\CertificateString.cs" />
     <Compile Include="ServiceLocation\ServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
