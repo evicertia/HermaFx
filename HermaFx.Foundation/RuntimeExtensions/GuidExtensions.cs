@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using HermaFx.Text;
+
 namespace HermaFx
 {
 	public static class GuidExtensions
