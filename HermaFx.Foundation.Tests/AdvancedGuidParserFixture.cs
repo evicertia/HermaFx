@@ -122,7 +122,7 @@ namespace HermaFx.Utils
 			Assert.That(_guidParser.Parse(_stubs.ZBase32String), Is.EqualTo(_stubs.Guid));
 		}
 
-		// Guid String 
+		// Guid String
 		[Test]
 		public void Parse_Return_Valid_Guid_For_Valid_Input_GuidString()
 		{
