@@ -13,8 +13,6 @@ namespace HermaFx.Utils
 		private const int BASE64_WO_PADD_LENGTH = 22;
 		private const int ZBASE32_LENGTH = 26;
 
-		private static ZBase32Encoder _encoder = new ZBase32Encoder();
-
 		private string NormalizeBase64Padding(string base64)
 		{
 			// Normlize base64 string adding the padding at end if not have it
@@ -29,10 +27,9 @@ namespace HermaFx.Utils
 			Guard.Against<ArgumentException>(base32.Length != ZBASE32_LENGTH,
 				$"Invalid base32 string length, expected {ZBASE32_LENGTH}");
 
-			var bytes = _encoder.Decode(base32);
-
 			try
 			{
+				var bytes = new ZBase32Encoder().Decode(base32);
 				return new Guid(bytes);
 			}
 			catch (ArgumentException e)

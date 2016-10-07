@@ -29,13 +29,13 @@ namespace HermaFx.Utils
 		#region ZBase32
 
 		[Test]
-		public void ParseFromZBase32String_Return_valid_Guid()
+		public void ParseFromZBase32String_Returns_valid_Guid()
 		{
 			Assert.That(_guidParser.ParseFromZBase32String(_stubs.ZBase32String), Is.EqualTo(_stubs.Guid));
 		}
 
 		[Test]
-		public void ParseFromZBase32String_Expect_Exception_When_Length_Is_NotValid()
+		public void ParseFromZBase32String_Throws_Exception_When_Length_Is_NotValid()
 		{
 			Assert.Throws<ArgumentException>(() => _guidParser.ParseFromZBase32String(_stubs.InvalidString));
 		}
@@ -63,19 +63,19 @@ namespace HermaFx.Utils
 		#region Base64
 
 		[Test]
-		public void ParseFromBase64String_From_Valid_String_With_Padding_Return_valid_Guid()
+		public void ParseFromBase64String_From_Valid_String_With_Padding_Returns_valid_Guid()
 		{
 			Assert.That(_guidParser.ParseFromBase64String(_stubs.Base64StringPadding), Is.EqualTo(_stubs.Guid));
 		}
 
 		[Test]
-		public void ParseFromBase64String_From_Valid_String_Wo_Padding_Return_valid_Guid()
+		public void ParseFromBase64String_From_Valid_String_Wo_Padding_Returns_valid_Guid()
 		{
 			Assert.That(_guidParser.ParseFromBase64String(_stubs.Base64StringNoPadding), Is.EqualTo(_stubs.Guid));
 		}
 
 		[Test]
-		public void ParseFromBase64String_From_Invalid_String_Lenght_Expect_Exception()
+		public void ParseFromBase64String_From_Invalid_String_Length_Throws_Exception()
 		{
 			Assert.Throws<ArgumentException>(() => _guidParser.ParseFromBase64String(_stubs.InvalidString));
 		}
@@ -104,33 +104,33 @@ namespace HermaFx.Utils
 
 		// From Base64
 		[Test]
-		public void Parse_Return_Valid_Guid_For_Valid_Input_Base64String_With_Padding()
+		public void Parse_Returns_Valid_Guid_For_Valid_Input_Base64String_With_Padding()
 		{
 			Assert.That(_guidParser.Parse(_stubs.Base64StringPadding), Is.EqualTo(_stubs.Guid));
 		}
 
 		[Test]
-		public void Parse_Return_Valid_Guid_For_Valid_Input_Base64String_Wo_Padding()
+		public void Parse_Returns_Valid_Guid_For_Valid_Input_Base64String_Wo_Padding()
 		{
 			Assert.That(_guidParser.Parse(_stubs.Base64StringNoPadding), Is.EqualTo(_stubs.Guid));
 		}
 
 		// From Zbase32
 		[Test]
-		public void Parse_Return_Valid_Guid_For_Valid_Input_ZBase32String()
+		public void Parse_Returns_Valid_Guid_For_Valid_Input_ZBase32String()
 		{
 			Assert.That(_guidParser.Parse(_stubs.ZBase32String), Is.EqualTo(_stubs.Guid));
 		}
 
 		// Guid String
 		[Test]
-		public void Parse_Return_Valid_Guid_For_Valid_Input_GuidString()
+		public void Parse_Returns_Valid_Guid_For_Valid_Input_GuidString()
 		{
 			Assert.That(_guidParser.Parse(_stubs.GuidString.ToString()), Is.EqualTo(_stubs.Guid));
 		}
 
 		[Test]
-		public void Parse_Expect_Exception_For_Invalid_InputStrings()
+		public void Parse_Throws_Exception_For_Invalid_InputString()
 		{
 			Assert.Throws<FormatException>(() => _guidParser.Parse(_stubs.InvalidString));
 		}

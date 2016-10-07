@@ -31,5 +31,12 @@ namespace HermaFx
 		{
 			return Convert.ToBase64String(guid.ToByteArray());
 		}
+
+		public static string ToBase64String(this Guid guid, bool trimmed)
+		{
+			var result = Convert.ToBase64String(guid.ToByteArray());
+
+			return trimmed ? result.TrimEnd('=') : result;
+		}
 	}
 }
