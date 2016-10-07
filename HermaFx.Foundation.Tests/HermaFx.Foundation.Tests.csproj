@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvancedGuidParserFixture.cs" />
     <Compile Include="AdvancedGuidGeneratorTests.cs" />
     <Compile Include="Base32EncodingTests.cs" />
     <Compile Include="ComponentModel\StringArrayConverterTests.cs" />
