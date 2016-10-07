@@ -19,5 +19,15 @@ namespace HermaFx
 			result = default(Guid);
 			return false;
 		}
+
+		public static string ToBase32String(this Guid guid)
+		{
+			return new ZBase32Encoder().Encode(guid.ToByteArray());
+		}
+
+		public static string ToBase64String(this Guid guid)
+		{
+			return Convert.ToBase64String(guid.ToByteArray());
+		}
 	}
 }
