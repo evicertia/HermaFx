@@ -22,7 +22,7 @@ namespace HermaFx
 			return false;
 		}
 
-		public static string ToBase32String(this Guid guid)
+		public static string ToZBase32String(this Guid guid)
 		{
 			return new ZBase32Encoder().Encode(guid.ToByteArray());
 		}
