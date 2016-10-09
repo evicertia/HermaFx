@@ -13,7 +13,7 @@ namespace HermaFx.Utils
 		private const int BASE64_WO_PADD_LENGTH = 22;
 		private const int ZBASE32_LENGTH = 26;
 
-		private string NormalizeBase64Padding(string base64)
+		private static string NormalizeBase64Padding(string base64)
 		{
 			// Normlize base64 string adding the padding at end if not have it
 			return base64.EndsWith("==") ? base64 : $"{base64}==";
@@ -21,7 +21,7 @@ namespace HermaFx.Utils
 
 		#region From Base32
 
-		public Guid ParseFromZBase32String(string base32)
+		public static Guid ParseFromZBase32String(string base32)
 		{
 			Guard.IsNotNullNorEmpty(base32, nameof(base32));
 			Guard.Against<ArgumentException>(base32.Length != ZBASE32_LENGTH,
@@ -39,7 +39,7 @@ namespace HermaFx.Utils
 
 		}
 
-		public bool TryParseFromBase32String(string base32, out Guid result)
+		public static bool TryParseFromBase32String(string base32, out Guid result)
 		{
 			try
 			{
@@ -56,7 +56,7 @@ namespace HermaFx.Utils
 
 		#region From Base64
 
-		public Guid ParseFromBase64String(string base64)
+		public static Guid ParseFromBase64String(string base64)
 		{
 			Guard.IsNotNullNorEmpty(base64, nameof(base64));
 
@@ -75,7 +75,7 @@ namespace HermaFx.Utils
 			}
 		}
 
-		public bool TryParseFromBase64String(string base64, out Guid result)
+		public static bool TryParseFromBase64String(string base64, out Guid result)
 		{
 			try
 			{
@@ -92,7 +92,7 @@ namespace HermaFx.Utils
 
 		#region Parser
 
-		public Guid Parse(string input)
+		public static Guid Parse(string input)
 		{
 			Guard.IsNotNullNorEmpty(input, nameof(input));
 
@@ -108,7 +108,7 @@ namespace HermaFx.Utils
 			return Guid.Parse(input);
 		}
 
-		public bool TryParse(string input, out Guid result)
+		public static bool TryParse(string input, out Guid result)
 		{
 			try
 			{
