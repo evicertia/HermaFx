@@ -126,13 +126,12 @@ namespace HermaFx.DataAnnotations
 			}
 			else
 			{
-				return AggregateValidationResult.CreateFor(ErrorMessage ?? context, results);
+				if (ErrorMessage.IsNullOrEmpty())
+					return AggregateValidationResult.CreateFor(context, results);
+
+				return AggregateValidationResult.CreateFor(
+					FormatErrorMessage(context.IfNotNull(x => x.DisplayName.IsNullOrEmpty() ? x.MemberName : x.DisplayName)), results);
 			}
-			return results.Count == 0 ?
-				ValidationResult.Success
-				: ErrorMessage != null ?
-					AggregateValidationResult.CreateFor(this.FormatErrorMessage(ErrorMessage), results)
-					: AggregateValidationResult.CreateFor(context, results);
 		}
 	}
 }
