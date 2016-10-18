@@ -61,43 +61,57 @@ namespace HermaFx.Rebus
 			bus.Reply(message);
 		}
 
-		public static void ReplyTo<TResponse>(this IBus bus, string originator, TResponse message, Guid? autoCorrelationSagaId)
+		public static void ReplyTo<TResponse>(this IBus bus, string originator, string correlationId, TResponse message)
+		{
+			Guard.IsNotNull(bus, nameof(bus));
+			Guard.IsNotNullNorEmpty(originator, nameof(originator));
+			Guard.IsNotNullNorEmpty(correlationId, nameof(correlationId));
+			Guard.IsNotNull(message, nameof(message));
+
+			bus.AttachHeader(message, Headers.CorrelationId, correlationId);
+			bus.Advanced.Routing.Send(originator, message);
+		}
+
+		public static void ReplyTo<TResponse>(this IBus bus, string originator, string correlationId, Action<TResponse> customizer)
+		{
+			Guard.IsNotNull(bus, nameof(bus));
+
+			var message = Activator.CreateInstance<TResponse>();
+			customizer(message);
+
+			bus.ReplyTo(originator, correlationId, message);
+		}
+
+		public static void ReplyTo<TResponse>(this IBus bus, string originator, TResponse message, Guid sagaId)
 		{
 			Guard.IsNotNull(bus, nameof(bus));
 			Guard.IsNotNullNorEmpty(originator, nameof(originator));
 			Guard.IsNotNull(message, nameof(message));
 
-			var sagaKey = SagaContext.SagaContextItemKey;
 			var messageContext = MessageContext.GetCurrent();
+			var sagaContextKey = SagaContext.SagaContextItemKey;
 
-			if (autoCorrelationSagaId.HasValue && messageContext.Items.ContainsKey(sagaKey))
+			if (!messageContext.Items.ContainsKey(sagaContextKey))
 			{
-				// Current saga context
-				var currentSagaContext = messageContext.Items[sagaKey];
+				throw new InvalidOperationException("Current message not contains a saga context");
+			}
 
+			// Current saga context
+			var currentSagaContext = messageContext.Items[sagaContextKey];
+			try
+			{
 				// XXX: The .Routing.Send() method is overwriting the AutoCorrelationSagaId header by current SagaConext.Id,
 				//		then we must to replace the current SagaConext.Id of message context by 'autoCorrelationSagaId' in order to reply
 				//		to original saga wicht send the request
-				messageContext.Items[sagaKey] = new SagaContext(autoCorrelationSagaId.Value);
+				messageContext.Items[sagaContextKey] = new SagaContext(sagaId);
 				bus.Advanced.Routing.Send(originator, message);
-
-				// XXX: Dont forquet restore the current SagaConext in order to correlate the Timeouts message of current saga.
-				messageContext.Items[sagaKey] = currentSagaContext;
 			}
-			else
+			finally
 			{
-				bus.Advanced.Routing.Send(originator, message);
+				// XXX: Dont forquet restore the current SagaConext in order to correlate the Timeouts message of current saga.
+				messageContext.Items[sagaContextKey] = currentSagaContext;
 			}
-		}
 
-		public static void ReplyTo<TResponse>(this IBus bus, string originator, Guid? autoCorrelationSagaId, Action<TResponse> customizer)
-		{
-			Guard.IsNotNull(bus, "bus");
-
-			var message = Activator.CreateInstance<TResponse>();
-			customizer(message);
-
-			bus.ReplyTo(originator, message, autoCorrelationSagaId);
 		}
 
 		#endregion
