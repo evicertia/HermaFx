@@ -61,26 +61,67 @@ namespace HermaFx.Rebus
 			bus.Reply(message);
 		}
 
-		public static void ReplyTo<TResponse>(this IBus bus, string originator, string correlationId, TResponse message)
+		public static void ReplyTo<TResponse>(this IBus bus, string originator, TResponse message)
 		{
 			Guard.IsNotNull(bus, nameof(bus));
 			Guard.IsNotNullNorEmpty(originator, nameof(originator));
-			Guard.IsNotNullNorEmpty(correlationId, nameof(correlationId));
 			Guard.IsNotNull(message, nameof(message));
 
-			bus.AttachHeader(message, Headers.CorrelationId, correlationId);
 			bus.Advanced.Routing.Send(originator, message);
 		}
 
-		public static void ReplyTo<TResponse>(this IBus bus, string originator, string correlationId, Action<TResponse> customizer)
+		/// <summary>
+		/// Replies to origin saga correlating with sagaId parameter.
+		/// </summary>
+		public static void ReplyToSaga<TResponse>(this IBus bus, string originator, Guid sagaId, TResponse message)
 		{
-			Guard.IsNotNull(bus, "bus");
+			Guard.IsNotNull(bus, nameof(bus));
+			Guard.IsNotNullNorEmpty(originator, nameof(originator));
+			Guard.IsNotDefault(sagaId, nameof(sagaId));
+			Guard.IsNotNull(message, nameof(message));
 
-			var message = Activator.CreateInstance<TResponse>();
-			customizer(message);
+			var messageContext = MessageContext.GetCurrent();
+			var sagaContextKey = SagaContext.SagaContextItemKey;
 
-			bus.ReplyTo(originator, correlationId, message);
+			// Current saga context
+			var currentSagaContext = messageContext.Items[sagaContextKey];
+			try
+			{
+				// XXX: The .Routing.Send() method is overwriting the AutoCorrelationSagaId header by current SagaConext.Id,
+				//		so we need to (temporarilly) remove the existing sagaContext from messageContext.
+				messageContext.Items.Remove(sagaContextKey);
+				bus.AttachHeader(message, Headers.AutoCorrelationSagaId, sagaId.ToString());
+				bus.ReplyTo(originator, message);
+			}
+			finally
+			{
+				// XXX: Restore the current SagaConext, no matter what.
+				messageContext.Items[sagaContextKey] = currentSagaContext;
+			}
+
 		}
+
+		/// <summary>
+		/// If sagaId is not null or default then replies to origin saga correlating with sagaId parameter,
+		/// else send normal replies to originator
+		/// </summary>
+		public static void ReplyTo<TResponse>(this IBus bus, string originator, TResponse message, Guid? sagaId)
+		{
+			Guard.IsNotNull(bus, nameof(bus));
+			Guard.IsNotNullNorEmpty(originator, nameof(originator));
+			Guard.IsNotNull(message, nameof(message));
+
+			if (sagaId.GetValueOrDefault() != default(Guid))
+			{
+				bus.ReplyToSaga(originator, sagaId.Value, message);
+			}
+			else
+			{
+				bus.ReplyTo(originator, message);
+			}
+
+		}
+
 
 		#endregion
 
