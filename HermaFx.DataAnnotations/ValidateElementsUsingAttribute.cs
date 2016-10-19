@@ -11,14 +11,33 @@ namespace HermaFx.DataAnnotations
 	[AttributeUsage(AttributeTargets.Property)]
 	public class ValidateElementsUsingAttribute : ValidationAttribute
 	{
-		#region Properties
+		#region Private Properties
+		private const string DefaultErrorMessage = "{0} has some invalid values.";
+		#endregion
+
+		#region Public Properties
 		public Type MetadataType { get; private set; }
 		public string Property { get; private set; }
+
+		/// <summary>
+		/// A flag indicating that the attribute requires a non-null <see cref=System.ComponentModel.DataAnnotations.ValidationContext /> to perform validation.
+		/// </summary>
+		public override bool RequiresValidationContext
+		{
+			get
+			{
+				return true;
+			}
+		}
 		#endregion
 
 		#region .ctor
 
 		public ValidateElementsUsingAttribute(Type metadataType, string propertyName)
+			: this(metadataType, propertyName, DefaultErrorMessage) { }
+
+		public ValidateElementsUsingAttribute(Type metadataType, string propertyName, string errorMessage)
+			: base(() => errorMessage)
 		{
 			MetadataType = metadataType;
 			Property = propertyName;
@@ -120,18 +139,10 @@ namespace HermaFx.DataAnnotations
 				}
 			}
 
-			if (results.Count == 0)
-			{
-				return ValidationResult.Success;
-			}
-			else
-			{
-				if (ErrorMessage.IsNullOrEmpty())
-					return AggregateValidationResult.CreateFor(context, results);
-
-				return AggregateValidationResult.CreateFor(
-					FormatErrorMessage(context.IfNotNull(x => x.DisplayName.IsNullOrEmpty() ? x.MemberName : x.DisplayName)), results);
-			}
+			return results.Count == 0 ?
+				ValidationResult.Success :
+				AggregateValidationResult.CreateFor(
+					FormatErrorMessage(context.DisplayName.IsNullOrEmpty() ? context.MemberName : context.DisplayName), results);
 		}
 	}
 }

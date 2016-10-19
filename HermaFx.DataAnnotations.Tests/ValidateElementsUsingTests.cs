@@ -40,5 +40,16 @@ namespace HermaFx.DataAnnotations
 			Assert.Throws<AggregateValidationException>(() => ExtendedValidator.EnsureIsValid(bad));
 		}
 
+		[Test]
+		public void ValidateElementsMandatoryContext()
+		{
+			var good = new TestDto()
+			{
+				StringList = new[] { "abcde" }
+			};
+
+			var results = new List<ValidationResult>();
+			Assert.Throws<ArgumentNullException>(() => Validator.TryValidateObject(good, null, results));
+		}
 	}
 }
