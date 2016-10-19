@@ -73,7 +73,6 @@ namespace HermaFx.Rebus
 		/// <summary>
 		/// Replies to origin saga correlating with sagaId parameter.
 		/// </summary>
-		/// <exception cref="System.InvalidOperationException">The message not contains saga context</exception>
 		public static void ReplyToSaga<TResponse>(this IBus bus, string originator, Guid sagaId, TResponse message)
 		{
 			Guard.IsNotNull(bus, nameof(bus));
@@ -83,12 +82,6 @@ namespace HermaFx.Rebus
 
 			var messageContext = MessageContext.GetCurrent();
 			var sagaContextKey = SagaContext.SagaContextItemKey;
-
-			// Ensure the SagaContext
-			if (!messageContext.Items.ContainsKey(sagaContextKey))
-			{
-				throw new InvalidOperationException("The message context not contains a saga context");
-			}
 
 			// Current saga context
 			var currentSagaContext = messageContext.Items[sagaContextKey];
