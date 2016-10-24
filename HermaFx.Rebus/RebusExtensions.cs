@@ -82,9 +82,10 @@ namespace HermaFx.Rebus
 
 			var messageContext = MessageContext.GetCurrent();
 			var sagaContextKey = SagaContext.SagaContextItemKey;
+			var sagaContextExists = messageContext.Items.ContainsKey(sagaContextKey);
 
 			// Current saga context
-			var currentSagaContext = messageContext.Items[sagaContextKey];
+			var currentSagaContext = sagaContextExists ? messageContext.Items[sagaContextKey] : null;
 			try
 			{
 				// XXX: The .Routing.Send() method is overwriting the AutoCorrelationSagaId header by current SagaConext.Id,
@@ -95,8 +96,11 @@ namespace HermaFx.Rebus
 			}
 			finally
 			{
-				// XXX: Restore the current SagaConext, no matter what.
-				messageContext.Items[sagaContextKey] = currentSagaContext;
+				if (sagaContextExists)
+				{
+					// XXX: Restore the current SagaConext, no matter what.
+					messageContext.Items[sagaContextKey] = currentSagaContext;
+				}
 			}
 
 		}
