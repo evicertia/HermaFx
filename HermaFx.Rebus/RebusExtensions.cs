@@ -7,10 +7,14 @@ using System.Reflection;
 using Rebus;
 using Rebus.Shared;
 
+using HermaFx.Logging;
+
 namespace HermaFx.Rebus
 {
 	public static class RebusExtensions
 	{
+		private static ILog _Log = LogProvider.GetCurrentClassLogger();
+
 		#region Send/Reply/ReplyTo
 
 		public static void Send<TCommand>(this IBus bus, Action<TCommand> customizer)
@@ -143,7 +147,7 @@ namespace HermaFx.Rebus
 
 			foreach (var msg in messageWeWantToSubscribeTo)
 			{
-				//_Log.InfoFormat("Subscribing via bus to: {0}", msg);
+				_Log.InfoFormat("Subscribing via bus to: {0}", msg);
 				var @delegate = busSubscribeMethod.MakeGenericMethod(msg);
 				@delegate.Invoke(bus, new object[] { });
 			}
