@@ -12,6 +12,7 @@ namespace HermaFx.Rebus
 	public static class TransportConfigurerExtensions
 	{
 		private const string DEFAULT_SEPARATOR = "%";
+
 		#region Private Helpers
 		private static string GetHostName()
 		{

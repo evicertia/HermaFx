@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.SettingsAdapter", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.SettingsAdapter.Tests", "HermaFx.SettingsAdapter.Tests\HermaFx.SettingsAdapter.Tests.csproj", "{7BE33AE3-FFDF-40EF-8967-BCE9EA714728}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.MediatR", "HermaFx.MediatR\HermaFx.MediatR.csproj", "{351D7D74-3087-4004-9AFE-2A1836B44549}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{7BE33AE3-FFDF-40EF-8967-BCE9EA714728}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BE33AE3-FFDF-40EF-8967-BCE9EA714728}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BE33AE3-FFDF-40EF-8967-BCE9EA714728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{351D7D74-3087-4004-9AFE-2A1836B44549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{351D7D74-3087-4004-9AFE-2A1836B44549}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{351D7D74-3087-4004-9AFE-2A1836B44549}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{351D7D74-3087-4004-9AFE-2A1836B44549}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
