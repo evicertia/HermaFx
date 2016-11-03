@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 // Originally based on BSD Licensed code from NETfx project.
 // See: http://netfx.codeplex.com/
 
-namespace HermaFx.RuntimeExtensions
+namespace HermaFx
 {
 	/// <summary>
 	/// Provides conversion of DateTime and DateTimeOffset into an epoch-relative number value (total seconds).

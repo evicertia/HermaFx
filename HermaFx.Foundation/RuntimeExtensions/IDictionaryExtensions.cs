@@ -33,5 +33,17 @@ namespace HermaFx
 		{
 			return source.GetValueOrDefault(key, default(V));
 		}
+
+		public static V GetValueOrDefault<K, V>(this IReadOnlyDictionary<K, V> source, K key, V @default)
+		{
+			if (source == null) throw new ArgumentNullException("source");
+
+			return source.ContainsKey(key) ? source[key] : @default;
+		}
+
+		public static V GetValueOrDefault<K, V>(this IReadOnlyDictionary<K, V> source, K key)
+		{
+			return source.GetValueOrDefault(key, default(V));
+		}
 	}
 }
