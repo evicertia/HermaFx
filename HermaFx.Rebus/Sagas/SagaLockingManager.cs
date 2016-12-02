@@ -67,7 +67,7 @@ namespace HermaFx.Rebus.Sagas
 
 		private ISagaData GetSagaData(Saga saga)
 		{
-			var getter = _sagaDataGetters.GetOrAdd(saga.GetType(), x => x.GetType().GetProperty("Data"));
+			var getter = _sagaDataGetters.GetOrAdd(saga.GetType(), x => x.GetProperty("Data"));
 			return getter.GetValue(saga, null) as ISagaData;
 		}
 		#endregion
