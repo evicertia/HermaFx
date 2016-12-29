@@ -36,7 +36,6 @@ namespace HermaFx.Rebus.Sagas
 		{
 			Guard.IsNotNull(backbone, "backbone");
 			Guard.IsNotNull(provider, "provider");
-			Guard.IsNotNull(timeout, nameof(timeout));
 
 			this._backbone = backbone;
 			this._provider = provider;
