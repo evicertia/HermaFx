@@ -28,16 +28,20 @@ namespace HermaFx.Rebus.Sagas
 		private static ILog _log;
 		private readonly ConfigurationBackbone _backbone;
 		private readonly ISagaLockingProvider _provider;
+		private readonly TimeSpan? _timeout;
 		#endregion
 
 		#region .ctor
-		internal SagaLockingManager(ConfigurationBackbone backbone, ISagaLockingProvider provider)
+		internal SagaLockingManager(ConfigurationBackbone backbone, ISagaLockingProvider provider, TimeSpan? timeout)
 		{
 			Guard.IsNotNull(backbone, "backbone");
 			Guard.IsNotNull(provider, "provider");
+			Guard.IsNotNull(timeout, nameof(timeout));
 
 			this._backbone = backbone;
 			this._provider = provider;
+			this._timeout = timeout;
+
 			RebusLoggerFactory.Changed += f => _log = f.GetCurrentClassLogger();
 			this._backbone.ConfigureEvents(x => AttachEventHandlers(x));
 		}
@@ -105,6 +109,7 @@ namespace HermaFx.Rebus.Sagas
 			Guard.Against<InvalidOperationException>(data == null, "Missing SagaData.");
 			Guard.Against<InvalidOperationException>(locks == null, "Missing locks dictionary.");
 
+			//TODO: When _timeout has value we have to use Lock(SagaData, TimeSpan) instead of Lock(SagaData)
 			_log.Debug("Trying to adquire lock for saga {0} with id {1}..", saga.GetType().Name, data.Id);
 			if (!locks.TryAdd(data.GetType(), (thelock = _provider.Lock(data))))
 			{
@@ -113,51 +118,6 @@ namespace HermaFx.Rebus.Sagas
 			}
 			_log.Debug("Lock adquired for saga {0} with id {1}..", saga.GetType().Name, data.Id);
 		}
-
-#if false // We need to wait until MessageContext.Disposed in order to release locks..
-		private void OnAfterHandlingEvent(IBus bus, object message, IHandleMessages handler)
-		{
-			if (!(handler is Saga)) return;
-
-			var saga = handler as Saga;
-			var data = GetSagaData(saga);
-			var context = MessageContext.GetCurrent();
-			var locks = GetLocksFor(context);
-			IDisposable thelock = null;
-
-			Guard.Against<InvalidOperationException>(data == null, "Missing SagaData.");
-			Guard.Against<InvalidOperationException>(locks == null, "Missing locks dictionary.");
-
-			_log.Debug("Trying to release lock for saga {0} with id {1}..", saga.GetType().Name, data.Id);
-
-			if (!locks.TryRemove(data.GetType(), out thelock))
-			{
-				_log.Warn("No lock found for saga {0}, with id {1}.", handler.GetType().Name, data.Id);
-				return;
-			}
-
-			thelock.Dispose();
-
-			_log.Debug("Lock disposed for saga {0} with id {1}..", saga.GetType().Name, data.Id);
-		}
-
-		private void OnHandlingError(Exception exception)
-		{
-			if (MessageContext.HasCurrent) return;
-
-			var context = MessageContext.GetCurrent();
-			var locks = GetLocksFor(context);
-			IDisposable thelock = null;
-
-			_log.Debug("Trying to release lock for (failed) saga {0} with id {1}..", saga.GetType().Name, data.Id);
-
-			if (locks.TryRemove(data.GetType(), out thelock))
-			{
-				thelock.Dispose();
-				return;
-			}
-		}
-#endif
 
 		private void OnMessageContextDisposed(IMessageContext context)
 		{
