@@ -11,6 +11,8 @@ namespace HermaFx.Rebus.Sagas
 {
 	public static class SagaLockingExtensions
 	{
+///XXX: Added by mistake. Needs to be well implemented to be useful
+#if false
 		/// <summary>
 		/// Extension to allow saga locking while handling messages.
 		/// </summary>
@@ -24,5 +26,6 @@ namespace HermaFx.Rebus.Sagas
 			var manager = new SagaLockingManager(configurer.Backbone, provider, timeout);
 			return configurer;
 		}
+#endif
 	}
 }
