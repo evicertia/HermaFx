@@ -12,6 +12,8 @@ using Rebus.Logging;
 
 namespace HermaFx.Rebus.Sagas
 {
+///XXX: Added by mistake. Needs to be well implemented to be useful
+#if false
 	// FIXME: This may have some chances of dead locking when two messages
 	//		  end up invoking the same two or more sagas on alternating order,
 	//		  and the SagaStore allows multiple sagas to handle the same message.
@@ -144,4 +146,5 @@ namespace HermaFx.Rebus.Sagas
 		}
 		#endregion
 	}
+#endif
 }
