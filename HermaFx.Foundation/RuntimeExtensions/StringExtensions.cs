@@ -1,14 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web.UI;
 
 namespace HermaFx
 {
 	public static class StringExtensions
 	{
+		#region StartWith / EndWith extensions
+		public static bool StartsWithInvariant(this string @this, string value)
+		{
+			return @this.StartsWith(value, StringComparison.InvariantCulture);
+		}
+
+		public static bool StartsWithInvariant(this string @this, string value, bool ignoreCase)
+		{
+			var mode = ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
+			return @this.StartsWith(value, mode);
+		}
+
+		public static bool StartsWithOrdinal(this string @this, string value)
+		{
+			return @this.StartsWith(value, StringComparison.Ordinal);
+		}
+
+		public static bool StartsWithOrdinal(this string @this, string value, bool ignoreCase)
+		{
+			var mode = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+			return @this.StartsWith(value, mode);
+		}
+
+		public static bool EndsWithInvariant(this string @this, string value)
+		{
+			return @this.EndsWith(value, StringComparison.InvariantCulture);
+		}
+
+		public static bool EndsWithInvariant(this string @this, string value, bool ignoreCase)
+		{
+			var mode = ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
+			return @this.EndsWith(value, mode);
+		}
+
+		public static bool EndsWithOrdinal(this string @this, string value)
+		{
+			return @this.EndsWith(value, StringComparison.Ordinal);
+		}
+
+		public static bool EndsWithOrdinal(this string @this, string value, bool ignoreCase)
+		{
+			var mode = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+			return @this.EndsWith(value, mode);
+		}
+		#endregion
+
+		#region IsNullOrWhiteSpace & IfNotNullOrWhiteSpace
 		/// <summary>
 		/// Determines whether [is null, empty or white space] [the specified @this].
 		/// </summary>
@@ -49,7 +96,7 @@ namespace HermaFx
 			}
 			return lambda(@this);
 		}
-
+		#endregion
 
 		public static string TrimOrDefault(this string @this)
 		{
