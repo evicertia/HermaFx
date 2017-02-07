@@ -92,6 +92,7 @@
     <Compile Include="RuntimeExtensions\LinqExtensions.cs" />
     <Compile Include="RuntimeExtensions\ReflectionExtensions.cs" />
     <Compile Include="RuntimeExtensions\StreamExtensions.cs" />
+    <Compile Include="RuntimeExtensions\SysDateOffset.cs" />
     <Compile Include="RuntimeExtensions\SysDate.cs" />
     <Compile Include="RuntimeExtensions\TypeExtensions.cs" />
     <Compile Include="Text\EncodingConverter.cs" />
