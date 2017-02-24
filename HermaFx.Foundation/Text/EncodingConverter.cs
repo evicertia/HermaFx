@@ -14,7 +14,8 @@ namespace HermaFx.Text
 
 		private IEncodingResolver _resolver;
 
-		public EncodingConverter(Type resolver)
+		#region .ctor
+		private EncodingConverter(Type resolver)
 		{
 			_resolver = (IEncodingResolver)Activator.CreateInstance(resolver);
 		}
@@ -23,10 +24,23 @@ namespace HermaFx.Text
 		{
 
 		}
+		#endregion
+
+		#region Factory Methods
+		public static EncodingConverter Using(Type resolver)
+		{
+			return new EncodingConverter(resolver);
+		}
+
+		public static EncodingConverter Using(IEncodingResolver resolver)
+		{
+			return Using(resolver.GetType());
+		}
+		#endregion
 
 		private IEncodingResolver GetResolver(ITypeDescriptorContext context)
 		{
-			var attr = context.PropertyDescriptor.Attributes.OfType<EncodingResolverAttribute>().SingleOrDefault();
+			var attr = context?.PropertyDescriptor.Attributes.OfType<EncodingResolverAttribute>().SingleOrDefault();
 			return attr != null ? attr.GetResolver() : _resolver;
 		}
 
