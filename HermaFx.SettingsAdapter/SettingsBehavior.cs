@@ -9,6 +9,7 @@ using System.Reflection;
 using Castle.Components.DictionaryAdapter;
 
 using PropertyDescriptor = Castle.Components.DictionaryAdapter.PropertyDescriptor;
+using System.Globalization;
 
 namespace HermaFx.Settings
 {
@@ -142,7 +143,7 @@ namespace HermaFx.Settings
 			if (storedValue != null && !descriptor.PropertyType.IsAssignableFrom(storedValue.GetType()))
 			{
 				storedValue = descriptor.TypeConverter.CanConvertFrom(storedValue.GetType()) ?
-					descriptor.TypeConverter.ConvertFrom(storedValue)
+					descriptor.TypeConverter.ConvertFrom(new GenericTypeDescriptorContext(descriptor.Property), CultureInfo.CurrentCulture, storedValue)
 					: Convert.ChangeType(storedValue, descriptor.PropertyType);
 			}
 
