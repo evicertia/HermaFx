@@ -49,7 +49,7 @@ namespace HermaFx.Text
 			var resolver = GetResolver(context);
 
 			if (resolver != null && !AllEncodings.Any(x => x == name.ToLowerInvariant()))
-				return _resolver.GetEncoding(name);
+				return resolver.GetEncoding(name);
 
 			return Encoding.GetEncoding(name);
 		}

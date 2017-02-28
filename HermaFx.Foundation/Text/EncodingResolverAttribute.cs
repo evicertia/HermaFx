@@ -14,7 +14,7 @@ namespace HermaFx.Text
 		{
 			Guard.IsNotNull(resolver, nameof(resolver));
 			Guard.Against<ArgumentOutOfRangeException>(
-				typeof(IEncodingResolver).IsAssignableFrom(resolver), 
+				!typeof(IEncodingResolver).IsAssignableFrom(resolver),
 				"Type {0} does not implement {1}", resolver.FullName, typeof(IEncodingResolver).FullName
 			);
 
