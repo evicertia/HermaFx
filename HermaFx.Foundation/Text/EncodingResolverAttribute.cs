@@ -7,21 +7,16 @@ namespace HermaFx.Text
 	[AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
 	public class EncodingResolverAttribute : Attribute, IEncodingResolver
 	{
-		private readonly Type _resolver;
 		private readonly Encoding[] _encodings;
 
-		public EncodingResolverAttribute(Type resolver)
+		#region .ctor
+		public	EncodingResolverAttribute()
 		{
-			Guard.IsNotNull(resolver, nameof(resolver));
-			Guard.Against<ArgumentOutOfRangeException>(
-				!typeof(IEncodingResolver).IsAssignableFrom(resolver),
-				"Type {0} does not implement {1}", resolver.FullName, typeof(IEncodingResolver).FullName
-			);
 
-			_resolver = resolver;
 		}
 
 		public EncodingResolverAttribute(params Type[] encodings)
+			: this()
 		{
 			Guard.IsNotNull(encodings, nameof(encodings));
 			Guard.Against<ArgumentOutOfRangeException>(
@@ -31,16 +26,24 @@ namespace HermaFx.Text
 
 			_encodings = encodings.Select(x => (Encoding)Activator.CreateInstance(x)).ToArray();
 		}
+		#endregion
 
 		public Encoding GetEncoding(string name)
 		{
 			Guard.IsNotNullNorWhitespace(name, nameof(name));
+			// FIXME: Throw a more meaningfull exception if encoding is not available.
 			return _encodings.Single(x => x.BodyName.ToLowerInvariant() == name.ToLowerInvariant());
 		}
 
-		public IEncodingResolver GetResolver()
-		{
-			return _encodings != null ? this : (IEncodingResolver)Activator.CreateInstance(_resolver);
-		}
+		//public IEncodingResolver GetResolver()
+		//{
+		//	Guard.Against<InvalidOperationException>(_encodings == null && ResolverType == null)
+		//	Guard.Against<ArgumentOutOfRangeException>(
+		//		!typeof(IEncodingResolver).IsAssignableFrom(resolver),
+		//		"Type {0} does not implement {1}", resolver.FullName, typeof(IEncodingResolver).FullName
+		//	);
+
+		//	return _encodings != null ? this : (IEncodingResolver)Activator.CreateInstance(_resolver);
+		//}
 	}
 }

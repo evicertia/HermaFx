@@ -72,7 +72,7 @@ namespace HermaFx.Text
 		{
 			[DefaultValue("FAKE")]
 			[TypeConverter(typeof(EncodingConverter))]
-			[EncodingResolver(new [] { typeof(FakeEncoding) })]
+			[EncodingResolver(typeof(FakeEncoding))]
 			Encoding Encoder { get; set; }
 		}
 
@@ -87,6 +87,15 @@ namespace HermaFx.Text
 			var model = new SettingsAdapter().Create<DataCoding>(_dict);
 
 			Assert.AreEqual(model.Encoder.GetType(), typeof(FakeEncoding), "#0");
+		}
+
+		[Test]
+		public void EncodingUsingTypeDescriptorGetConverter()
+		{
+			var properties = TypeDescriptor.GetProperties(typeof(DataCoding));
+			var converter = properties[0].Converter;
+
+			Assert.IsNotNull(converter);
 		}
 	}
 }

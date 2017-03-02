@@ -56,7 +56,6 @@
     <Compile Include="AdvancedGuidParserFixture.cs" />
     <Compile Include="AdvancedGuidGeneratorTests.cs" />
     <Compile Include="Base32EncodingTests.cs" />
-    <Compile Include="Text\EncodingConverterTests.cs" />
     <Compile Include="ComponentModel\StringArrayConverterTests.cs" />
     <Compile Include="GuardTests.cs" />
     <Compile Include="Cryptography\CryptoHelperTests.cs" />
@@ -82,10 +81,6 @@
     <ProjectReference Include="..\HermaFx.Foundation\HermaFx.Foundation.csproj">
       <Project>{0c13f477-7360-4831-9d62-9c5b183224c8}</Project>
       <Name>HermaFx.Foundation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HermaFx.SettingsAdapter\HermaFx.SettingsAdapter.csproj">
-      <Project>{25cde825-0c23-4e8d-bdf0-4aa8cc07c393}</Project>
-      <Name>HermaFx.SettingsAdapter</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
