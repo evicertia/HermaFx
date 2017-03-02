@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="SettingsAdapterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Text\EncodingConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HermaFx.DataAnnotations\HermaFx.DataAnnotations.csproj">
