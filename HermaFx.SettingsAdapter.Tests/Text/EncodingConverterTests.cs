@@ -12,90 +12,30 @@ namespace HermaFx.Text
 	[TestFixture]
 	public class EncodingConverterTest
 	{
-		#region Fake Encoding
-		private class FakeEncoding : Encoding
-		{
-			#region Not Implemented Methods
-			public override int GetByteCount(char[] chars, int index, int count)
-			{
-				throw new NotImplementedException();
-			}
-
-			public override int GetBytes(char[] chars, int charIndex, int charCount, byte[] bytes, int byteIndex)
-			{
-				throw new NotImplementedException();
-			}
-
-			public override int GetCharCount(byte[] bytes, int index, int count)
-			{
-				throw new NotImplementedException();
-			}
-
-			public override int GetChars(byte[] bytes, int byteIndex, int byteCount, char[] chars, int charIndex)
-			{
-				throw new NotImplementedException();
-			}
-
-			public override int GetMaxByteCount(int charCount)
-			{
-				throw new NotImplementedException();
-			}
-
-			public override int GetMaxCharCount(int byteCount)
-			{
-				throw new NotImplementedException();
-			}
-			#endregion
-
-			#region Properties
-			public override string BodyName
-			{
-				get
-				{
-					return "FAKE";
-				}
-			}
-
-			public override string EncodingName
-			{
-				get
-				{
-					return "FAKE Encoding";
-				}
-			}
-			#endregion
-		}
-		#endregion
-
 		[Settings]
 		public interface DataCoding
 		{
-			[DefaultValue("FAKE")]
+			[DefaultValue("UTF-16")]
 			[TypeConverter(typeof(EncodingConverter))]
-			[EncodingResolver(typeof(FakeEncoding))]
-			Encoding Encoder { get; set; }
+			Encoding Encoding1 { get; set; }
+
+			[DefaultValue("ASCII")]
+			[TypeConverter(typeof(EncodingConverter))]
+			Encoding Encoding2 { get; set; }
 		}
 
 		private static readonly NameValueCollection _dict = new NameValueCollection()
 		{
-			{ typeof(DataCoding).Namespace + ":Encoder", "FAKE" }
+			{ typeof(DataCoding).Namespace + ":Encoding1", "UTF-8" },
 		};
 
 		[Test]
-		public void EncodingConverterWithValueFakeEncoding()
+		public void CanConvertStringSettingsToEncodingUsingConverters()
 		{
 			var model = new SettingsAdapter().Create<DataCoding>(_dict);
 
-			Assert.AreEqual(model.Encoder.GetType(), typeof(FakeEncoding), "#0");
-		}
-
-		[Test]
-		public void EncodingUsingTypeDescriptorGetConverter()
-		{
-			var properties = TypeDescriptor.GetProperties(typeof(DataCoding));
-			var converter = properties[0].Converter;
-
-			Assert.IsNotNull(converter);
+			Assert.That(model.Encoding1, Is.TypeOf(typeof(UTF8Encoding)));
+			Assert.That(model.Encoding2, Is.TypeOf(typeof(ASCIIEncoding)));
 		}
 	}
 }

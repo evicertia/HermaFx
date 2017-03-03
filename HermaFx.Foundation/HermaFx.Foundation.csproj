@@ -14,7 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <UpgradeBackupLocation/>
+    <UpgradeBackupLocation />
     <OldToolsVersion>3.5</OldToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <TargetFrameworkProfile />
@@ -49,7 +49,6 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -96,7 +95,6 @@
     <Compile Include="RuntimeExtensions\SysDate.cs" />
     <Compile Include="RuntimeExtensions\TypeExtensions.cs" />
     <Compile Include="Text\EncodingConverter.cs" />
-    <Compile Include="Text\EncodingResolverAttribute.cs" />
     <Compile Include="Text\IEncodingResolver.cs" />
     <Compile Include="Utils\BackOffWaiter.cs" />
     <Compile Include="Utils\AdvancedGuidParser.cs" />

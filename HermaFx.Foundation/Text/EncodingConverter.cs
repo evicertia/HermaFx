@@ -9,17 +9,38 @@ namespace HermaFx.Text
 {
 	public class EncodingConverter : TypeConverter
 	{
-		private static Lazy<string[]> _allEncodings = new Lazy<string[]>(() => Encoding.GetEncodings().Select(x => x.GetEncoding().BodyName.ToLowerInvariant()).ToArray());
-		private static IEnumerable<string> AllEncodings => _allEncodings.Value;
+		#region DefaultEncodingResolver
+		public class DefaultEncodingResolver : IEncodingResolver
+		{
+			private readonly EncoderFallback _encoderFallback;
+			private readonly DecoderFallback _decoderFallback;
 
-		private IEncodingResolver _resolver;
+			public DefaultEncodingResolver()
+			{
+			}
+
+			public DefaultEncodingResolver(EncoderFallback encoderFallback, DecoderFallback decoderFallback)
+			{
+				Guard.IsNotNull(encoderFallback, nameof(encoderFallback));
+				Guard.IsNotNull(decoderFallback, nameof(decoderFallback));
+
+				_encoderFallback = encoderFallback;
+				_decoderFallback = decoderFallback;
+			}
+
+			public virtual Encoding GetEncoding(string name)
+			{
+				Guard.IsNotNullNorWhitespace(name, nameof(name));
+
+				return _encoderFallback == null ? Encoding.GetEncoding(name)
+					: Encoding.GetEncoding(name, _encoderFallback, _decoderFallback);
+			}
+		}
+		#endregion
+
+		private readonly IEncodingResolver _resolver;
 
 		#region .ctor
-		protected EncodingConverter(Type resolver)
-		{
-			_resolver = (IEncodingResolver)Activator.CreateInstance(resolver);
-		}
-
 		protected EncodingConverter(IEncodingResolver resolver)
 		{
 			Guard.IsNotNull(resolver, nameof(resolver));
@@ -28,25 +49,14 @@ namespace HermaFx.Text
 		}
 
 		public EncodingConverter()
+			: this(new DefaultEncodingResolver())
 		{
-
 		}
 		#endregion
 
-		private IEncodingResolver GetResolver(ITypeDescriptorContext context)
+		protected virtual Encoding GetEncoding(ITypeDescriptorContext context, string name)
 		{
-			var attr = context?.PropertyDescriptor.Attributes.OfType<EncodingResolverAttribute>().SingleOrDefault();
-			return attr ?? _resolver;
-		}
-
-		private Encoding GetEncoding(ITypeDescriptorContext context, string name)
-		{
-			var resolver = GetResolver(context);
-
-			if (resolver != null && !AllEncodings.Any(x => x == name.ToLowerInvariant()))
-				return resolver.GetEncoding(name);
-
-			return Encoding.GetEncoding(name);
+			return _resolver.GetEncoding(name);
 		}
 
 		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
