@@ -65,6 +65,7 @@ namespace HermaFx
 	/// </summary>
 	public static class DateTimeExtensions
 	{
+		#region StartOfWeek
 		/// <summary>
 		/// Returns the date for the first day of the week for current thread culture.
 		/// </summary>
@@ -72,7 +73,7 @@ namespace HermaFx
 		/// <returns></returns>
 		public static DateTime StartOfWeek(this DateTime date)
 		{
-			var culture = System.Threading.Thread.CurrentThread.CurrentCulture;
+			var culture = CultureInfo.CurrentCulture;
 			return date.StartOfWeek(culture);
 		}
 
@@ -103,5 +104,48 @@ namespace HermaFx
 
 			return date.AddDays(-diff).Date;
 		}
+		#endregion
+
+		#region EndOfWeek
+		/// <summary>
+		/// Returns the date for the last day of the week for current thread culture.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <returns></returns>
+		public static DateTime EndOfWeek(this DateTime date)
+		{
+			var culture = CultureInfo.CurrentCulture;
+			return date.EndOfWeek(culture);
+		}
+
+		/// <summary>
+		/// Return the date for the last day of the week for the specified culture.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		public static DateTime EndOfWeek(this DateTime date, CultureInfo culture)
+		{
+			var firstDayOfWeek = culture.DateTimeFormat.FirstDayOfWeek;
+			var endDayOfWeek = (DayOfWeek) (((int) firstDayOfWeek + 6) % 7);
+			return date.EndOfWeek(endDayOfWeek);
+		}
+
+		/// <summary>
+		/// Return the date for the last day of the week.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <param name="startOfWeek">The end of week.</param>
+		/// <returns></returns>
+		public static DateTime EndOfWeek(this DateTime date, DayOfWeek endOfWeek)
+		{
+			int diff = endOfWeek - date.DayOfWeek;
+
+			if (diff < 0)
+				diff += 7;
+
+			return date.AddDays(diff).Date;
+		}
+		#endregion
 	}
 }
