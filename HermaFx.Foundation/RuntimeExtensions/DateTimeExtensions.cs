@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,6 +57,51 @@ namespace HermaFx
 		public static DateTimeOffset ToDateTimeOffset(this long secondsSince1970)
 		{
 			return new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).AddSeconds(secondsSince1970);
+		}
+	}
+
+	/// <summary>
+	/// Provides useful extension methods for DateTime type
+	/// </summary>
+	public static class DateTimeExtensions
+	{
+		/// <summary>
+		/// Returns the date for the first day of the week for current thread culture.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <returns></returns>
+		public static DateTime StartOfWeek(this DateTime date)
+		{
+			var culture = System.Threading.Thread.CurrentThread.CurrentCulture;
+			return date.StartOfWeek(culture);
+		}
+
+		/// <summary>
+		/// Return the date for the first day of the week for the specified culture.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		public static DateTime StartOfWeek(this DateTime date, CultureInfo culture)
+		{
+			var firstDayOfWeek = culture.DateTimeFormat.FirstDayOfWeek;
+			return date.StartOfWeek(firstDayOfWeek);
+		}
+
+		/// <summary>
+		/// Return the date for the first day of the week.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <param name="startOfWeek">The start of week.</param>
+		/// <returns></returns>
+		public static DateTime StartOfWeek (this DateTime date, DayOfWeek startOfWeek)
+		{
+			int diff = date.DayOfWeek - startOfWeek;
+
+			if (diff < 0)
+				diff += 7;
+
+			return date.AddDays(-diff).Date;
 		}
 	}
 }
