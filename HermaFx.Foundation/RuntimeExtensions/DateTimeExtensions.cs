@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,5 +58,92 @@ namespace HermaFx
 		{
 			return new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero).AddSeconds(secondsSince1970);
 		}
+	}
+
+	/// <summary>
+	/// Provides useful extension methods for DateTime type
+	/// </summary>
+	public static class DateTimeExtensions
+	{
+		#region StartOfWeek
+		/// <summary>
+		/// Returns the date for the first day of the week for current thread culture.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <returns></returns>
+		public static DateTime StartOfWeek(this DateTime date)
+		{
+			return date.StartOfWeek(CultureInfo.CurrentCulture);
+		}
+
+		/// <summary>
+		/// Return the date for the first day of the week for the specified culture.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		public static DateTime StartOfWeek(this DateTime date, IFormatProvider format)
+		{
+			var firstDayOfWeek = ((DateTimeFormatInfo) format.GetFormat(typeof(DateTimeFormatInfo))).FirstDayOfWeek;
+			return date.StartOfWeek(firstDayOfWeek);
+		}
+
+		/// <summary>
+		/// Return the date for the first day of the week.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <param name="startOfWeek">The start of week.</param>
+		/// <returns></returns>
+		public static DateTime StartOfWeek (this DateTime date, DayOfWeek startOfWeek)
+		{
+			int diff = date.DayOfWeek - startOfWeek;
+
+			if (diff < 0)
+				diff += 7;
+
+			return date.AddDays(-diff).Date;
+		}
+		#endregion
+
+		#region EndOfWeek
+		/// <summary>
+		/// Returns the date for the last day of the week for current thread culture.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <returns></returns>
+		public static DateTime EndOfWeek(this DateTime date)
+		{
+			return date.EndOfWeek(CultureInfo.CurrentCulture);
+		}
+
+		/// <summary>
+		/// Return the date for the last day of the week for the specified culture.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		public static DateTime EndOfWeek(this DateTime date, IFormatProvider format)
+		{
+			var firstDayOfWeek = ((DateTimeFormatInfo)format.GetFormat(typeof(DateTimeFormatInfo))).FirstDayOfWeek;
+			var endDayOfWeek = (DayOfWeek) (((int) firstDayOfWeek + 6) % 7);
+			return date.EndOfWeek(endDayOfWeek);
+		}
+
+		/// <summary>
+		/// Return the date for the last day of the week.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <param name="startOfWeek">The end of week.</param>
+		/// <returns></returns>
+		public static DateTime EndOfWeek(this DateTime date, DayOfWeek endOfWeek)
+		{
+			int diff = endOfWeek - date.DayOfWeek;
+
+			if (diff < 0)
+				diff += 7;
+
+			return date.AddDays(diff).Date;
+		}
+		#endregion
 	}
 }
