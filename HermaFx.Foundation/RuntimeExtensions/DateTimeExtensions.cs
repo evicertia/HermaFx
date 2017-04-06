@@ -73,8 +73,7 @@ namespace HermaFx
 		/// <returns></returns>
 		public static DateTime StartOfWeek(this DateTime date)
 		{
-			var culture = CultureInfo.CurrentCulture;
-			return date.StartOfWeek(culture);
+			return date.StartOfWeek(CultureInfo.CurrentCulture);
 		}
 
 		/// <summary>
@@ -83,9 +82,9 @@ namespace HermaFx
 		/// <param name="date">The date.</param>
 		/// <param name="culture">The culture.</param>
 		/// <returns></returns>
-		public static DateTime StartOfWeek(this DateTime date, CultureInfo culture)
+		public static DateTime StartOfWeek(this DateTime date, IFormatProvider format)
 		{
-			var firstDayOfWeek = culture.DateTimeFormat.FirstDayOfWeek;
+			var firstDayOfWeek = ((DateTimeFormatInfo) format.GetFormat(typeof(DateTimeFormatInfo))).FirstDayOfWeek;
 			return date.StartOfWeek(firstDayOfWeek);
 		}
 
@@ -114,8 +113,7 @@ namespace HermaFx
 		/// <returns></returns>
 		public static DateTime EndOfWeek(this DateTime date)
 		{
-			var culture = CultureInfo.CurrentCulture;
-			return date.EndOfWeek(culture);
+			return date.EndOfWeek(CultureInfo.CurrentCulture);
 		}
 
 		/// <summary>
@@ -124,9 +122,9 @@ namespace HermaFx
 		/// <param name="date">The date.</param>
 		/// <param name="culture">The culture.</param>
 		/// <returns></returns>
-		public static DateTime EndOfWeek(this DateTime date, CultureInfo culture)
+		public static DateTime EndOfWeek(this DateTime date, IFormatProvider format)
 		{
-			var firstDayOfWeek = culture.DateTimeFormat.FirstDayOfWeek;
+			var firstDayOfWeek = ((DateTimeFormatInfo)format.GetFormat(typeof(DateTimeFormatInfo))).FirstDayOfWeek;
 			var endDayOfWeek = (DayOfWeek) (((int) firstDayOfWeek + 6) % 7);
 			return date.EndOfWeek(endDayOfWeek);
 		}
