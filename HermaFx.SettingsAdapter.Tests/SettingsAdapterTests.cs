@@ -61,6 +61,27 @@ namespace HermaFx.Settings
 			[Settings, Required]
 			Nested Nested { get; set; }
 		}
+
+		#region Validation
+
+		public interface NestedWithRequired
+		{
+			[Required]
+			string Inner { get; set; }
+		}
+
+		[Settings("F")]
+		public interface F
+		{
+			[Required]
+			string Data { get; set; }
+
+			[Settings, ValidateObject]
+			NestedWithRequired Nested { get; set; }
+		}
+
+		#endregion
+
 		#endregion
 
 		private static readonly NameValueCollection _dict = new NameValueCollection()
@@ -107,6 +128,48 @@ namespace HermaFx.Settings
 			var obje = new SettingsAdapter().Create<E>(dict);
 			Assert.AreEqual("SubValue", obje.Nested.Inner);
 		}
+
+		#region Validation Test
+
+		[Test]
+		public void ValidObjectTest()
+		{
+			var dict = new NameValueCollection()
+			{
+				{ "F:Data", "Value" },
+				{ "F:Nested:Inner", "SubValue" }
+			};
+
+			var obje = new SettingsAdapter().Create<F>(dict);
+
+		}
+
+		[Test]
+		public void InValidRootPropertyTest()
+		{
+			var dict = new NameValueCollection()
+			{
+				{ "F:Nested:Inner", "SubValue" }
+			};
+
+			Assert.Throws<ValidationException>(() => new SettingsAdapter().Create<F>(dict));
+
+		}
+
+		[Test]
+		public void InValidNestedPropertyTest()
+		{
+			var dict = new NameValueCollection()
+			{
+				{ "F:Data", "Value" },
+				{ "F:Nested:Inner", null}
+			};
+
+			Assert.Throws<System.Reflection.TargetInvocationException>(() => new SettingsAdapter().Create<F>(dict));
+
+		}
+
+		#endregion
 
 	}
 }
