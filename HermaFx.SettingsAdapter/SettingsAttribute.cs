@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Components.DictionaryAdapter;
 
 namespace HermaFx.Settings
 {
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = false)]
-	public sealed class SettingsAttribute : Attribute
+	public sealed class SettingsAttribute : Attribute, IPropertyDescriptorInitializer
 	{
 		public const string DEFAULT_PREFIX_SEPARATOR = ":";
 
@@ -36,5 +37,22 @@ namespace HermaFx.Settings
 		{
 			KeyPrefix = keyPrefix;
 		}
+
+		#region IPropertyDescriptorInitializer
+
+		public int ExecutionOrder => DictionaryBehaviorAttribute.LastExecutionOrder;
+
+		public void Initialize(PropertyDescriptor propertyDescriptor, object[] behaviors)
+		{
+			propertyDescriptor.Fetch = true;
+		}
+
+		public IDictionaryBehavior Copy()
+		{
+			return this;
+		}
+
+		#endregion
+
 	}
 }
