@@ -52,6 +52,9 @@
     <Compile Include="MessageDateExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RebusExtensions.cs" />
+    <Compile Include="SagaPersisters\DualSagaExtensions.cs" />
+    <Compile Include="SagaPersisters\DualSagaPersister.cs" />
+    <Compile Include="SagaPersisters\DualSagaTimeoutStorage.cs" />
     <Compile Include="Sagas\ISagaLock.cs" />
     <Compile Include="Sagas\SagaLockingExtensions.cs" />
     <Compile Include="Sagas\ISagaLockingProvider.cs" />
