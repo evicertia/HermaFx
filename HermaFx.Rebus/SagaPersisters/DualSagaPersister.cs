@@ -7,7 +7,7 @@ namespace HermaFx.Rebus
 {
 	public class DualSagaPersister : IStoreSagaData
 	{
-		private const string DUAL_SAGA_ID = "HermaFx.Rebus:Dual_Saga_";
+		private const string SAGA_PERSISTER_IMPL = nameof(DualSagaPersister) + ":PersisterImpl:";
 
 		private IStoreSagaData _oldSagaPersister;
 		private IStoreSagaData _newSagaPersister;
@@ -31,7 +31,9 @@ namespace HermaFx.Rebus
 				throw new InvalidOperationException("Rebus MessageContext has no Current context, DualSagaPersister can't update the saga");
 			}
 
-			(MessageContext.GetCurrent().Items[DUAL_SAGA_ID + sagaData.GetType().FullName] as IStoreSagaData).Update(sagaData, sagaDataPropertyPathsToIndex);
+			GetStoreSagaDataImplementation(
+				(bool)MessageContext.GetCurrent().Items[SAGA_PERSISTER_IMPL + sagaData.GetType().FullName])
+				.Update(sagaData, sagaDataPropertyPathsToIndex);
 		}
 
 		public void Delete(ISagaData sagaData)
@@ -41,7 +43,9 @@ namespace HermaFx.Rebus
 				throw new InvalidOperationException("Rebus MessageContext has no Current context, DualSagaPersister can't delete the saga");
 			}
 
-			(MessageContext.GetCurrent().Items[DUAL_SAGA_ID + sagaData.GetType().FullName] as IStoreSagaData).Delete(sagaData);
+			GetStoreSagaDataImplementation(
+				(bool)MessageContext.GetCurrent().Items[SAGA_PERSISTER_IMPL + sagaData.GetType().FullName])
+				.Delete(sagaData);
 		}
 
 		public T Find<T>(string sagaDataPropertyPath, object fieldFromMessage) where T : class, ISagaData
@@ -54,18 +58,33 @@ namespace HermaFx.Rebus
 			var persisterData = _newSagaPersister.Find<T>(sagaDataPropertyPath, fieldFromMessage);
 			if (persisterData != null)
 			{
-				MessageContext.GetCurrent().Items[DUAL_SAGA_ID + persisterData.GetType().FullName] = _newSagaPersister;
+				MessageContext.GetCurrent().Items[SAGA_PERSISTER_IMPL + persisterData.GetType().FullName] = IsNewStoreSagaData(_newSagaPersister);
 				return persisterData;
 			}
 
 			persisterData = _oldSagaPersister.Find<T>(sagaDataPropertyPath, fieldFromMessage);
 			if (persisterData != null)
 			{
-				MessageContext.GetCurrent().Items[DUAL_SAGA_ID + persisterData.GetType().FullName] = _oldSagaPersister;
+				MessageContext.GetCurrent().Items[SAGA_PERSISTER_IMPL + persisterData.GetType().FullName] = IsNewStoreSagaData(_oldSagaPersister);
 				return persisterData;
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Gets the appropriate IStoreSagaData
+		/// </summary>
+		/// <param name="isNewStoreSagaData">True if new IStoreSagaData. False otherwise.</param>
+		/// <returns>IStoreSagaData instance</returns>
+		private IStoreSagaData GetStoreSagaDataImplementation(bool isNewStoreSagaData)
+		{
+			return isNewStoreSagaData ? _newSagaPersister : _oldSagaPersister;
+		}
+
+		private bool IsNewStoreSagaData(IStoreSagaData sagaPersister)
+		{
+			return sagaPersister == _newSagaPersister;
 		}
 	}
 }
