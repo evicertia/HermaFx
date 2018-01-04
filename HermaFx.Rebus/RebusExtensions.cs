@@ -140,6 +140,7 @@ namespace HermaFx.Rebus
 			var busSubscribeMethod = bus.GetType().GetMethod("Subscribe", new Type[] { });
 			var messageWeWantToSubscribeTo = assembly
 					.ExportedTypes
+					.Where(x => !x.IsAbstract)
 					.SelectMany(x => x.GetInterfaces())
 					.Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISubscribeTo<>))
 					.Select(x => x.GetGenericArguments()[0])
