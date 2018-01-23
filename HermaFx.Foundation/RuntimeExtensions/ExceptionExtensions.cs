@@ -84,7 +84,7 @@ namespace HermaFx
 		/// Run the specified @delegate avoiding throwing any exception (by catching & ignoring them if any).
 		/// </summary>
 		/// <param name="delegate">The @delegate.</param>
-		public static void Shallow(Action @delegate)
+		public static void Swallow(Action @delegate)
 		{
 			try
 			{
