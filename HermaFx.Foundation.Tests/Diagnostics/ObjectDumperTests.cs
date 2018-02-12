@@ -307,10 +307,10 @@ You"
 
 	public static class Extensions
 	{
-		public static T Trace<T>(this T item)
+		public static string Trace(this string item)
 		{
-			System.Diagnostics.Trace.WriteLine(item.ToString());
-			return item;
+			System.Diagnostics.Trace.WriteLine(item);
+			return item.Replace("\r", string.Empty);
 		}
 	}
 }
