@@ -111,12 +111,16 @@
     <Compile Include="Utils\Disposable.cs" />
     <Compile Include="Utils\AdvancedGuidGenerator.cs" />
     <Compile Include="Utils\TempFile.cs" />
+    <Compile Include="Diagnostics\ObjectDumper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="HermaFx.Foundation.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Diagnostics\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 			 Other similar extension points exist, see Microsoft.Common.targets.
