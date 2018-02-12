@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using NUnit.Framework;
 
@@ -51,11 +52,13 @@ namespace HermaFx.Diagnostics
 			(new
 			{
 				Foo = 1,
-				Foo2 = @"HELLO
-World
-How
-Are
-You"
+				Foo2 = new StringBuilder()
+					.AppendLine("HELLO")
+					.AppendLine("World")
+					.AppendLine("How")
+					.AppendLine("Are")
+					.AppendLine("You")
+					.ToString()
 			}).DumpAsString().Trace().ShouldEqual(
 @"|------------------------------------|
 | <>f__AnonymousType1<Int32, String> |
@@ -98,13 +101,15 @@ You"
 				Foo = 1,
 				Foo2 = new
 				{
-					Bar = @"HELLO
-World
-How
-Are
-You"
+					Bar = new StringBuilder()
+					.AppendLine("HELLO")
+					.AppendLine("World")
+					.AppendLine("How")
+					.AppendLine("Are")
+					.AppendLine("You")
+					.ToString()
 				}
-			}).DumpAsString().ShouldEqual(
+			}).DumpAsString().Trace().ShouldEqual(
 @"|---------------------------------------------------------|
 | <>f__AnonymousType1<Int32, <>f__AnonymousType2<String>> |
 |---------------------------------------------------------|
