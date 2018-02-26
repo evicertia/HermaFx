@@ -56,6 +56,7 @@
     <Compile Include="AdvancedGuidGeneratorTests.cs" />
     <Compile Include="Base32EncodingTests.cs" />
     <Compile Include="ComponentModel\StringArrayConverterTests.cs" />
+    <Compile Include="Functional\PatternMatcherTests.cs" />
     <Compile Include="GuardTests.cs" />
     <Compile Include="Cryptography\CryptoHelperTests.cs" />
     <Compile Include="RuntimeExtensions\DateTimeExtensionsTests.cs" />
@@ -96,9 +97,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Diagnostics\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
