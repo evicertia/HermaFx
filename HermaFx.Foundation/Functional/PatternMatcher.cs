@@ -3,6 +3,50 @@ using System.Collections.Generic;
 
 namespace HermaFx.Functional
 {
+	public class PatternMatcher
+	{
+		List<Tuple<Predicate<object>, Action<object>>> cases = new List<Tuple<Predicate<object>, Action<object>>>();
+
+		public PatternMatcher() { }
+
+		public PatternMatcher Case(Predicate<object> condition, Action<object> action)
+		{
+			cases.Add(new Tuple<Predicate<object>, Action<object>>(condition, action));
+			return this;
+		}
+
+		public PatternMatcher Case<T>(Predicate<T> condition, Action<T> action)
+		{
+			return Case(
+				o => o is T && condition((T)o),
+				o => action((T)o));
+		}
+
+		public PatternMatcher Case<T>(Action<T> action)
+		{
+			return Case(
+				o => o is T,
+				o => action((T)o));
+		}
+
+		public PatternMatcher Default(Action<object> action)
+		{
+			return Case(o => true, action);
+		}
+
+		public void Match(object o)
+		{
+			foreach (var tuple in cases)
+				if (tuple.Item1(o))
+				{
+					tuple.Item2(o);
+					return;
+				}
+
+			throw new Exception("Failed to match");
+		}
+	}
+
 	public class PatternMatcher<Output>
 	{
 		List<Tuple<Predicate<object>, Func<object, Output>>> cases = new List<Tuple<Predicate<object>, Func<object, Output>>>();
