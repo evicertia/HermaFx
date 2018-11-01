@@ -109,5 +109,40 @@ namespace HermaFx
 
 			return source;
 		}
+
+		/// <summary>
+		/// Shuffle the specified source.
+		/// </summary>
+		/// <returns>The shuffle.</returns>
+		/// <param name="source">Source.</param>
+		/// <param name="rng">A rng instance to use as randomness source.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random rng)
+		{
+			T[] elements = source.ToArray();
+			// Note i > 0 to avoid final pointless iteration
+			for (int i = elements.Length - 1; i >= 0; i--)
+			{
+				// Swap element "i" with a random earlier element it (or itself)
+				// ... except we don't really need to swap it fully, as we can
+				// return it immediately, and afterwards it's irrelevant.
+				int swapIndex = rng.Next(i + 1);
+				yield return elements[swapIndex];
+				elements[swapIndex] = elements[i];
+				// we don't actually perform the swap, we can forget about the
+				// swapped element because we already returned it.
+			}
+		}
+
+		/// <summary>
+		/// Shuffle the specified source.
+		/// </summary>
+		/// <returns>The shuffle.</returns>
+		/// <param name="source">Source.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
+		{
+			return source.Shuffle(new Random());
+		}
 	}
 }
