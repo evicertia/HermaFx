@@ -14,12 +14,18 @@ namespace HermaFx.DataAnnotations
 		{
 			[Required]
 			public string Field { get; set; }
+
+			[MaxLength(10)]
+			public string Field2 { get; set; }
 		}
 
 		public class OutterDto
 		{
 			[Required, MinLength(5)]
 			public string AString { get; set; }
+
+			[MaxLength(10)]
+			public string BString { get; set; }
 
 			[ValidateObject]
 			public InnerDto Inner { get; set; }
@@ -131,5 +137,22 @@ namespace HermaFx.DataAnnotations
 			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("InnerList[0].Field"));
 		}
 
+
+		[Test]
+		public void InvalidObjectFailsMaxLengthInnerDto()
+		{
+			var dto = BuildDto(true);
+			dto.Inner.Field = null; // Try to fire RequiredAttribute..
+			dto.BString = "123456789012345";  // Try to fire MaxLengthAttribute..
+			dto.Inner.Field2 = "123456789012345";  // Try to fire MaxLengthAttribute..
+
+			var result = ExtendedValidator.Validate(dto);
+
+			Assert.IsNotNull(result);
+			Assert.That(result, Has.Length.EqualTo(3));
+			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("BString"));
+			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("Inner.Field"));
+			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("Inner.Field2"));
+		}
 	}
 }
