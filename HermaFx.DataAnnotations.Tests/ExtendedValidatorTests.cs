@@ -142,8 +142,9 @@ namespace HermaFx.DataAnnotations
 		public void InvalidObjectFailsMaxLengthInnerDto()
 		{
 			var dto = BuildDto(true);
-			dto.Inner.Field = null; // Try to fire RequiredAttribute..
+
 			dto.BString = "123456789012345";  // Try to fire MaxLengthAttribute..
+			dto.Inner.Field = null; // Try to fire RequiredAttribute..
 			dto.Inner.Field2 = "123456789012345";  // Try to fire MaxLengthAttribute..
 
 			var result = ExtendedValidator.Validate(dto);
@@ -152,6 +153,21 @@ namespace HermaFx.DataAnnotations
 			Assert.That(result, Has.Length.EqualTo(3));
 			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("BString"));
 			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("Inner.Field"));
+			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("Inner.Field2"));
+		}
+
+		[Test]
+		public void InvalidObjectFailsMaxLengthInnerDto2()
+		{
+			var dto = BuildDto(true);
+
+			dto.Inner.Field = "hello";
+			dto.Inner.Field2 = "123456789012345";  // Try to fire MaxLengthAttribute..
+
+			var result = ExtendedValidator.Validate(dto);
+
+			Assert.IsNotNull(result);
+			Assert.That(result, Has.Length.EqualTo(1));
 			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("Inner.Field2"));
 		}
 	}
