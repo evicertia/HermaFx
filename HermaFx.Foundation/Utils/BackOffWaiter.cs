@@ -12,7 +12,7 @@ namespace HermaFx.Utils
 	/// <summary>
 	/// I can help you wait, especially if you want to wait e.g. for some kind of increasing amount of time.
 	/// </summary>
-	internal class BackoffWaiter
+	public class BackoffWaiter
 	{
 		private readonly TimeSpan[] backoffTimes;
 		private long currentIndex;
