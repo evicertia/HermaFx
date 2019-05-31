@@ -21,6 +21,9 @@ namespace HermaFx.Utils
 		/// </summary>
 		internal Action<TimeSpan> waitAction = timeToWait => Thread.Sleep(timeToWait);
 
+		internal Action<TimeSpan, CancellationToken> waitActionWithCancelationToken =
+			(timeToWait, cancelationToken ) => cancelationToken.WaitHandle.WaitOne(timeToWait);
+
 		public bool LoggingDisabled { get; set; }
 
 		public BackoffWaiter(params TimeSpan[] backoffTimes)
@@ -64,10 +67,15 @@ namespace HermaFx.Utils
 			Wait(_ => { });
 		}
 
+		public void Wait(CancellationToken cancelationToken)
+		{
+			Wait(_ => { }, cancelationToken);
+		}
+
 		/// <summary>
 		/// Waits the time specified next in the sequence, invoking the callback with the time that will be waited
 		/// </summary>
-		public void Wait(Action<TimeSpan> howLongTheWaitWillLast)
+		public void Wait(Action<TimeSpan> howLongTheWaitWillLast, CancellationToken? cancelationToken = null)
 		{
 			var effectiveIndex = Math.Min(Interlocked.Read(ref currentIndex), backoffTimes.Length - 1);
 			var timeToWait = backoffTimes[effectiveIndex];
@@ -80,7 +88,11 @@ namespace HermaFx.Utils
 #endif
 
 			howLongTheWaitWillLast(timeToWait);
-			waitAction(timeToWait);
+
+			if (cancelationToken == null)
+				waitAction(timeToWait);
+			else
+				waitActionWithCancelationToken(timeToWait, (CancellationToken)cancelationToken);
 
 			Interlocked.Increment(ref currentIndex);
 		}
