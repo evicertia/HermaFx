@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RabbitMQ.Client, Version=3.4.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
       <HintPath>..\packages\RabbitMQ.Client.3.4.0\lib\net35\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
@@ -50,8 +54,13 @@
     <Compile Include="ISubscribeTo.cs" />
     <Compile Include="MessageContextExtensions.cs" />
     <Compile Include="MessageDateExtensions.cs" />
+    <Compile Include="MessageDeferringSaga\MessageDeferringSagaDataProxyGenerator.cs" />
+    <Compile Include="MessageDeferringSaga\MessageDeferringSagaInterceptor.cs" />
+    <Compile Include="MessageDeferringSaga\MessageDeferringSagaPersister.cs" />
+    <Compile Include="MessageDeferringSaga\MessageDeferringSagaSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RebusExtensions.cs" />
+    <Compile Include="RebusSagaExtensions.cs" />
     <Compile Include="SagaPersisters\DualSagaExtensions.cs" />
     <Compile Include="SagaPersisters\DualSagaPersister.cs" />
     <Compile Include="SagaPersisters\DualSagaTimeoutStorage.cs" />
@@ -59,6 +68,9 @@
     <Compile Include="Sagas\SagaLockingExtensions.cs" />
     <Compile Include="Sagas\ISagaLockingProvider.cs" />
     <Compile Include="Sagas\SagaLockingManager.cs" />
+    <Compile Include="SagaTracing\ITraceableSagaData.cs" />
+    <Compile Include="SagaTracing\SagaDataTracingInterceptor.cs" />
+    <Compile Include="SagaTracing\SagaHandlerProxyGenerationHook.cs" />
     <Compile Include="SimpleContainerAdapter.cs" />
     <Compile Include="TimeToBeReceivedExtensions.cs" />
     <Compile Include="TransportConfigurerExtensions.cs" />
@@ -66,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="HermaFx.Rebus.nuspec" />
+    <None Include="ILMerge.excludes" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -86,4 +99,13 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <!-- ILMerge -->
+  <UsingTask AssemblyFile="$(SolutionDir)packages\ILMerge.Tools.MSBuildToolTask.2.14.1208.49\tools\ILMerge.Tools.MSBuildToolTask.dll" TaskName="ILMerge.Tools.MSBuildToolTask.ILMergeTool" />
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+      <InputAssemblies Include="$(OutputPath)\Castle.Core.dll" />
+    </ItemGroup>
+    <ILMergeTool Internalize="true" SearchDirectories="$(MSBuildProjectDirectory)\$(OutputPath.TrimEnd('\'))" InputAssemblies="@(IntermediateAssembly);@(InputAssemblies)" ExcludeFile="$(MSBuildProjectDirectory)\ILMerge.excludes" ToolPath="$(SolutionDir)packages\ILMerge.Tools.2.14.1208\tools\ILMerge.exe" OutputFile="$(OutputPath)\$(AssemblyName).dll" />
+  </Target>
+  <!-- /ILMerge -->
 </Project>
