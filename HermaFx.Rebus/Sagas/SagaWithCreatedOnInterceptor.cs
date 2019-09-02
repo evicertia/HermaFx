@@ -8,7 +8,7 @@ using Castle.DynamicProxy;
 
 namespace HermaFx.Rebus
 {
-	public class SagaDataTracingInterceptor : StandardInterceptor
+	public class SagaWithCreatedOnInterceptor : StandardInterceptor
 	{
 		private static ILog _Log = LogProvider.GetCurrentClassLogger();
 
@@ -16,13 +16,13 @@ namespace HermaFx.Rebus
 		private readonly ConcurrentDictionary<Type, PropertyInfo> _sagaDataCache = new ConcurrentDictionary<Type, PropertyInfo>();
 		private readonly ConcurrentDictionary<Type, Type> _handlerCache = new ConcurrentDictionary<Type, Type>();
 
-		private ITraceableSagaData GetSagaData(Saga saga)
+		private ISagaWithCreatedOn GetSagaData(Saga saga)
 		{
 			var property = _sagaDataCache.GetOrAdd(saga.GetType(), x => saga.GetType().GetProperty(nameof(Saga<ISagaData>.Data)));
-			var data = property.GetValue(saga) as ITraceableSagaData;
+			var data = property.GetValue(saga) as ISagaWithCreatedOn;
 
 			Guard.Against<InvalidOperationException>(data == null,
-				$"SagaData for saga {saga.GetType()} does not implemente {nameof(ITraceableSagaData)}?!"
+				$"SagaData for saga {saga.GetType()} does not implemente {nameof(ISagaWithCreatedOn)}?!"
 			);
 
 			return data;

@@ -3,7 +3,7 @@ using Rebus;
 
 namespace HermaFx.Rebus
 {
-	public interface ITraceableSagaData : ISagaData
+	public interface ISagaWithCreatedOn : ISagaData
 	{
 		DateTime? CreatedOn { get; set; }
 	}

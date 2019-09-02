@@ -68,13 +68,13 @@
     <Compile Include="Sagas\SagaLockingExtensions.cs" />
     <Compile Include="Sagas\ISagaLockingProvider.cs" />
     <Compile Include="Sagas\SagaLockingManager.cs" />
-    <Compile Include="SagaTracing\ITraceableSagaData.cs" />
-    <Compile Include="SagaTracing\SagaDataTracingInterceptor.cs" />
-    <Compile Include="SagaTracing\SagaHandlerProxyGenerationHook.cs" />
     <Compile Include="SimpleContainerAdapter.cs" />
     <Compile Include="TimeToBeReceivedExtensions.cs" />
     <Compile Include="TransportConfigurerExtensions.cs" />
     <Compile Include="ValidatingExtensions.cs" />
+    <Compile Include="Sagas\ISagaWithCreatedOn.cs" />
+    <Compile Include="Sagas\SagaWithCreatedOnHandlerProxyGenerationHook.cs" />
+    <Compile Include="Sagas\SagaWithCreatedOnInterceptor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="HermaFx.Rebus.nuspec" />

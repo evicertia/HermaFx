@@ -15,15 +15,15 @@ namespace HermaFx.Rebus
 		}
 		#endregion
 
-		private const string SAGA_LOCKED_EXCEPTION_NAME = "AdoNetSagaLockedException";
-
 		private static ILog _Log = LogProvider.GetCurrentClassLogger();
 		private readonly MessageDeferringSagaDataProxyGenerator _proxyGenerator = new MessageDeferringSagaDataProxyGenerator();
 		private readonly IStoreSagaData _inner;
+		private readonly Func<Exception, bool> _filter;
 
-		public MessageDeferringSagaPersister(IStoreSagaData inner)
+		public MessageDeferringSagaPersister(IStoreSagaData inner, Func<Exception, bool> filter)
 		{
 			_inner = inner.ThrowIfNull(nameof(inner));
+			_filter = filter.ThrowIfNull(nameof(filter));
 		}
 
 		public static bool IsLockedSagaData(ISagaData obj)
@@ -61,18 +61,13 @@ namespace HermaFx.Rebus
 			{
 				return _inner.Find<T>(sagaDataPropertyPath, fieldFromMessage);
 			}
-			catch (Exception exception)
+			catch (Exception ex) when (_filter(ex))
 			{
-				if (exception.GetType().Name == SAGA_LOCKED_EXCEPTION_NAME)
-				{
-					_Log.InfoFormat("Returning fake sagaData for locked saga of type {0}, with {1} = {2}.",
-						typeof(T).Name, sagaDataPropertyPath, fieldFromMessage
-					);
+				_Log.InfoFormat("Returning fake sagaData for locked saga of type {0}, with {1} = {2}.",
+					typeof(T).Name, sagaDataPropertyPath, fieldFromMessage
+				);
 
-					return _proxyGenerator.CreateProxy<T>();
-				}
-
-				throw;
+				return _proxyGenerator.CreateProxy<T>();
 			}
 		}
 	}

@@ -11,7 +11,7 @@ namespace HermaFx.Rebus
 	/// An IProxyGenerationHook which filters out from proxying methods
 	/// those not strictly related to handling incomming messages.
 	/// </summary>
-	public class SagaHandlerProxyGenerationHook : IProxyGenerationHook
+	public class SagaWithCreatedOnHandlerProxyGenerationHook : IProxyGenerationHook
 	{
 		public void MethodsInspected()
 		{
