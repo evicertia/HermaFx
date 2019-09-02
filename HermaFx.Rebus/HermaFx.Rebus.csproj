@@ -54,10 +54,6 @@
     <Compile Include="ISubscribeTo.cs" />
     <Compile Include="MessageContextExtensions.cs" />
     <Compile Include="MessageDateExtensions.cs" />
-    <Compile Include="MessageDeferringSaga\MessageDeferringSagaDataProxyGenerator.cs" />
-    <Compile Include="MessageDeferringSaga\MessageDeferringSagaInterceptor.cs" />
-    <Compile Include="MessageDeferringSaga\MessageDeferringSagaPersister.cs" />
-    <Compile Include="MessageDeferringSaga\MessageDeferringSagaSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RebusExtensions.cs" />
     <Compile Include="RebusSagaExtensions.cs" />
@@ -75,6 +71,10 @@
     <Compile Include="Sagas\ISagaWithCreatedOn.cs" />
     <Compile Include="Sagas\SagaWithCreatedOnHandlerProxyGenerationHook.cs" />
     <Compile Include="Sagas\SagaWithCreatedOnInterceptor.cs" />
+    <Compile Include="Sagas\MessageDeferringSagaDataProxyGenerator.cs" />
+    <Compile Include="Sagas\MessageDeferringSagaInterceptor.cs" />
+    <Compile Include="Sagas\MessageDeferringSagaPersister.cs" />
+    <Compile Include="Sagas\MessageDeferringSagaSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="HermaFx.Rebus.nuspec" />
