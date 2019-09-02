@@ -5,7 +5,7 @@ using Rebus;
 
 using Castle.DynamicProxy;
 
-namespace HermaFx.Rebus.LockedSagaDefer.Sagas
+namespace HermaFx.Rebus
 {
 	/// <summary>
 	/// An IProxyGenerationHook which filters out from proxying methods

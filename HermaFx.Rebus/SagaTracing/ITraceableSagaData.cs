@@ -1,7 +1,7 @@
 ﻿using System;
 using Rebus;
 
-namespace HermaFx.Rebus.LockedSagaDefer.Sagas
+namespace HermaFx.Rebus
 {
 	public interface ITraceableSagaData : ISagaData
 	{

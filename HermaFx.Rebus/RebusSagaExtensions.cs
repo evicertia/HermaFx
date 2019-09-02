@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Rebus.Configuration;
-using HermaFx.Rebus.LockedSagaDefer.MessageDeferringSaga;
 
-namespace HermaFx.Rebus.LockedSagaDefer
+namespace HermaFx.Rebus
 {
 	public static class RebusSagaExtensions
 	{

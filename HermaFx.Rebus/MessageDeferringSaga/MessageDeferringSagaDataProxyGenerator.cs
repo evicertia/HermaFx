@@ -2,7 +2,7 @@
 using Rebus;
 using Castle.DynamicProxy;
 
-namespace HermaFx.Rebus.LockedSagaDefer.MessageDeferringSaga
+namespace HermaFx.Rebus
 {
 	public class MessageDeferringSagaDataProxyGenerator
 	{

@@ -1,9 +1,9 @@
 ﻿using System;
 using Rebus;
 
-using SagaLockedException = Rebus.AdoNet.AdoNetSagaLockedException;
+using HermaFx.Logging;
 
-namespace HermaFx.Rebus.LockedSagaDefer.MessageDeferringSaga
+namespace HermaFx.Rebus
 {
 	public class MessageDeferringSagaPersister : IStoreSagaData, ICanUpdateMultipleSagaDatasAtomically
 	{
@@ -15,7 +15,9 @@ namespace HermaFx.Rebus.LockedSagaDefer.MessageDeferringSaga
 		}
 		#endregion
 
-		private static readonly global::Common.Logging.ILog _Log = global::Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		private const string SAGA_LOCKED_EXCEPTION_NAME = "AdoNetSagaLockedException";
+
+		private static ILog _Log = LogProvider.GetCurrentClassLogger();
 		private readonly MessageDeferringSagaDataProxyGenerator _proxyGenerator = new MessageDeferringSagaDataProxyGenerator();
 		private readonly IStoreSagaData _inner;
 
@@ -59,13 +61,18 @@ namespace HermaFx.Rebus.LockedSagaDefer.MessageDeferringSaga
 			{
 				return _inner.Find<T>(sagaDataPropertyPath, fieldFromMessage);
 			}
-			catch (SagaLockedException)
+			catch (Exception exception)
 			{
-				_Log.InfoFormat("Returning fake sagaData for locked saga of type {0}, with {1} = {2}.",
-					typeof(T).Name, sagaDataPropertyPath, fieldFromMessage
-				);
+				if (exception.GetType().Name == SAGA_LOCKED_EXCEPTION_NAME)
+				{
+					_Log.InfoFormat("Returning fake sagaData for locked saga of type {0}, with {1} = {2}.",
+						typeof(T).Name, sagaDataPropertyPath, fieldFromMessage
+					);
 
-				return _proxyGenerator.CreateProxy<T>();
+					return _proxyGenerator.CreateProxy<T>();
+				}
+
+				throw;
 			}
 		}
 	}

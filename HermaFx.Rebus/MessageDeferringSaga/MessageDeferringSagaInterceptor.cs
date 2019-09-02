@@ -3,12 +3,14 @@ using System.Reflection;
 using System.Collections.Concurrent;
 using System.Linq;
 
+using HermaFx.Logging;
+
 using Rebus;
 using Rebus.Shared;
 
 using Castle.DynamicProxy;
 
-namespace HermaFx.Rebus.LockedSagaDefer.MessageDeferringSaga
+namespace HermaFx.Rebus
 {
 	/// <summary>
 	/// This interceptor is inteded to defer processing of incomming
@@ -20,7 +22,7 @@ namespace HermaFx.Rebus.LockedSagaDefer.MessageDeferringSaga
 	{
 		private const string HERMAFX_LOCKING_DEFER = "HermaFx:SagaLockingDeferred";
 
-		private static readonly global::Common.Logging.ILog _Log = global::Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		private static ILog _Log = LogProvider.GetCurrentClassLogger();
 		private readonly ConcurrentDictionary<Type, PropertyInfo> _sagaDataCache = new ConcurrentDictionary<Type, PropertyInfo>();
 
 		private readonly IBus _bus;

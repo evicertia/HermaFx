@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HermaFx.Rebus.LockedSagaDefer.MessageDeferringSaga
+namespace HermaFx.Rebus
 {
 	public class MessageDeferringSagaSettings
 	{

@@ -2,16 +2,15 @@
 using System.Reflection;
 using System.Collections.Concurrent;
 
+using HermaFx.Logging;
 using Rebus;
-
 using Castle.DynamicProxy;
 
-
-namespace HermaFx.Rebus.LockedSagaDefer.Sagas
+namespace HermaFx.Rebus
 {
 	public class SagaDataTracingInterceptor : StandardInterceptor
 	{
-		private static readonly global::Common.Logging.ILog _Log = global::Common.Logging.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+		private static ILog _Log = LogProvider.GetCurrentClassLogger();
 
 		private static readonly Type IAmInitiatedByType = typeof(IAmInitiatedBy<>);
 		private readonly ConcurrentDictionary<Type, PropertyInfo> _sagaDataCache = new ConcurrentDictionary<Type, PropertyInfo>();
