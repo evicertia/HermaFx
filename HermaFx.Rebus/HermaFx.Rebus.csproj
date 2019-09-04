@@ -58,6 +58,7 @@
     <Compile Include="ISubscribeTo.cs" />
     <Compile Include="MessageContextExtensions.cs" />
     <Compile Include="MessageDateExtensions.cs" />
+    <Compile Include="Configuration\MulticastOutgoingMessageLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RebusExtensions.cs" />
     <Compile Include="RebusSagaExtensions.cs" />

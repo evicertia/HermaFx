@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Rebus.Shared;
+﻿using Rebus.Bus;
 
 using HermaFx;
 using HermaFx.Logging;
@@ -21,9 +16,18 @@ namespace Rebus.Configuration
 
 		public static RebusConfigurer LogOutgoingMessages(this RebusConfigurer @this, LogLevel logLevel = LogLevel.Debug)
 		{
-			Guard.IsNotNull(@this.Backbone.SendMessages, "A transport ISendMessages interface must be first configured");
+			Guard.IsNotNull(@this.Backbone.SendMessages, "A transport sender interface (ISendMessages or IMulticastTransport) interface must be first configured.");
 
-			@this.Backbone.SendMessages = new OutgoingMessageLogger(@this.Backbone.SendMessages, logLevel);
+			var multicast = @this.Backbone.SendMessages as IMulticastTransport;
+
+			if (multicast == null)
+			{
+				@this.Backbone.SendMessages = new OutgoingMessageLogger(@this.Backbone.SendMessages, logLevel);
+				return @this;
+			}
+
+			@this.Backbone.SendMessages = new MulticastOutgoingMessageLogger(multicast, logLevel);
+
 			return @this;
 		}
 	}
