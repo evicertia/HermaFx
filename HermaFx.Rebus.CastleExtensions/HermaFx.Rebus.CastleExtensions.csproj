@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="HermaFx.CastleExtensions.nuspec" />
+    <None Include="HermaFx.Rebus.CastleExtensions.nuspec" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
