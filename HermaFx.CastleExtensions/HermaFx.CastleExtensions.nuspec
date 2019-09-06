@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
 	<metadata>
-		<id>HermFx.CastleExtensions</id>
+		<id>HermFx.Rebus.CastleExtensions</id>
 		<version>0.0.0.0</version>
 		<authors>Evidencias Certificadas, S.L.</authors>
 		<owners>Evidencias Certificadas, S.L.</owners>
@@ -10,8 +10,8 @@
 		<!-- iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl -->
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<releaseNotes>See changes for this revision at: https://github.com/evicertia/HermaFx/commit/GIT_COMMIT </releaseNotes>
-		<description>HermaFx Castle extensions.</description>
-		<copyright>Copyright Evidencias Certificadas, S.L. 2010-2016</copyright>
+		<description>HermaFx Rebus Castle extensions.</description>
+		<copyright>Copyright Evidencias Certificadas, S.L. 2010-2019</copyright>
 		<dependencies>
 			<dependency id="HermaFx.Foundation" version="0.0.0.0" />
 			<dependency id="Rebus" version="[0.84.0,0.90)" />
@@ -21,7 +21,7 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="bin\Release\HermaFx.CastleExtensions.*" target="lib\NET45" />
+		<file src="bin\Release\HermaFx.Rebus.CastleExtensions.*" target="lib\NET45" />
 		<file src="**\*.cs" target="src" />
 	</files>
 </package>

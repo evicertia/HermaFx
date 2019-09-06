@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HermaFx.Rebus.Extensions")]
-[assembly: AssemblyDescription("HermaFx Rebus extensions assembly")]
+[assembly: AssemblyTitle("HermaFx.Rebus.CastleExtensions")]
+[assembly: AssemblyDescription("HermaFx Rebus Castle extensions assembly")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Evidencias Certificadas S.L.")]
 [assembly: AssemblyProduct("HermaFx Library")]

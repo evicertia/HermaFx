@@ -56,9 +56,9 @@
     <Compile Include="MessageDeffering\MessageDeferringSagaPersister.cs" />
     <Compile Include="MessageDeffering\MessageDeferringSagaSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sagas\ISagaWithCreatedOn.cs" />
-    <Compile Include="Sagas\SagaWithCreatedOnHandlerProxyGenerationHook.cs" />
-    <Compile Include="Sagas\SagaWithCreatedOnInterceptor.cs" />
+    <Compile Include="SagaWithCreatedOn\ISagaWithCreatedOn.cs" />
+    <Compile Include="SagaWithCreatedOn\SagaWithCreatedOnHandlerProxyGenerationHook.cs" />
+    <Compile Include="SagaWithCreatedOn\SagaWithCreatedOnInterceptor.cs" />
     <Compile Include="SagaWithCreatedOnExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
