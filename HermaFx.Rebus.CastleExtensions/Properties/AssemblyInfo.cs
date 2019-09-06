@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HermaFx.Foundation")]
-[assembly: AssemblyDescription("HermaFx foundation assembly")]
+[assembly: AssemblyTitle("HermaFx.Rebus.CastleExtensions")]
+[assembly: AssemblyDescription("HermaFx Rebus Castle extensions assembly")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Evidencias Certificadas S.L.")]
 [assembly: AssemblyProduct("HermaFx Library")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("b988e610-cf6a-4871-8de1-64b2f0f006f0")]
+[assembly: Guid("e871ef75-d1d6-4229-8697-a320332499aa")]
 
 // Version information for an assembly consists of the following four values:
 //
