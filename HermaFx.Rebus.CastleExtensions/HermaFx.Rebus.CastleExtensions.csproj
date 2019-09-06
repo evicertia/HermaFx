@@ -7,8 +7,8 @@
     <ProjectGuid>{5A7D8DB5-58B5-4F14-9F44-74B0E7283D95}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HermaFx.CastleExtensions</RootNamespace>
-    <AssemblyName>HermaFx.CastleExtensions</AssemblyName>
+    <RootNamespace>HermaFx.Rebus.CastleExtensions</RootNamespace>
+    <AssemblyName>HermaFx.Rebus.CastleExtensions</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

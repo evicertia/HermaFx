@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Evidencias Certificadas S.L.")]
 [assembly: AssemblyProduct("HermaFx Library")]
-[assembly: AssemblyCopyright("Copyright © Evidencias Certificadas S.L. 2010-2016")]
+[assembly: AssemblyCopyright("Copyright © Evidencias Certificadas S.L. 2010-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

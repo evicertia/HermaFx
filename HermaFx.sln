@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.SettingsAdapter.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.MediatR", "HermaFx.MediatR\HermaFx.MediatR.csproj", "{351D7D74-3087-4004-9AFE-2A1836B44549}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.Rebus.CastleExtensions", "HermaFx.CastleExtensions\HermaFx.Rebus.CastleExtensions.csproj", "{5A7D8DB5-58B5-4F14-9F44-74B0E7283D95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.Rebus.CastleExtensions", "HermaFx.Rebus.CastleExtensions\HermaFx.Rebus.CastleExtensions.csproj", "{5A7D8DB5-58B5-4F14-9F44-74B0E7283D95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
