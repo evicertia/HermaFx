@@ -68,13 +68,6 @@
     <Compile Include="TimeToBeReceivedExtensions.cs" />
     <Compile Include="TransportConfigurerExtensions.cs" />
     <Compile Include="ValidatingExtensions.cs" />
-    <Compile Include="Sagas\ISagaWithCreatedOn.cs" />
-    <Compile Include="Sagas\SagaWithCreatedOnHandlerProxyGenerationHook.cs" />
-    <Compile Include="Sagas\SagaWithCreatedOnInterceptor.cs" />
-    <Compile Include="Sagas\MessageDeferringSagaDataProxyGenerator.cs" />
-    <Compile Include="Sagas\MessageDeferringSagaInterceptor.cs" />
-    <Compile Include="Sagas\MessageDeferringSagaPersister.cs" />
-    <Compile Include="Sagas\MessageDeferringSagaSettings.cs" />
     <Compile Include="MessageRunningTimeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
