@@ -26,5 +26,20 @@ namespace HermaFx.Rebus
 
 			return configurer;
 		}
+
+		public static RebusConfigurer ValidateIncomingMessages(this RebusConfigurer configurer, IEnumerable<Type> inclusions = null, IEnumerable<Type> exclusions = null)
+		{
+			configurer.Events(evs =>
+				evs.BeforeHandling += (ibus, message, handler) =>
+				{
+					if (message == null) return;
+					if (exclusions != null && exclusions.Contains(message.GetType())) return;
+					if (inclusions != null && !inclusions.Contains(message.GetType())) return;
+
+					ExtendedValidator.EnsureIsValid(message);
+				});
+
+			return configurer;
+		}
 	}
 }
