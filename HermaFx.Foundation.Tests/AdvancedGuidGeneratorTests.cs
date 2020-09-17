@@ -15,5 +15,12 @@ namespace HermaFx.Utils
 			var id = AdvancedGuidGenerator.GenerateComb();
 			Guid.Parse(id.ToString());
 		}
+
+		[Test]
+		public void BasicPostgreSQLCombGuidGeneration()
+		{
+			var id = AdvancedGuidGenerator.GenerateCombEx();
+			Guid.Parse(id.ToString());
+		}
 	}
 }
