@@ -22,6 +22,5 @@
 	</metadata>
 	<files>
 		<file src="bin\Release\HermaFx.Rebus.CastleExtensions.*" target="lib\NET45" />
-		<file src="**\*.cs" target="src" />
 	</files>
 </package>

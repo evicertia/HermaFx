@@ -20,6 +20,5 @@
 	</metadata>
 	<files>
 		<file src="bin\Release\Herma.Castle.*" target="lib\NET45" />
-		<file src="**\*.cs" target="src" />
 	</files>
 </package>

@@ -97,4 +97,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
 </Project>

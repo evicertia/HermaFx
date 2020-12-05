@@ -78,4 +78,5 @@
     <ILMergeTool Internalize="true" SearchDirectories="$(MSBuildProjectDirectory)\$(OutputPath.TrimEnd('\'))" InputAssemblies="@(IntermediateAssembly);@(InputAssemblies)" ExcludeFile="$(MSBuildProjectDirectory)\ILMerge.excludes" ToolPath="$(SolutionDir)packages\ILMerge.Tools.2.14.1208\tools\ILMerge.exe" OutputFile="$(OutputPath)\$(AssemblyName).dll" />
   </Target>
   <!-- /ILMerge -->
+  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
 </Project>
