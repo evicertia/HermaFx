@@ -29,7 +29,7 @@ namespace HermaFx.Diagnostics
 |----------------------------|
 | Foo | 1                    |
 |----------------------------|
-");
+".WithNativeNewLines());
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace HermaFx.Diagnostics
 |------------------------------------|
 | Foo2 | HELLO                       |
 |------------------------------------|
-");
+".WithNativeNewLines());
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace HermaFx.Diagnostics
 |      | Are                         |
 |      | You                         |
 |------------------------------------|
-");
+".WithNativeNewLines());
 		}
 
 		[Test]
@@ -89,7 +89,7 @@ namespace HermaFx.Diagnostics
 |      | | Bar | 1.234                  |                  |
 |      | |------------------------------|                  |
 |----------------------------------------------------------|
-");
+".WithNativeNewLines());
 		}
 
 
@@ -125,7 +125,7 @@ namespace HermaFx.Diagnostics
 |      | |     | You                   |                  |
 |      | |-----------------------------|                  |
 |---------------------------------------------------------|
-");
+".WithNativeNewLines());
 		}
 
 		[Test]
@@ -135,7 +135,7 @@ namespace HermaFx.Diagnostics
 @"|-------------------|
 | Int32[] (0 items) |
 |-------------------|
-");
+".WithNativeNewLines());
 		}
 
 
@@ -148,7 +148,7 @@ namespace HermaFx.Diagnostics
 |-------------------|
 | 1                 |
 |-------------------|
-");
+".WithNativeNewLines());
 		}
 
 		[Test]
@@ -197,7 +197,7 @@ namespace HermaFx.Diagnostics
 | | Value | 1.45                         |  |
 | |--------------------------------------|  |
 |-------------------------------------------|
-");
+".WithNativeNewLines());
 		}
 
 		[Test]
@@ -258,7 +258,7 @@ namespace HermaFx.Diagnostics
 |                       | | |--------------------|             |    |
 |                       | |------------------------------------|    |
 |-------------------------------------------------------------------|
-");
+".WithNativeNewLines());
 		}
 
 		[Test]
@@ -315,7 +315,12 @@ namespace HermaFx.Diagnostics
 		public static string Trace(this string item)
 		{
 			System.Diagnostics.Trace.WriteLine(item);
-			return item.Replace("\r", string.Empty);
+			return item;
+		}
+
+		public static string WithNativeNewLines(this string str)
+		{
+			return str.Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
 		}
 	}
 }
