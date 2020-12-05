@@ -8,8 +8,8 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: $(APPVEYOR_REPO_BRANCH):$(APPVEYOR_REPO_COMMIT)
-install:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/install-nuget-3-3-0.ps1'))
+#install:
+#  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/install-nuget-3-3-0.ps1'))
 before_build:
   - cmd: |
       setlocal enabledelayedexpansion
