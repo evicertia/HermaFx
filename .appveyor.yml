@@ -14,9 +14,6 @@ before_build:
   - cmd: |
       setlocal enabledelayedexpansion
       setlocal EnableExtensions
-      set NUGET=.nuget\NuGet.exe
-      
-      %NUGET% restore
       
       REM Set version attributes..
       FOR /R %%F IN (*.nuspec) DO (Tools\UnixUtils\sed.exe -i -e "s|0\.0\.0\.0|%APPVEYOR_BUILD_VERSION%|g" %%F)
