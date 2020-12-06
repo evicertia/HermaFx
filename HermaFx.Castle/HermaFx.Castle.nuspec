@@ -18,7 +18,4 @@
 			<dependency id="Castle.Core" version="3.3.0" />
 		</dependencies>
 	</metadata>
-	<files>
-		<file src="bin\Release\Herma.Castle.*" target="lib\NET45" />
-	</files>
 </package>

@@ -19,7 +19,4 @@
 			<dependency id="Rebus.RabbitMQ2" version="[0.84.0,0.90)" />
 		</dependencies>
 	</metadata>
-	<files>
-		<file src="bin\Release\Herma.Rebus.*" target="lib\NET45" />
-	</files>
 </package>

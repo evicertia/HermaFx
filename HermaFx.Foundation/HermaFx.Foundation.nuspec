@@ -13,7 +13,4 @@
 		<description>Herma Foundation (infrastructure &amp; fx extensions) code.</description>
 		<copyright>Copyright Evidencias Certificadas, S.L. 2010-2016</copyright>
 	</metadata>
-	<files>
-		<file src="bin\Release\Herma.Foundation.*" target="lib\NET45" />
-	</files>
 </package>

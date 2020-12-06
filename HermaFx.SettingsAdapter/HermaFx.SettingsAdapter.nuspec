@@ -16,7 +16,4 @@
 			<dependency id="HermaFx.Foundation" version="0.0.0.0" />
 		</dependencies>
 	</metadata>
-	<files>
-		<file src="bin\Release\Herma.SettingsAdapter.*" target="lib\NET45" />
-	</files>
 </package>

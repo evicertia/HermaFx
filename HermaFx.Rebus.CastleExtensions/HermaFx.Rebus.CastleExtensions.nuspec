@@ -20,7 +20,4 @@
 			<dependency id="Rebus.Castle.Windsor" version="0.84.0" />
 		</dependencies>
 	</metadata>
-	<files>
-		<file src="bin\Release\HermaFx.Rebus.CastleExtensions.*" target="lib\NET45" />
-	</files>
 </package>
