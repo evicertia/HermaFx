@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace HermaFx.DataAnnotations
 {
-	[AttributeUsage(AttributeTargets.Property)]
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
 	public abstract class ContingentValidationAttribute : ModelAwareValidationAttribute
 	{
 		#region Properties
