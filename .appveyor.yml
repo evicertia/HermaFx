@@ -28,10 +28,10 @@ build:
 before_test:
   - cmd: |
       set PATH=C:\Tools\NUnit3\bin;%APPVEYOR_BUILD_FOLDER%\packages\Machine.Specifications.Runner.Console.1.0.0\tools;%PATH%
-      # Remove Machine.Specifications VS Adapter dlls
+      REM Remove Machine.Specifications VS Adapter dlls
       del %APPVEYOR_BUILD_FOLDER%\HermaFx.SimpleConfig.Tests\bin\Release\Machine.*
       del %APPVEYOR_BUILD_FOLDER%\HermaFx.SimpleConfig.Tests\bin\Release\Mono.*
-      # Remove Castle.Core.dll too, as to ensure no dependency against it exists (due to ilmergin)
+      REM Remove Castle.Core.dll too, as to ensure no dependency against it exists (due to ilmergin)
       del %APPVEYOR_BUILD_FOLDER%\HermaFx.SimpleConfig.Tests\bin\Release\Castle.*
 after_test:
   - ps: |
