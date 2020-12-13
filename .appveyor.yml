@@ -27,9 +27,7 @@ build:
   verbosity: normal
 before_test:
   - cmd: |
-      set PATH=C:\Tools\NUnit3\bin;%PATH%
-  - ps: |
-      Add-Path c:\Projects\HermaFx\packages\Machine.Specifications.Runner.Console.1.0.0\tools
+      set PATH=C:\Tools\NUnit3\bin;%APPVEYOR_BUILD_FOLDER%\packages\Machine.Specifications.Runner.Console.1.0.0\tools;%PATH%
 after_test:
   - ps: |
       #$wc = New-Object 'System.Net.WebClient'
