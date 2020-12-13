@@ -24,7 +24,7 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   use_snupkg_format: true
-  verbosity: minimal
+  verbosity: detailed
 before_test:
   - cmd: |
       set PATH=C:\Tools\NUnit3\bin;%PATH%
