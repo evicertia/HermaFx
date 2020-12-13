@@ -28,7 +28,7 @@ namespace HermaFx.SimpleConfig.Tests
                 .ShouldEqual("customClearElementName");
 
         It should_use_default_convention_value_instead_of_whitespace_strings =
-            () => NamingConvention.Current.SectionNameByIntefaceType(typeof(IDeclareAppConfiguration))
+            () => NamingConvention.Current.SectionNameByInterfaceType(typeof(IDeclareAppConfiguration))
                     .ShouldEqual("DeclareAppConfiguration");
 
         private class ReturningNullValuesConvention : NamingConvention
@@ -48,7 +48,7 @@ namespace HermaFx.SimpleConfig.Tests
                 return "customClearElementName";
             }
 
-            public override string SectionNameByIntefaceType(Type interfaceType)
+            public override string SectionNameByInterfaceType(Type interfaceType)
             {
                 return "   ";
             }            

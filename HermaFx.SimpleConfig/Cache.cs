@@ -23,18 +23,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Diagnostics;
+using Castle.Core.Internal;
 
 namespace HermaFx.SimpleConfig
 {
-#if true //< DOT_NET_4
+#if true // DOT_NET_4
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Diagnostics;
-	using Castle.Core.Internal;
-
-	[DebuggerStepThrough]
+    
+    [DebuggerStepThrough]
     internal sealed class Cache<TKey, TValue>
     {
         private readonly IDictionary<TKey, object> entries;

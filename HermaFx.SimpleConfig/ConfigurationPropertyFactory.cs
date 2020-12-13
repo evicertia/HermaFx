@@ -81,7 +81,7 @@ namespace HermaFx.SimpleConfig
             var validators = mi.GetAttributes<ValidationAttribute>();
             if (validators.IsNullOrEmpty() == false)
             {
-                validator = new CompositeConfigurationValidator(validators, mi);
+                validator = new CompositeConfigurationValidator(validators, mi.Name);
             }
             return validator;
         }
