@@ -15,8 +15,6 @@ before_build:
       setlocal enabledelayedexpansion
       setlocal EnableExtensions
       
-      nuget help
-      
       appveyor-retry nuget restore
       
       REM Set version attributes..
