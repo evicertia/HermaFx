@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace HermaFx.Utils
+namespace HermaFx.IO
 {
 	public class TempFile : IDisposable
 	{
@@ -22,6 +22,11 @@ namespace HermaFx.Utils
 				data.CopyTo(stream);
 				stream.Flush();
 			}
+		}
+
+		public override string ToString()
+		{
+			return FullPath;
 		}
 
 		public static implicit operator String(TempFile file)
