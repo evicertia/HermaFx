@@ -7,7 +7,7 @@ namespace HermaFx.SimpleConfig.Tests
     {
         It should_throw_invalid_argument_exception =
             () => Catch.Exception(()=> Configuration.WithNamingConvention(null))
-            .ShouldBeOfType<ArgumentException>();
+                .ShouldBeOfExactType<ArgumentException>();
     }
 
     public class when_setting_naming_convention_to_convention_that_returns_null_values 
