@@ -24,14 +24,16 @@ namespace HermaFx.SimpleConfig
 
         public override void Validate(object value)
         {
-            var validationErrors = (from validation in _validationAttributes
-                                    where validation.IsValid(value) == false
-                                    select validation.FormatErrorMessage(_propertyName)).ToList();
+            var context = new ValidationContext(value) { MemberName = _propertyName };
+            var errors = _validationAttributes
+                .Select(x => x.GetValidationResult(value, context))
+                .Where(x => x != ValidationResult.Success)
+                .ToArray();
 
-            if(validationErrors.Any())
+            if(errors.Any())
             {
                 var errorMsgs = new StringBuilder("Validation Errors:");
-                var fullMsg = validationErrors.Aggregate(errorMsgs, (sb, cur) => sb.AppendLine(cur)).ToString();
+                var fullMsg = errors.Select(x => x.ErrorMessage).Aggregate(errorMsgs, (sb, cur) => sb.AppendLine(cur)).ToString();
                 throw new ArgumentException(fullMsg);
             }
         }
