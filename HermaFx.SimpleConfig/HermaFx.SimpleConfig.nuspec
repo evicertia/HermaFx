@@ -12,5 +12,7 @@
 		<releaseNotes>See changes for this revision at: https://github.com/evicertia/HermaFx/commit/GIT_COMMIT </releaseNotes>
 		<description>HermaFx SimpleConfig extensions.</description>
 		<copyright>Copyright Evidencias Certificadas, S.L. 2010-2016</copyright>
+		<dependencies>
+		</dependencies>
 	</metadata>
 </package>
