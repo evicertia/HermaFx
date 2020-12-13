@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 using HermaFx.SimpleConfig.BasicExtensions;
 
@@ -19,17 +20,27 @@ namespace HermaFx.SimpleConfig
             return concreteConfiguration.ClientValue(sectionIdentity.Type);
         }
 
-        public TInterface Get<TInterface>() where TInterface : class
+        public object Get(Type type)
         {
-            var sectionName = NamingConvention.Current.SectionNameByInterfaceOrClassType(typeof(TInterface));
+            var sectionName = NamingConvention.Current.SectionNameByInterfaceOrClassType(type);
             var section = ConfigurationManager.GetSection(sectionName);
 
             if (section == null)
             {
                 throw new ConfigurationErrorsException("There is no section named {0}".ToFormat(sectionName));
             }
-            return (TInterface)_cachedConfigs.Get(new SectionIdentity(sectionName, typeof(TInterface), 
-                (ConfigurationSectionForInterface)section));
+            return _cachedConfigs.Get(new SectionIdentity(sectionName, type, (ConfigurationSectionForInterface)section));
         }
+
+        public TResult Get<TResult>(Type type) where TResult : class
+        {
+            return (TResult)Get(type);
+        }
+
+        public TInterface Get<TInterface>() where TInterface : class
+        {
+            return (TInterface)Get(typeof(TInterface));
+        }
+
     }
 }

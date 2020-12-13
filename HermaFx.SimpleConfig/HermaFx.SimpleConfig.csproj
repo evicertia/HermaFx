@@ -68,6 +68,7 @@
     <Compile Include="ReflectionHelpers.cs" />
     <Compile Include="SectionIdentity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EnhancedNamingConvention.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
