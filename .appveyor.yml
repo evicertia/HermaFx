@@ -14,7 +14,9 @@ before_build:
   - cmd: |
       setlocal enabledelayedexpansion
       setlocal EnableExtensions
-
+      
+      nuget help
+      
       appveyor-retry nuget restore
       
       REM Set version attributes..
@@ -24,7 +26,7 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   use_snupkg_format: true
-  verbosity: detailed
+  verbosity: normal
 before_test:
   - cmd: |
       set PATH=C:\Tools\NUnit3\bin;%PATH%
