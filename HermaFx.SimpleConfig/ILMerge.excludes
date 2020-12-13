@@ -1,0 +1,3 @@
+Castle.DynamicProxy.AbstractInvocation
+Castle.DynamicProxy.Internal.CompositionInvocation
+Castle.DynamicProxy.Internal.InheritanceInvocation
