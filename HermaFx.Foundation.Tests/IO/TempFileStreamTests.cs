@@ -31,12 +31,18 @@ namespace HermaFx.IO
 		{
 			var data = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 };
 
-			using (var obj = new TempFileStream(FileShare.Read))
+			using (var obj = new TempFileStream(FileShare.ReadWrite))
 			{
 				obj.Write(data, 0, data.Length);
 				obj.Flush();
 
-				Assert.That(File.ReadAllBytes(obj.FullPath), Is.EquivalentTo(data));
+				// I am using Open() instead of File.OpenRead or File.ReadAllBytes()
+				// case we need to pass FileShare.ReadWrite for this to work on win32.
+				using (var stream = File.Open(obj.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+				{
+					var bytes = stream.ReadAllBytes();
+					Assert.That(bytes, Is.EquivalentTo(data));
+				}
 			}
 		}
 	}
