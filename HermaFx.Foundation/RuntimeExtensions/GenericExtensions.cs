@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace HermaFx
 {
@@ -119,5 +117,23 @@ namespace HermaFx
 			return lambda(item.Value);
 		}
 
+		/// <summary>
+		/// Throws if source is null.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="source">The source.</param>
+		/// <param name="message">Name of the param.</param>
+		/// <returns></returns>
+		public static T ThrowIfNull<T>(this T source, string paramName, string message, params object[] args)
+			where T : class
+		{
+			if (source == null)
+			{
+				message = string.Format(message, args);
+				throw new ArgumentNullException(paramName, message);
+			}
+
+			return source;
+		}
 	}
 }
