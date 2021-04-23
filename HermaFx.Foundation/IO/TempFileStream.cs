@@ -9,20 +9,51 @@ namespace HermaFx.IO
 
         public string FullPath => _path;
 
-        public TempFileStream(FileShare sharing)
-                : base(CreateInner(sharing))
+        public TempFileStream(FileShare sharing, FileMode fileMode, FileAccess fileAccess)
+                : base(CreateInner(sharing, fileMode, fileAccess))
         {
             _path = (Stream as FileStream).Name;
         }
 
-        public TempFileStream()
-            : this(FileShare.None)
+		public TempFileStream(FileShare sharing, FileMode fileMode)
+			: this(sharing, fileMode, FileAccess.ReadWrite)
 		{
 		}
 
-        private static Stream CreateInner(FileShare sharing)
+		public TempFileStream(FileShare sharing, FileAccess fileAccess)
+			: this(sharing, FileMode.OpenOrCreate | FileMode.Truncate, fileAccess)
+		{
+		}
+
+		public TempFileStream(FileMode fileMode, FileAccess fileAccess)
+			: this(FileShare.None, fileMode, fileAccess)
+		{
+		}
+
+		public TempFileStream(FileMode fileMode)
+			: this(FileShare.None, fileMode, FileAccess.ReadWrite)
+		{
+		}
+
+		public TempFileStream(FileAccess fileAccess)
+			: this(FileShare.None, FileMode.OpenOrCreate | FileMode.Truncate, fileAccess)
+		{
+		}
+
+		public TempFileStream(FileShare sharing)
+				: base(CreateInner(sharing, FileMode.OpenOrCreate | FileMode.Truncate, FileAccess.ReadWrite))
+		{
+			_path = (Stream as FileStream).Name;
+		}
+
+		public TempFileStream()
+            : this(FileShare.None, FileMode.OpenOrCreate | FileMode.Truncate, FileAccess.ReadWrite)
+		{
+		}
+
+		private static Stream CreateInner(FileShare sharing, FileMode fileMode, FileAccess fileAccess)
         {
-            return File.Open(Path.GetTempFileName(), FileMode.OpenOrCreate | FileMode.Truncate, FileAccess.ReadWrite, sharing);
+            return File.Open(Path.GetTempFileName(), fileMode, fileAccess, sharing);
         }
 
         public override string ToString()

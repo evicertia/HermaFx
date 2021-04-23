@@ -17,12 +17,38 @@ namespace HermaFx.IO
 		public TempFile(Stream data)
 			: this()
 		{
+			CopyStreamToFullPath(data);
+		}
+		public TempFile(string path)
+		{
+			Guard.Against<IOException>(File.Exists(path),
+				string.Format("Path {0} provided for TempFile already exists. TempFile cannot be created?!", path));
+
+			var directoryName = Path.GetDirectoryName(path);
+			Guard.Against<DirectoryNotFoundException>(!Directory.Exists(directoryName),
+				string.Format("Directory provided {0} for creating TempFile does not exists?!", directoryName));
+
+			// XXX: We create empty file to "reserve" path. Then dispose FileStream
+			File.Create(path).Dispose();
+			this.FullPath = path;
+		}
+
+		public TempFile(string path, Stream data)
+			: this(path)
+		{
+			CopyStreamToFullPath(data);
+		}
+
+		#region Private Methods
+		private void CopyStreamToFullPath(Stream data)
+		{
 			using (var stream = File.OpenWrite(FullPath))
 			{
 				data.CopyTo(stream);
 				stream.Flush();
 			}
 		}
+		#endregion
 
 		public override string ToString()
 		{
