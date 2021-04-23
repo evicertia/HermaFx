@@ -64,7 +64,7 @@ namespace HermaFx.IO
 		{
 			var tmpPath = Path.GetTempFileName();
 
-			Assert.Throws<ArgumentException>(() => new TempFile(tmpPath), "#1");
+			Assert.Throws<IOException>(() => new TempFile(tmpPath), "#1");
 		}
 
 		[Test]

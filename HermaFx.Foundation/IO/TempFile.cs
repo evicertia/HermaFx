@@ -21,8 +21,12 @@ namespace HermaFx.IO
 		}
 		public TempFile(string path)
 		{
-			Guard.Against<ArgumentException>(File.Exists(path),
+			Guard.Against<IOException>(File.Exists(path),
 				string.Format("Path {0} provided for TempFile already exists. TempFile cannot be created?!", path));
+
+			var directoryName = Path.GetDirectoryName(path);
+			Guard.Against<DirectoryNotFoundException>(!Directory.Exists(directoryName),
+				string.Format("Directory provided {0} for creating TempFile does not exists?!", directoryName));
 
 			// XXX: We create empty file to "reserve" path. Then dispose FileStream
 			File.Create(path).Dispose();
