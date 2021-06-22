@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace HermaFx
 {
 	public static class IDictionaryExtensions
 	{
-		private static object GetDefault(Type type)
-		{
-			if (type.IsValueType)
-			{
-				return Activator.CreateInstance(type);
-			}
-			return null;
-		}
-
 		public static IDictionary<K, V> Clone<K,V>(this IDictionary<K, V> source)
 		{
 			if (source == null) throw new ArgumentNullException("source");
@@ -44,6 +35,23 @@ namespace HermaFx
 		public static V GetValueOrDefault<K, V>(this IReadOnlyDictionary<K, V> source, K key)
 		{
 			return source.GetValueOrDefault(key, default(V));
+		}
+
+		public static void Add<K, V>(this IDictionary<K, V> source, IDictionary<K, V> dictionary)
+		{
+			if (source == null)
+				throw new ArgumentNullException(nameof(source));
+
+			if (dictionary == null)
+				throw new ArgumentNullException(nameof(dictionary));
+
+			foreach (var item in dictionary)
+			{
+				if (source.ContainsKey(item.Key))
+					throw new ArgumentException("Source already contains the key {0}.".Format((object)item.Key));
+
+				source.Add(item.Key, item.Value);
+			}
 		}
 	}
 }
