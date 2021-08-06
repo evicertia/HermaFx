@@ -68,6 +68,7 @@
     <Compile Include="Globalization\Currency.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="Guard.Expressions.cs" />
+    <Compile Include="IO\GZipStreamEx.cs" />
     <Compile Include="Reflection\Accessor.cs" />
     <Compile Include="Reflection\DummyPropertyInfo.cs" />
     <Compile Include="Reflection\PropertyChain.cs" />
