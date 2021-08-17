@@ -69,6 +69,12 @@
     <Compile Include="Guard.cs" />
     <Compile Include="Guard.Expressions.cs" />
     <Compile Include="IO\GZipStreamEx.cs" />
+    <Compile Include="Iso8601Duration\Constants.cs" />
+    <Compile Include="Iso8601Duration\DurationStruct.cs" />
+    <Compile Include="Iso8601Duration\Exceptions\Iso8601DurationException.cs" />
+    <Compile Include="Iso8601Duration\Extensions\ConverterExtensions.cs" />
+    <Compile Include="Iso8601Duration\Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Iso8601Duration\PeriodBuilder.cs" />
     <Compile Include="Reflection\Accessor.cs" />
     <Compile Include="Reflection\DummyPropertyInfo.cs" />
     <Compile Include="Reflection\PropertyChain.cs" />
@@ -124,9 +130,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="IO\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 			 Other similar extension points exist, see Microsoft.Common.targets.
