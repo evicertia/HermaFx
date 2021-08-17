@@ -80,6 +80,7 @@
     <Compile Include="Functional\PatternMatcherTests.cs" />
     <Compile Include="GuardTests.cs" />
     <Compile Include="Cryptography\CryptoHelperTests.cs" />
+    <Compile Include="Iso8601Duration\PeriodBuilderTests.cs" />
     <Compile Include="RuntimeExtensions\DateTimeExtensionsTests.cs" />
     <Compile Include="ZBase32EncodingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -121,9 +122,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="IO\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
