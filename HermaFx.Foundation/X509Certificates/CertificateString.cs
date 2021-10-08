@@ -28,6 +28,7 @@ namespace HermaFx.X509Certificates
 		public X509FindBy? X509FindBy { get; private set; }
 		public string X509FindValue { get; private set; }
 		public string KeyContainerName { get; private set; }
+		public bool ValidOnly { get; private set; }
 
 		public CertificateString(string certificateString)
 		{
@@ -74,6 +75,9 @@ namespace HermaFx.X509Certificates
 
 			if (_entries.ContainsKey("KeyContainerName"))
 				KeyContainerName = _entries["KeyContainerName"];
+
+			if (_entries.ContainsKey("ValidOnly"))
+				ValidOnly = bool.Parse(_entries["ValidOnly"]);
 		}
 
 		public X509Certificate2 _GetCertificate()
@@ -98,7 +102,7 @@ namespace HermaFx.X509Certificates
 				// Try by looking up in store..
 				store = new X509Store(sn, sl);
 				store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-				certs = store.Certificates.Find(xft, this.X509FindValue, true);
+				certs = store.Certificates.Find(xft, this.X509FindValue, ValidOnly);
 
 				if (certs == null || certs.Count == 0)
 				{
