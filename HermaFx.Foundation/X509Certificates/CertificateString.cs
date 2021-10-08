@@ -98,7 +98,7 @@ namespace HermaFx.X509Certificates
 				// Try by looking up in store..
 				store = new X509Store(sn, sl);
 				store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-				certs = store.Certificates.Find(xft, this.X509FindValue, false);
+				certs = store.Certificates.Find(xft, this.X509FindValue, true);
 
 				if (certs == null || certs.Count == 0)
 				{
