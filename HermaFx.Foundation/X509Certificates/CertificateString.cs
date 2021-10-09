@@ -14,6 +14,14 @@ namespace HermaFx.X509Certificates
 		FilePath = 0
 	}
 
+	public enum X509OrderBy
+	{
+		NotBefore,
+		NotAfter,
+		NotBeforeDesc,
+		NotAfterDesc
+	}
+
 	public class CertificateString 
 	{
 		private IDictionary<string, string> _entries = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
@@ -29,6 +37,10 @@ namespace HermaFx.X509Certificates
 		public string X509FindValue { get; private set; }
 		public string KeyContainerName { get; private set; }
 		public bool ValidOnly { get; private set; }
+
+		public bool Verify { get; private set; } = true;
+
+		public X509OrderBy? OrderBy { get; private set; }
 
 		public CertificateString(string certificateString)
 		{
@@ -73,16 +85,41 @@ namespace HermaFx.X509Certificates
 				X509FindValue = _entries["Thumbprint"];
 			}
 
+			if (_entries.ContainsKey("Subject"))
+			{
+				X509FindType = SysX509.X509FindType.FindBySubjectName;
+				X509FindValue = _entries["Subject"];
+			}
+
 			if (_entries.ContainsKey("KeyContainerName"))
 				KeyContainerName = _entries["KeyContainerName"];
 
-			if (_entries.ContainsKey("ValidOnly"))
-				ValidOnly = bool.Parse(_entries["ValidOnly"]);
+			if (_entries.ContainsKey(nameof(ValidOnly)))
+				ValidOnly = bool.Parse(_entries[nameof(ValidOnly)]);
+
+			if (_entries.ContainsKey(nameof(Verify)))
+				Verify = bool.Parse(_entries[nameof(Verify)]);
+
+			if (_entries.ContainsKey(nameof(OrderBy)))
+				OrderBy = (X509OrderBy)Enum.Parse(typeof(X509OrderBy), _entries[nameof(OrderBy)]);
+		}
+
+		private static IEnumerable<X509Certificate2> GetOrdered(IEnumerable<X509Certificate2> query, X509OrderBy orderBy)
+		{
+			switch (orderBy)
+			{
+				case X509OrderBy.NotBefore: return query.OrderBy(x => x.NotBefore);
+				case X509OrderBy.NotAfter: return query.OrderBy(x => x.NotAfter);
+				case X509OrderBy.NotBeforeDesc: return query.OrderByDescending(x => x.NotBefore);
+				case X509OrderBy.NotAfterDesc: return query.OrderByDescending(x => x.NotAfter);
+				default: throw new ArgumentOutOfRangeException(nameof(orderBy));
+			}
 		}
 
 		public X509Certificate2 _GetCertificate()
 		{
 			X509Store store = null;
+			X509Certificate2 result = null;
 			X509Certificate2Collection certs = null;
 			var sn = this.StoreName.GetValueOrDefault(SysX509.StoreName.My);
 			var sl = this.StoreLocation.GetValueOrDefault(SysX509.StoreLocation.LocalMachine);
@@ -110,19 +147,25 @@ namespace HermaFx.X509Certificates
 					throw new ApplicationException(str);
 				}
 
-				if (certs.Count > 1)
+				if (!OrderBy.HasValue && certs.Count > 1)
 				{
 					var str = string.Format("More than one matching certificate found for: {0}", _certificateString);
 					throw new ApplicationException(str);
 				}
-
-#if false // FIXME: Setup certificate validation on mono
-				if (!certs[0].Verify())
+				else if (OrderBy.HasValue)
 				{
-					var str = string.Format("Certificate verification failed for: {0}", certificateString);
+					result = GetOrdered(certs.Cast<X509Certificate2>(), OrderBy.Value).First();
+				}
+				else
+				{
+					result = certs[0];
+				}
+
+				if (Verify && !result.Verify())
+				{
+					var str = string.Format("Certificate verification failed for: {0}", _certificateString);
 					throw new ApplicationException(str);
 				}
-#endif
 
 				// Fix to avoid mono's bug #1201
 				// See: https://github.com/mono/mono/commit/b52404b35394c9941b521622564e3dc061c95118
@@ -132,10 +175,10 @@ namespace HermaFx.X509Certificates
 					csp.KeyContainerName = this.KeyContainerName;
 					csp.Flags = CspProviderFlags.UseExistingKey;
 					csp.Flags = csp.Flags | (sl == SysX509.StoreLocation.LocalMachine ? CspProviderFlags.UseMachineKeyStore : 0);
-					certs[0].PrivateKey = new RSACryptoServiceProvider(csp);
+					result.PrivateKey = new RSACryptoServiceProvider(csp);
 				}
 
-				return certs[0];
+				return result;
 			}
 			finally
 			{
