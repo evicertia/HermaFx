@@ -10,6 +10,7 @@ namespace HermaFx.Iso8601Duration
 	{
 		public int Years;
 		public int Months;
+		public int Weeks;
 		public int Days;
 		public int Hours;
 		public int Minutes;
