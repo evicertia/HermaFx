@@ -188,10 +188,8 @@ namespace HermaFx.Iso8601Duration
 
 		public DurationStruct ToDurationStruct(string pattern)
 		{
-			if (pattern.IsNullOrEmpty())
-				return new DurationStruct();
-
-			if (pattern == Constants.TAG_PERIOD // ISO8601 doesn't allow "P" to indicate a TimeSpan of 0
+			if (pattern.IsNullOrEmpty()
+				|| pattern == Constants.TAG_PERIOD // ISO8601 doesn't allow "P" to indicate a TimeSpan of 0
 				|| pattern.EndsWith(Constants.TAG_TIME)) // Ensure time pattern contains any data
 				throw new Iso8601DurationException(EXCEPTION_PATTERN_NOT_VALID);
 

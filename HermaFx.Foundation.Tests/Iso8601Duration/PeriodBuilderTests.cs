@@ -109,8 +109,6 @@ namespace HermaFx.Iso8601Duration
 			yield return new Tuple<string, TimeSpan>("P1W", TimeSpan.FromDays(7));
 			yield return new Tuple<string, TimeSpan>("P2W", TimeSpan.FromDays(14));
 			yield return new Tuple<string, TimeSpan>("P1W1D", TimeSpan.FromDays(8));
-			yield return new Tuple<string, TimeSpan>(string.Empty, TimeSpan.FromDays(0));
-			yield return new Tuple<string, TimeSpan>(null, TimeSpan.FromDays(0));
 		}
 
 		[Test, TestCaseSource(nameof(ToTimeSpan_FromPattern_DataProvider))]
@@ -154,6 +152,10 @@ namespace HermaFx.Iso8601Duration
 			yield return new Tuple<string, DurationStruct>("P1M", new DurationStruct() { Months = 1 });
 			yield return new Tuple<string, DurationStruct>("P1Y", new DurationStruct() { Years = 1 });
 			yield return new Tuple<string, DurationStruct>("P1DT1H1M", new DurationStruct() { Days = 1, Hours = 1, Minutes = 1 });
+			yield return new Tuple<string, DurationStruct>("P1W", new DurationStruct() { Days = 7 });
+			yield return new Tuple<string, DurationStruct>("P5W", new DurationStruct() { Days = 35 });
+			yield return new Tuple<string, DurationStruct>("P1W1D", new DurationStruct() { Days = 8 });
+			yield return new Tuple<string, DurationStruct>("P1W1DT10H", new DurationStruct() { Days = 8, Hours = 10 });
 		}
 
 		[Test, TestCaseSource(nameof(ToDurationStruct_FromPattern_DataProvider))]
@@ -190,6 +192,8 @@ namespace HermaFx.Iso8601Duration
 
 		private static IEnumerable<string> Invalid_Patterns_DataProvider()
 		{
+			yield return null;
+			yield return string.Empty;
 			yield return "P";
 			yield return "PT";
 			yield return "P1YT";
