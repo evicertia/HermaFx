@@ -4,8 +4,9 @@ using System.Text.RegularExpressions;
 namespace HermaFx.Iso8601Duration
 {
 	/// <summary>
-	/// Code extracted/obtained from https://github.com/J0rgeSerran0/Iso8601Duration
+	/// Code extracted/obtained/modified from https://github.com/J0rgeSerran0/Iso8601Duration
 	/// We took project to HermaFx to avoid dependencies on netstandard framework, which is the one used in the original library, and its causing some problems when referencing on MONO/UNIX.
+	/// IMPORTANT: Use HermaFx.Iso8601Duration.DateTimeExtensions to perform DateTime calculations in order to avoid losing precission when converting the ISO6801 expression to TimeSpan.
 	/// </summary>
 	public class PeriodBuilder
 	{
@@ -18,16 +19,13 @@ namespace HermaFx.Iso8601Duration
 		 * ((?<years>\d*)Y): Capture a group of digits named years for a expression that ends with Y.
 		 *	Do the same with every group (years, months, weeks, days, hours, minutes and seconds)
 		 * (T((?<hours>\d*)H)?...) : Time is set after the T group
+		 *
+		 * INFO: ISO8601 allows decimal digits on Duration expressions, but since we're using int we'll stick to natural numbers
 		 */
 		private const string DURATION_EXPRESSION_REGEX = @"^P((?<years>\d*)Y)?((?<months>\d*)M)?((?<weeks>\d*)W)?((?<days>\d*)D)?(T((?<hours>\d*)H)?((?<minutes>\d*)M)?((?<seconds>\d*)S)?)?$";
 
-		private int CalculateDays(DurationStruct durationStruct)
+		private int CalculateDays(int years, int months, int days)
 		{
-			var years = durationStruct.Years;
-			var months = durationStruct.Months;
-			var weeks = durationStruct.Weeks;
-			var days = durationStruct.Days;
-
 			int daysInMonths;
 			if (months > Constants.MONTHS_PER_YEAR)
 			{
@@ -40,7 +38,7 @@ namespace HermaFx.Iso8601Duration
 				daysInMonths = months * Constants.DAYS_PER_MONTH;
 			}
 
-			return (years * Constants.DAYS_PER_YEAR) + daysInMonths + (weeks * Constants.DAYS_PER_WEEK) + days;
+			return (years * Constants.DAYS_PER_YEAR) + daysInMonths + days;
 		}
 
 		private string GetPatternFromDurationStruct(DurationStruct durationStruct)
@@ -68,29 +66,15 @@ namespace HermaFx.Iso8601Duration
 				durationStruct.Hours -= days * Constants.HOURS_PER_DAY;
 			}
 
-			if (durationStruct.Days >= Constants.DAYS_PER_WEEK)
+			if (durationStruct.Days >= Constants.DAYS_PER_MONTH)
 			{
 				int years = durationStruct.Days / Constants.DAYS_PER_YEAR;
 				int days = durationStruct.Days - (years * Constants.DAYS_PER_YEAR);
 				int months = (days / Constants.DAYS_PER_MONTH);
-				days -= (months * Constants.DAYS_PER_MONTH);
-				int weeks = (days / Constants.DAYS_PER_WEEK);
 
 				durationStruct.Years += years;
 				durationStruct.Months += months;
-				durationStruct.Weeks += weeks;
-				durationStruct.Days -= (years * Constants.DAYS_PER_YEAR) + (months * Constants.DAYS_PER_MONTH) + (weeks * Constants.DAYS_PER_WEEK);
-			}
-
-			if (durationStruct.Weeks >= Constants.WEEKS_PER_MONTH)
-			{
-				int years = durationStruct.Weeks / Constants.WEEKS_PER_YEAR;
-				int weeks = durationStruct.Weeks - (years * Constants.WEEKS_PER_YEAR);
-				int months = (weeks / Constants.WEEKS_PER_MONTH);
-
-				durationStruct.Years += years;
-				durationStruct.Months += months;
-				durationStruct.Weeks -= (years * Constants.DAYS_PER_YEAR) + (months * Constants.DAYS_PER_MONTH);
+				durationStruct.Days -= (years * Constants.DAYS_PER_YEAR) + (months * Constants.DAYS_PER_MONTH);
 			}
 
 			if (durationStruct.Months >= Constants.MONTHS_PER_YEAR)
@@ -104,7 +88,6 @@ namespace HermaFx.Iso8601Duration
 
 			pattern += (durationStruct.Years > 0 ? durationStruct.Years + Constants.TAG_YEARS : string.Empty);
 			pattern += (durationStruct.Months > 0 ? durationStruct.Months + Constants.TAG_MONTHS : string.Empty);
-			pattern += (durationStruct.Weeks > 0 ? durationStruct.Weeks + Constants.TAG_WEEKS : string.Empty);
 			pattern += (durationStruct.Days > 0 ? durationStruct.Days + Constants.TAG_DAYS : string.Empty);
 
 			var patternTime = string.Empty;
@@ -164,20 +147,6 @@ namespace HermaFx.Iso8601Duration
 					durationStruct.Days -= periodValues.Item2;
 				}
 
-				if (durationStruct.Days >= Constants.DAYS_PER_WEEK)
-				{
-					var periodValues = CalculatePeriodValues(durationStruct.Days, Constants.DAYS_PER_WEEK);
-					durationStruct.Weeks = periodValues.Item1;
-					durationStruct.Days -= periodValues.Item2;
-				}
-
-				if (durationStruct.Weeks >= Constants.WEEKS_PER_MONTH)
-				{
-					var periodValues = CalculatePeriodValues(durationStruct.Weeks, Constants.WEEKS_PER_MONTH);
-					durationStruct.Months = periodValues.Item1;
-					durationStruct.Weeks -= periodValues.Item2;
-				}
-
 				if (durationStruct.Months >= Constants.MONTHS_PER_YEAR)
 				{
 					var periodValues = CalculatePeriodValues(durationStruct.Months, Constants.MONTHS_PER_YEAR);
@@ -219,6 +188,13 @@ namespace HermaFx.Iso8601Duration
 
 		public DurationStruct ToDurationStruct(string pattern)
 		{
+			if (pattern.IsNullOrEmpty())
+				return new DurationStruct();
+
+			if (pattern == Constants.TAG_PERIOD // ISO8601 doesn't allow "P" to indicate a TimeSpan of 0
+				|| pattern.EndsWith(Constants.TAG_TIME)) // Ensure time pattern contains any data
+				throw new Iso8601DurationException(EXCEPTION_PATTERN_NOT_VALID);
+
 			try
 			{
 				var regex = new Regex(DURATION_EXPRESSION_REGEX);
@@ -239,10 +215,11 @@ namespace HermaFx.Iso8601Duration
 					durationStruct.Years = int.Parse(years.Value);
 				if (months.Length > 0)
 					durationStruct.Months = int.Parse(months.Value);
+				// Convert Weeks to Days to avoid precission loss when doing calculations with DateTimes
 				if (weeks.Length > 0)
-					durationStruct.Weeks = int.Parse(weeks.Value);
+					durationStruct.Days += int.Parse(weeks.Value) * Constants.DAYS_PER_WEEK;
 				if (days.Length > 0)
-					durationStruct.Days = int.Parse(days.Value);
+					durationStruct.Days += int.Parse(days.Value);
 				if (hours.Length > 0)
 					durationStruct.Hours = int.Parse(hours.Value);
 				if (minutes.Length > 0)
@@ -265,10 +242,9 @@ namespace HermaFx.Iso8601Duration
 
 		public TimeSpan ToTimeSpan(DurationStruct durationStruct)
 		{
-			durationStruct.Days = CalculateDays(durationStruct);
+			durationStruct.Days = CalculateDays(durationStruct.Years, durationStruct.Months, durationStruct.Days);
 
 			return new TimeSpan(durationStruct.Days, durationStruct.Hours, durationStruct.Minutes, durationStruct.Seconds);
 		}
-
 	}
 }
