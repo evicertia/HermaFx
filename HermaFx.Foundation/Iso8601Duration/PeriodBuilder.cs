@@ -1,29 +1,36 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace HermaFx.Iso8601Duration
 {
 	/// <summary>
-	/// Code extracted/obtained from https://github.com/J0rgeSerran0/Iso8601Duration
+	/// Code extracted/obtained/modified from https://github.com/J0rgeSerran0/Iso8601Duration
 	/// We took project to HermaFx to avoid dependencies on netstandard framework, which is the one used in the original library, and its causing some problems when referencing on MONO/UNIX.
+	/// IMPORTANT: Use HermaFx.Iso8601Duration.DateTimeExtensions to perform DateTime calculations in order to avoid losing precission when converting the ISO6801 expression to TimeSpan.
 	/// </summary>
 	public class PeriodBuilder
 	{
 		private const string EXCEPTION_GENERIC_ERROR = "A general error has occurred";
 		private const string EXCEPTION_PATTERN_NOT_VALID = "The pattern text is not valid";
-		private const string EXCEPTION_PATTERN_SHOULD_START_BY_P = "The pattern text should start with P";
 
-		private bool _isMonthBeforeTime = false;
-		private bool _isTagTimeFound = false;
+		/**
+		 * Regex Explain:
+		 * ^P: Ensure patterns starts with P
+		 * ((?<years>\d*)Y): Capture a group of digits named years for a expression that ends with Y.
+		 *	Do the same with every group (years, months, weeks, days, hours, minutes and seconds)
+		 * (T((?<hours>\d*)H)?...) : Time is set after the T group
+		 *
+		 * INFO: ISO8601 allows decimal digits on Duration expressions, but since we're using int we'll stick to natural numbers
+		 */
+		private const string DURATION_EXPRESSION_REGEX = @"^P((?<years>\d*)Y)?((?<months>\d*)M)?((?<weeks>\d*)W)?((?<days>\d*)D)?(T((?<hours>\d*)H)?((?<minutes>\d*)M)?((?<seconds>\d*)S)?)?$";
 
 		private int CalculateDays(int years, int months, int days)
 		{
-			var daysInMonths = 0;
-			var daysInRest = 0;
-
+			int daysInMonths;
 			if (months > Constants.MONTHS_PER_YEAR)
 			{
 				daysInMonths = Constants.DAYS_PER_YEAR * (months / Constants.MONTHS_PER_YEAR);
-				daysInRest = months - ((months / Constants.MONTHS_PER_YEAR) * Constants.MONTHS_PER_YEAR);
+				int daysInRest = months - ((months / Constants.MONTHS_PER_YEAR) * Constants.MONTHS_PER_YEAR);
 				daysInMonths += daysInRest * Constants.DAYS_PER_MONTH;
 			}
 			else
@@ -38,35 +45,28 @@ namespace HermaFx.Iso8601Duration
 		{
 			string pattern = Constants.TAG_PERIOD;
 
-			if (durationStruct.Seconds > Constants.SECONDS_PER_MINUTE)
+			if (durationStruct.Seconds >= Constants.SECONDS_PER_MINUTE)
 			{
 				int seconds = durationStruct.Seconds / Constants.SECONDS_PER_MINUTE;
 				durationStruct.Minutes += seconds;
 				durationStruct.Seconds -= seconds * Constants.SECONDS_PER_MINUTE;
 			}
 
-			if (durationStruct.Minutes > Constants.MINUTES_PER_HOUR)
-			{
-				int minutes = durationStruct.Minutes / Constants.MINUTES_PER_HOUR;
-				durationStruct.Hours += minutes;
-				durationStruct.Minutes -= minutes * Constants.MINUTES_PER_HOUR;
-			}
-
-			if (durationStruct.Hours > Constants.HOURS_PER_DAY)
-			{
-				int days = durationStruct.Hours / Constants.HOURS_PER_DAY;
-				durationStruct.Days += days;
-				durationStruct.Hours -= days * Constants.HOURS_PER_DAY;
-			}
-
-			if (durationStruct.Minutes > Constants.MINUTES_PER_HOUR)
+			if (durationStruct.Minutes >= Constants.MINUTES_PER_HOUR)
 			{
 				int hours = durationStruct.Minutes / Constants.MINUTES_PER_HOUR;
 				durationStruct.Hours += hours;
 				durationStruct.Minutes -= hours * Constants.MINUTES_PER_HOUR;
 			}
 
-			if (durationStruct.Days > Constants.DAYS_PER_MONTH)
+			if (durationStruct.Hours >= Constants.HOURS_PER_DAY)
+			{
+				int days = durationStruct.Hours / Constants.HOURS_PER_DAY;
+				durationStruct.Days += days;
+				durationStruct.Hours -= days * Constants.HOURS_PER_DAY;
+			}
+
+			if (durationStruct.Days >= Constants.DAYS_PER_MONTH)
 			{
 				int years = durationStruct.Days / Constants.DAYS_PER_YEAR;
 				int days = durationStruct.Days - (years * Constants.DAYS_PER_YEAR);
@@ -86,58 +86,21 @@ namespace HermaFx.Iso8601Duration
 				durationStruct.Months = months;
 			}
 
-			pattern += (durationStruct.Years > 0 ? durationStruct.Years + Constants.TAG_YEARS : String.Empty);
-			pattern += (durationStruct.Months > 0 ? durationStruct.Months + Constants.TAG_MONTHS : String.Empty);
-			pattern += (durationStruct.Days > 0 ? durationStruct.Days + Constants.TAG_DAYS : String.Empty);
+			pattern += (durationStruct.Years > 0 ? durationStruct.Years + Constants.TAG_YEARS : string.Empty);
+			pattern += (durationStruct.Months > 0 ? durationStruct.Months + Constants.TAG_MONTHS : string.Empty);
+			pattern += (durationStruct.Days > 0 ? durationStruct.Days + Constants.TAG_DAYS : string.Empty);
 
-			var patternTime = String.Empty;
-			patternTime += (durationStruct.Hours > 0 ? durationStruct.Hours + Constants.TAG_HOURS : String.Empty);
-			patternTime += (durationStruct.Minutes > 0 ? durationStruct.Minutes + Constants.TAG_MINUTES : String.Empty);
-			patternTime += (durationStruct.Seconds > 0 ? durationStruct.Seconds + Constants.TAG_SECONDS : String.Empty);
+			var patternTime = string.Empty;
+			patternTime += (durationStruct.Hours > 0 ? durationStruct.Hours + Constants.TAG_HOURS : string.Empty);
+			patternTime += (durationStruct.Minutes > 0 ? durationStruct.Minutes + Constants.TAG_MINUTES : string.Empty);
+			patternTime += (durationStruct.Seconds > 0 ? durationStruct.Seconds + Constants.TAG_SECONDS : string.Empty);
 
-			if (!String.IsNullOrEmpty(patternTime))
+			if (!string.IsNullOrEmpty(patternTime))
 			{
 				pattern += Constants.TAG_TIME + patternTime;
 			}
 
 			return pattern;
-		}
-
-		private int GetValue(string tagPattern, ref string pattern)
-		{
-			var valueString = String.Empty;
-
-			int index = pattern.IndexOf(tagPattern);
-
-			if (index != -1)
-			{
-				if (!pattern.Substring(0, index).IsNumeric())
-				{
-					throw new Iso8601DurationException(EXCEPTION_PATTERN_NOT_VALID);
-				}
-
-				valueString = pattern.Substring(0, index);
-				pattern = pattern.Substring(index);
-
-				if (pattern.Substring(0, 1) == tagPattern)
-				{
-					pattern = pattern.Substring(1);
-				}
-				else
-				{
-					throw new Iso8601DurationException(EXCEPTION_PATTERN_NOT_VALID);
-				}
-
-				if (pattern.Length > 0 &&
-					pattern.StartsWith(Constants.TAG_TIME))
-				{
-					pattern = pattern.Substring(1);
-				}
-
-				return Convert.ToInt32(valueString);
-			}
-
-			return 0;
 		}
 
 		private DurationStruct TimeSpanToDurationStruct(TimeSpan timeSpan)
@@ -153,9 +116,7 @@ namespace HermaFx.Iso8601Duration
 
 		public string NormalizeDuration(string pattern)
 		{
-			_isTagTimeFound = false;
-
-			return ToString(ToTimeSpan(pattern));
+			return ToString(ToDurationStruct(pattern));
 		}
 
 		private Tuple<int, int> CalculatePeriodValues(int initialValue, int constantValue)
@@ -201,11 +162,6 @@ namespace HermaFx.Iso8601Duration
 			}
 		}
 
-		public DurationStruct ToDurationStruct(string pattern)
-		{
-			return ToDurationStruct(ToTimeSpan(pattern));
-		}
-
 		public string ToString(TimeSpan timeSpan)
 		{
 			try
@@ -227,56 +183,59 @@ namespace HermaFx.Iso8601Duration
 
 		public string ToString(DurationStruct durationStruct)
 		{
-			return NormalizeDuration(GetPatternFromDurationStruct(durationStruct));
+			return GetPatternFromDurationStruct(durationStruct);
 		}
 
-		public TimeSpan ToTimeSpan(string pattern)
+		public DurationStruct ToDurationStruct(string pattern)
 		{
+			if (pattern.IsNullOrEmpty()
+				|| pattern == Constants.TAG_PERIOD // ISO8601 doesn't allow "P" to indicate a TimeSpan of 0
+				|| pattern.EndsWith(Constants.TAG_TIME)) // Ensure time pattern contains any data
+				throw new Iso8601DurationException(EXCEPTION_PATTERN_NOT_VALID);
+
 			try
 			{
-				_isTagTimeFound = false;
-				pattern = pattern.ToUpper().Trim();
+				var regex = new Regex(DURATION_EXPRESSION_REGEX);
+				var match = regex.Match(pattern);
+				if (!match.Success)
+					throw new Iso8601DurationException(EXCEPTION_PATTERN_NOT_VALID);
 
-				if (!pattern.StartsWith(Constants.TAG_PERIOD))
-				{
-					throw new Iso8601DurationException(EXCEPTION_PATTERN_SHOULD_START_BY_P);
-				}
-
-				pattern = pattern.Substring(1);
-
-				if (pattern.Length == 0)
-				{
-					return new TimeSpan(0);
-				}
-
-				_isMonthBeforeTime = pattern.IsMonthBeforeTime();
-
-				if (pattern.Length > 0 &&
-					pattern.StartsWith(Constants.TAG_TIME))
-				{
-					_isTagTimeFound = true;
-					pattern = pattern.Substring(1);
-				}
+				var years = match.Groups["years"];
+				var months = match.Groups["months"];
+				var weeks = match.Groups["weeks"];
+				var days = match.Groups["days"];
+				var hours = match.Groups["hours"];
+				var minutes = match.Groups["minutes"];
+				var seconds = match.Groups["seconds"];
 
 				var durationStruct = new DurationStruct();
+				if (years.Length > 0)
+					durationStruct.Years = int.Parse(years.Value);
+				if (months.Length > 0)
+					durationStruct.Months = int.Parse(months.Value);
+				// Convert Weeks to Days to avoid precission loss when doing calculations with DateTimes
+				if (weeks.Length > 0)
+					durationStruct.Days += int.Parse(weeks.Value) * Constants.DAYS_PER_WEEK;
+				if (days.Length > 0)
+					durationStruct.Days += int.Parse(days.Value);
+				if (hours.Length > 0)
+					durationStruct.Hours = int.Parse(hours.Value);
+				if (minutes.Length > 0)
+					durationStruct.Minutes = int.Parse(minutes.Value);
+				if (seconds.Length > 0)
+					durationStruct.Seconds = int.Parse(seconds.Value);
 
-				if (!_isTagTimeFound)
-				{
-					durationStruct.Years = GetValue(Constants.TAG_YEARS, ref pattern);
-					if (_isMonthBeforeTime) durationStruct.Months = GetValue(Constants.TAG_MONTHS, ref pattern);
-					durationStruct.Days = GetValue(Constants.TAG_DAYS, ref pattern);
-				}
-
-				durationStruct.Hours = GetValue(Constants.TAG_HOURS, ref pattern);
-				durationStruct.Minutes = GetValue(Constants.TAG_MINUTES, ref pattern);
-				durationStruct.Seconds = GetValue(Constants.TAG_SECONDS, ref pattern);
-
-				return ToTimeSpan(durationStruct);
+				return durationStruct;
 			}
 			catch (Exception ex)
 			{
 				throw new Iso8601DurationException(EXCEPTION_GENERIC_ERROR, ex);
 			}
+		}
+
+		public TimeSpan ToTimeSpan(string pattern)
+		{
+			return ToTimeSpan(ToDurationStruct(pattern));
 		}
 
 		public TimeSpan ToTimeSpan(DurationStruct durationStruct)
@@ -285,6 +244,5 @@ namespace HermaFx.Iso8601Duration
 
 			return new TimeSpan(durationStruct.Days, durationStruct.Hours, durationStruct.Minutes, durationStruct.Seconds);
 		}
-
 	}
 }

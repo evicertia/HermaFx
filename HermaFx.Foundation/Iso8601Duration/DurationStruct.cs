@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HermaFx.Iso8601Duration
+﻿namespace HermaFx.Iso8601Duration
 {
 	public struct DurationStruct
 	{

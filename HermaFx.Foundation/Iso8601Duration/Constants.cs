@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HermaFx.Iso8601Duration
+﻿namespace HermaFx.Iso8601Duration
 {
 	public sealed class Constants
 	{
@@ -25,6 +19,7 @@ namespace HermaFx.Iso8601Duration
 
 		public const int DAYS_PER_YEAR = 365;
 		public const int DAYS_PER_MONTH = 30;
+		public const int DAYS_PER_WEEK = 7;
 		public const int MONTHS_PER_YEAR = 12;
 
 		public const int HOURS_PER_DAY = 24;
