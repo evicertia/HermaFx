@@ -81,6 +81,7 @@
     <Compile Include="GuardTests.cs" />
     <Compile Include="Cryptography\CryptoHelperTests.cs" />
     <Compile Include="Iso8601Duration\PeriodBuilderTests.cs" />
+    <Compile Include="Rfc2047Encoding\Rfc2047Tests.cs" />
     <Compile Include="RuntimeExtensions\DateTimeExtensionsTests.cs" />
     <Compile Include="ZBase32EncodingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
