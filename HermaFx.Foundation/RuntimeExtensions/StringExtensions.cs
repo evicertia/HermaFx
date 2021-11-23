@@ -125,11 +125,19 @@ namespace HermaFx
 		/// <returns><c>byte</c> array containing the converted hexadecimal string contents.</returns>
 		public static byte[] AsByteArray(this string hexString)
 		{
-			byte[] bytes = new byte[hexString.Length / 2 + 1];
-			for (int i = 0; i <= hexString.Length / 2 - 1; i++)
-			{
+			Guard.IsNotNull(hexString, nameof(hexString));
+
+			if (hexString == string.Empty)
+				return new byte[0];
+
+			Guard.Against<ArgumentOutOfRangeException>(hexString.Length % 2 != 0, "The specified argument {0} does not contain a valid length.", nameof(hexString));
+
+			var length = hexString.Length / 2;
+			var bytes = new byte[length];
+
+			for (var i = 0; i < length; i++)
 				bytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
-			}
+
 			return bytes;
 		}
 
