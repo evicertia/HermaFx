@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{91CE06EB-90DB-43B4-91BF-24DD4D20DDE3}"
 	ProjectSection(SolutionItems) = preProject
@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.Castle", "HermaFx.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.Castle.Tests", "HermaFx.Castle.Tests\HermaFx.Castle.Tests.csproj", "{48548940-A46F-49DF-BB15-7B7AD24DF232}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.MvcDemo", "HermaFx.MvcDemo\HermaFx.MvcDemo.csproj", "{800E53F9-FE66-40A6-96EA-341A0BEFDAAD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.Mvc", "HermaFx.Mvc\HermaFx.Mvc.csproj", "{36FB4448-8B60-4A08-A79F-F20FFCCE6A8B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.SettingsAdapter", "HermaFx.SettingsAdapter\HermaFx.SettingsAdapter.csproj", "{25CDE825-0C23-4E8D-BDF0-4AA8CC07C393}"
@@ -32,6 +30,19 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.SettingsAdapter.Tests", "HermaFx.SettingsAdapter.Tests\HermaFx.SettingsAdapter.Tests.csproj", "{7BE33AE3-FFDF-40EF-8967-BCE9EA714728}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.MediatR", "HermaFx.MediatR\HermaFx.MediatR.csproj", "{351D7D74-3087-4004-9AFE-2A1836B44549}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.Rebus.CastleExtensions", "HermaFx.Rebus.CastleExtensions\HermaFx.Rebus.CastleExtensions.csproj", "{5A7D8DB5-58B5-4F14-9F44-74B0E7283D95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.SimpleConfig", "HermaFx.SimpleConfig\HermaFx.SimpleConfig.csproj", "{19AC67C4-812A-4473-A78B-B1760C32C324}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.SimpleConfig.Tests", "HermaFx.SimpleConfig.Tests\HermaFx.SimpleConfig.Tests.csproj", "{D809566F-8E89-41DB-BD45-68CD6A0BE9F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HermaFx.MvcDemo", "HermaFx.MvcDemo\HermaFx.MvcDemo.csproj", "{800E53F9-FE66-40A6-96EA-341A0BEFDAAD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBFCDFB6-CBF4-4632-BE55-ED83E15AEC7F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,10 +78,6 @@ Global
 		{48548940-A46F-49DF-BB15-7B7AD24DF232}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48548940-A46F-49DF-BB15-7B7AD24DF232}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48548940-A46F-49DF-BB15-7B7AD24DF232}.Release|Any CPU.Build.0 = Release|Any CPU
-		{800E53F9-FE66-40A6-96EA-341A0BEFDAAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{800E53F9-FE66-40A6-96EA-341A0BEFDAAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{800E53F9-FE66-40A6-96EA-341A0BEFDAAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{800E53F9-FE66-40A6-96EA-341A0BEFDAAD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{36FB4448-8B60-4A08-A79F-F20FFCCE6A8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{36FB4448-8B60-4A08-A79F-F20FFCCE6A8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36FB4448-8B60-4A08-A79F-F20FFCCE6A8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -87,9 +94,28 @@ Global
 		{351D7D74-3087-4004-9AFE-2A1836B44549}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{351D7D74-3087-4004-9AFE-2A1836B44549}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{351D7D74-3087-4004-9AFE-2A1836B44549}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A7D8DB5-58B5-4F14-9F44-74B0E7283D95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A7D8DB5-58B5-4F14-9F44-74B0E7283D95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A7D8DB5-58B5-4F14-9F44-74B0E7283D95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A7D8DB5-58B5-4F14-9F44-74B0E7283D95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19AC67C4-812A-4473-A78B-B1760C32C324}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19AC67C4-812A-4473-A78B-B1760C32C324}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19AC67C4-812A-4473-A78B-B1760C32C324}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19AC67C4-812A-4473-A78B-B1760C32C324}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D809566F-8E89-41DB-BD45-68CD6A0BE9F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D809566F-8E89-41DB-BD45-68CD6A0BE9F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D809566F-8E89-41DB-BD45-68CD6A0BE9F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D809566F-8E89-41DB-BD45-68CD6A0BE9F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{800E53F9-FE66-40A6-96EA-341A0BEFDAAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{800E53F9-FE66-40A6-96EA-341A0BEFDAAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{800E53F9-FE66-40A6-96EA-341A0BEFDAAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{800E53F9-FE66-40A6-96EA-341A0BEFDAAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3E0A7A04-9F0C-4BE6-B2A5-9ADF2679DF66}
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True

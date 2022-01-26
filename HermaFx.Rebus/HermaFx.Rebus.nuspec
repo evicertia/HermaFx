@@ -15,12 +15,6 @@
 		<dependencies>
 			<dependency id="HermaFx.Foundation" version="0.0.0.0" />
 			<dependency id="HermaFx.DataAnnotations" version="0.0.0.0" />
-			<dependency id="Rebus" version="[0.84.0,0.90)" />
-			<dependency id="Rebus.RabbitMQ" version="[0.84.0,0.90)" />
 		</dependencies>
 	</metadata>
-	<files>
-		<file src="bin\Release\Herma.Rebus.*" target="lib\NET45" />
-		<file src="**\*.cs" target="src" />
-	</files>
 </package>

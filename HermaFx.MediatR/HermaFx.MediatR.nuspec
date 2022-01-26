@@ -14,11 +14,7 @@
 		<copyright>Copyright Evidencias Certificadas, S.L. 2010-2016</copyright>
 		<dependencies>
 			<dependency id="HermaFx.Foundation" version="0.0.0.0" />
-			<dependency id="MediatR" version="2.1.0" />
+			<dependency id="MediatR" version="4.1.0" />
 		</dependencies>
 	</metadata>
-	<files>
-		<file src="bin\Release\Herma.MediatR.*" target="lib\NET45" />
-		<file src="**\*.cs" target="src" />
-	</files>
 </package>

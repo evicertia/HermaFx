@@ -1,0 +1,4 @@
+Castle.DynamicProxy.AbstractInvocation
+Castle.DynamicProxy.IProxyTargetAccessor
+Castle.DynamicProxy.Internal.CompositionInvocation
+Castle.DynamicProxy.Internal.InheritanceInvocation

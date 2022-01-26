@@ -88,13 +88,41 @@ namespace HermaFx.DataAnnotations
 				{
 					var validateAllProperties = ShouldValidateAllProperties(context);
 
-					if (validateAllProperties)
-					{
-						Validator.TryValidateObject(value2, newctx, results, validateAllProperties);
-					}
-					else if (property.GetCustomAttribute<ValidateObjectAttribute>() != null)
+					if (property.GetCustomAttribute<ValidateObjectAttribute>() != null)
 					{
 						results.AddRange(ValidateRecursing(value2, newctx));
+					}
+					else if (validateAllProperties)
+					{
+						Validator.TryValidateObject(value2, newctx, results, validateAllProperties);
+
+						// We need another fake context in order to provide a valid 'MemberName'
+						// to dotnet's internal validation infrastructure. (pruiz)
+						var ctx2 = new ValidationContext(value, context.Items)
+						{
+							DisplayName = newctx.DisplayName,
+							MemberName = property.Name
+						};
+						var results2 = new List<ValidationResult>();
+						Validator.TryValidateProperty(value2, ctx2, results2);
+
+						// Convert results so they confom to our MemberName conventions.
+						if (!context.MemberName.IsNullOrWhiteSpace())
+						{
+							foreach (var result in results2)
+							{
+								var mnames = (result.MemberNames ?? Enumerable.Empty<string>());
+								mnames = mnames.Select(x => string.Join(".", context.MemberName, x)).ToArray();
+
+								// FIXME: Handle AggregateValidationResults too?
+
+								results.Add(new ValidationResult(result.ErrorMessage, mnames));
+							}
+						}
+						else
+						{
+							results.AddRange(results2);
+						}
 					}
 				}
 			}
