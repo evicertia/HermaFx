@@ -81,17 +81,12 @@ namespace HermaFx
 			var buffer = new byte[bufferSize];
 			int count;
 
-			using (var @out = new MemoryStream())
+			while ((count = @this.Read(buffer, 0, buffer.Length)) != 0)
 			{
-				while ((count = @this.Read(buffer, 0, buffer.Length)) != 0)	
-				{
-					if (cancellationToken.IsCancellationRequested)
-						throw new OperationCanceledException(string.Format("{0}: Operation cancelled... aborting request!", nameof(CopyTo)));
+				if (cancellationToken.IsCancellationRequested)
+					throw new OperationCanceledException(string.Format("{0}: Operation cancelled... aborting request!", nameof(CopyTo)));
 
-					@out.Write(buffer, 0, count);
-					destination.Write(buffer, 0, count);
-				}
-				@out.Flush();
+				destination.Write(buffer, 0, count);
 			}
 		}
 	}
