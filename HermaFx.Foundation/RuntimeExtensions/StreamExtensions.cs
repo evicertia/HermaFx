@@ -88,6 +88,8 @@ namespace HermaFx
 
 				destination.Write(buffer, 0, count);
 			}
+
+			destination.Flush();
 		}
 	}
 }
