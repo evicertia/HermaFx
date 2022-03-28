@@ -59,6 +59,7 @@
     <Compile Include="Adobe\PdfValidator.cs" />
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="ComponentModel\StringArrayConverter.cs" />
+    <Compile Include="Cryptography\Crc32.cs" />
     <Compile Include="DesignPatterns\EnhancedEnumType.cs" />
     <Compile Include="Functional\PatternMatcher.cs" />
     <Compile Include="Functional\TypeSwitch.cs" />

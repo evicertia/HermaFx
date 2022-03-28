@@ -86,5 +86,18 @@ namespace HermaFx.Cryptography
 			Assert.AreEqual(longString, decodedString);
 		}
 
+		[Test]
+		public void GenerateCrc32ForString()
+		{
+			var @string = "Demo String Value";
+			var bytes = Encoding.ASCII.GetBytes(@string);
+			var calculatedHash = String.Empty;
+			var expectedHash = "e2942afc"; //< Hex
+
+			using (var crc32 = new Crc32())
+				foreach (byte b in crc32.ComputeHash(bytes)) calculatedHash += b.ToString("x2").ToLower(); //< Hex
+
+			Assert.AreEqual(expectedHash, calculatedHash);
+		}
 	}
 }
