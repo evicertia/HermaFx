@@ -107,7 +107,7 @@ namespace HermaFx
 		{
 			if (!@this.IsNullOrWhiteSpace())
 			{
-				return lambda(@this);
+				lambda(@this);
 			}
 		}
 		#endregion
