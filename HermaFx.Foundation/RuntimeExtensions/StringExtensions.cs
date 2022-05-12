@@ -96,6 +96,20 @@ namespace HermaFx
 			}
 			return lambda(@this);
 		}
+		
+		/// <summary>
+		/// Exectues action over element if it is not null, empty nor whitespace string
+		/// </summary>
+		/// <param name="@this">The @this.</param>
+		/// <param name="lambda">Action to apply.</param>
+		/// <returns></returns>
+		public static void IfNotNullOrWhiteSpace(this string @this, Action<string> lambda)
+		{
+			if (!@this.IsNullOrWhiteSpace())
+			{
+				return lambda(@this);
+			}
+		}
 		#endregion
 
 		public static string TrimOrDefault(this string @this)
