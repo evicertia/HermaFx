@@ -1,6 +1,6 @@
-﻿<#
+<#
 /*
-T4MVC Version 3.17.4
+T4MVC Version 4.2.4
 Find latest version and documentation at https://github.com/T4MVC/T4MVC/wiki/Documentation
 Discuss on StackOverflow or on GitHub (https://github.com/T4MVC/T4MVC/issues)
 
@@ -102,6 +102,7 @@ namespace <#=settings.T4MVCNamespace #>
 <#} #>
 }
 
+#pragma warning disable 0436
 namespace <#=settings.T4MVCNamespace #>
 {
     [<#= GeneratedCode #>, DebuggerNonUserCode]
@@ -111,6 +112,7 @@ namespace <#=settings.T4MVCNamespace #>
         public static Dummy Instance = new Dummy();
     }
 }
+#pragma warning restore 0436
 
 <#foreach (var resultType in ResultTypes.Values) { #>
 [<#= GeneratedCode #>, DebuggerNonUserCode]
@@ -720,6 +722,10 @@ void ProcessControllersRecursive(ProjectItem projectItem, AreaInfo area)
         ProcessControllersRecursive(item, area);
     }
 
+    // There is a CodeModel bug when it deals with a .editorconfig, so just skip those
+    // See https://github.com/T4MVC/T4MVC/issues/124 for details
+    if (Path.GetFileName(projectItem.get_FileNames(0)) == ".editorconfig") return;
+
     if (projectItem.FileCodeModel != null)
     {
         DateTime controllerLastWriteTime = File.GetLastWriteTime(projectItem.get_FileNames(0));
@@ -996,6 +1002,7 @@ void AddViewsRecursive(ProjectItems items, ViewsFolderInfo viewsFolder, bool use
                 continue;
 
             viewsFolder.AddView(item, useNonQualifiedViewNames);
+            AddViewsRecursive(item.ProjectItems, viewsFolder, useNonQualifiedViewNames);
         }
         else if (item.Kind == EnvDTE.Constants.vsProjectItemKindPhysicalFolder)
         {
@@ -1138,7 +1145,8 @@ void ProcessBundleFilesRecursive(ProjectItem projectItem, string path)
 void ProcessBundleFilesRecursive(ProjectItem projectItem, string path, HashSet<String> nameSet)
 {
     // The passed in HashSet is to guarantee uniqueness with our parent and siblings
-    string name = SanitizeWithNoConflicts(projectItem.Name, nameSet);
+    string projectItemName = projectItem.Name;
+    string name = SanitizeWithNoConflicts(projectItemName, nameSet);
 
     // This HashSet is to guarantee uniqueness of our direct children
     // We add our own name to it to avoid class name conflicts (http://mvccontrib.codeplex.com/workitem/7153)
@@ -1163,22 +1171,34 @@ public static partial class <#=EscapeID(name)#>
             {
                 ProcessBundleFilesRecursive(
                     item,
-                    path + "/" + projectItem.Name,
+                    path + "/" + projectItemName,
                     childrenNameSet);
             }
 
             if (IsFile(item))
             {
-                files.Add(item);
+                AddItemRecursive(files, item);
             }
         }
 
-        BuildBundleConstants(files, path + "/" + projectItem.Name, childrenNameSet);
+        BuildBundleConstants(files, path + "/" + projectItemName, childrenNameSet);
 #>
 }
 <#+
         PopIndent();
     }    
+}
+
+void AddItemRecursive(List<ProjectItem> files, ProjectItem item)
+{
+    files.Add(item);
+    if (item.ProjectItems.Count > 0)
+    {
+        foreach (ProjectItem subItem in item.ProjectItems)
+        {
+            AddItemRecursive(files, subItem);
+        }
+    }
 }
 
 void BuildBundleConstants(List<ProjectItem> projectItems, string path, HashSet<String> childrenNameSet)
@@ -1201,13 +1221,13 @@ public static class <#= settings.AssetsNamespace #>
             if (projectItem.Name.EndsWith(".js")  && !projectItem.Name.Contains("-vsdoc")) 
             {
 #>
-public const string <#=name#> = "<#=bundleAssetPath#>"; 
+public static readonly string <#=name#> = T4MVCHelpers.ProcessAssetPath("<#=bundleAssetPath#>"); 
 <#+
             }
             else if (projectItem.Name.EndsWith(".css")) 
             { 
 #>
-public const string <#=name#> = "<#=bundleAssetPath#>";
+public static readonly string <#=name#> = T4MVCHelpers.ProcessAssetPath("<#=bundleAssetPath#>");
 <#+
             }
         } 
@@ -1300,9 +1320,9 @@ void ProcessStaticFilesRecursive(ProjectItem projectItem, string path, HashSet<S
         #>
     [<#= GeneratedCode #>, DebuggerNonUserCode]
     public static class <#=EscapeID(name)#> {
-        private const string URLPATH = "<#=path#>/<#=projectItem.Name#>";
-        public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
-        public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+        public const string UrlPath = "<#=path#>/<#=projectItem.Name#>";
+        public static string Url() { return T4MVCHelpers.ProcessVirtualPath(UrlPath); }
+        public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(UrlPath + "/" + fileName); }
 <#+
 PushIndent("    ");
 
@@ -1341,20 +1361,20 @@ if (!settings.ExcludedStaticFileExtensions.Any(extension => projectItem.Name.End
         string nonMinifiedName = projectItem.Name.Replace(extension, map.Item1);
         string minifiedName = projectItem.Name.Replace(extension, map.Item2);
         if (AddTimestampToStaticLink(projectItem)) { #>
-    public static readonly string <#=name#> = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/<#=minifiedName#>") ? Url("<#=minifiedName#>")+"?"+T4MVCHelpers.TimestampString(URLPATH + "/<#=minifiedName#>") : Url("<#=nonMinifiedName#>")+"?"+T4MVCHelpers.TimestampString(URLPATH + "/<#=nonMinifiedName#>");
+    public static readonly string <#=name#> = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(UrlPath + "/<#=minifiedName#>") ? Url("<#=minifiedName#>")+"?"+T4MVCHelpers.TimestampString(UrlPath + "/<#=minifiedName#>") : Url("<#=nonMinifiedName#>")+"?"+T4MVCHelpers.TimestampString(UrlPath + "/<#=nonMinifiedName#>");
         <#+} else {#>
-    public static readonly string <#=name#> = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/<#=minifiedName#>") ? Url("<#=minifiedName#>") : Url("<#=nonMinifiedName#>");
+    public static readonly string <#=name#> = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(UrlPath + "/<#=minifiedName#>") ? Url("<#=minifiedName#>") : Url("<#=nonMinifiedName#>");
 <#+}  #>
 <#+}
 else if (AddTimestampToStaticLink(projectItem)) { #>
-    public static readonly string <#=name#> = Url("<#=projectItem.Name#>")+"?"+T4MVCHelpers.TimestampString(URLPATH + "/<#=projectItem.Name#>");
+    public static readonly string <#=name#> = Url("<#=projectItem.Name#>")+"?"+T4MVCHelpers.TimestampString(UrlPath + "/<#=projectItem.Name#>");
 <#+}
     else { #>
     public static readonly string <#=name#> = Url("<#=projectItem.Name#>");
 <#+}
     }
     else if (AddTimestampToStaticLink(projectItem)) { #>
-    public static readonly string <#=name#> = Url("<#=projectItem.Name#>")+"?"+T4MVCHelpers.TimestampString(URLPATH + "/<#=projectItem.Name#>");
+    public static readonly string <#=name#> = Url("<#=projectItem.Name#>")+"?"+T4MVCHelpers.TimestampString(UrlPath + "/<#=projectItem.Name#>");
 <#+}
     else { #>
     public static readonly string <#=name#> = Url("<#=projectItem.Name#>");
@@ -1392,9 +1412,9 @@ int BuildClassStructureForProvidedPath(string path)
 
     [<#= GeneratedCode #>, DebuggerNonUserCode]
     public static partial class <#=className #> {
-        private const string URLPATH = "<#=currentPath#>";
-        public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
-        public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+        public const string UrlPath = "<#=currentPath#>";
+        public static string Url() { return T4MVCHelpers.ProcessVirtualPath(UrlPath); }
+        public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(UrlPath + "/" + fileName); }
 <#+     } else {
             #>
 
