@@ -3,7 +3,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>HermaFx</RootNamespace>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-	  <TargetFramework>netstandard2.1</TargetFramework>
+	  <TargetFramework>netstandard2.0</TargetFramework>
 	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>TRACE;LIBLOG_PUBLIC</DefineConstants>
   </PropertyGroup>
