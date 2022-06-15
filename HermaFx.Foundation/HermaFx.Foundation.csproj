@@ -1,162 +1,28 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0C13F477-7360-4831-9D62-9C5B183224C8}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HermaFx</RootNamespace>
-    <AssemblyName>HermaFx.Foundation</AssemblyName>
-    <TargetFrameworkVersion Condition=" '$(TargetFrameworkVersion)' == '' ">v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation />
-    <OldToolsVersion>3.5</OldToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <TargetFrameworkProfile />
+	  <TargetFramework>netstandard2.1</TargetFramework>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>TRACE;LIBLOG_PUBLIC</DefineConstants>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v3.5' ">$(DefineConstants);NET_3_5</DefineConstants>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">$(DefineConstants);NET_4_0;NET_3_5</DefineConstants>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.5' ">$(DefineConstants);NET_4_5;NET_4_0;NET_3_5</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>$(DefineConstants)</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core">
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adobe\PdfValidator.cs" />
-    <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
-    <Compile Include="ComponentModel\StringArrayConverter.cs" />
-    <Compile Include="Cryptography\Crc32.cs" />
-    <Compile Include="DesignPatterns\EnhancedEnumType.cs" />
-    <Compile Include="Functional\PatternMatcher.cs" />
-    <Compile Include="Functional\TypeSwitch.cs" />
-    <Compile Include="Globalization\Countries.cs" />
-    <Compile Include="Globalization\Currencies.cs" />
-    <Compile Include="Globalization\Country.cs" />
-    <Compile Include="Globalization\Currency.cs" />
-    <Compile Include="Guard.cs" />
-    <Compile Include="Guard.Expressions.cs" />
-    <Compile Include="IO\GZipStreamEx.cs" />
-    <Compile Include="Iso8601Duration\Constants.cs" />
-    <Compile Include="Iso8601Duration\DurationStruct.cs" />
-    <Compile Include="Iso8601Duration\Exceptions\Iso8601DurationException.cs" />
-    <Compile Include="Iso8601Duration\Extensions\ConverterExtensions.cs" />
-    <Compile Include="Iso8601Duration\Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Iso8601Duration\PeriodBuilder.cs" />
-    <Compile Include="Reflection\Accessor.cs" />
-    <Compile Include="Reflection\DummyPropertyInfo.cs" />
-    <Compile Include="Reflection\PropertyChain.cs" />
-    <Compile Include="Reflection\ReflectionHelper.cs" />
-    <Compile Include="Reflection\SingleProperty.cs" />
-    <Compile Include="Rfc2047Encoding\Base64Decoder.cs" />
-    <Compile Include="Rfc2047Encoding\Base64Encoder.cs" />
-    <Compile Include="Rfc2047Encoding\ByteExtensions.cs" />
-    <Compile Include="Rfc2047Encoding\CharsetUtils.cs" />
-    <Compile Include="Rfc2047Encoding\CharType.cs" />
-    <Compile Include="Rfc2047Encoding\ContentEncoding.cs" />
-    <Compile Include="Rfc2047Encoding\FormatOptions.cs" />
-    <Compile Include="Rfc2047Encoding\IMimeDecoder.cs" />
-    <Compile Include="Rfc2047Encoding\IMimeEncoder.cs" />
-    <Compile Include="Rfc2047Encoding\OptimizerOrdinalComparer.cs" />
-    <Compile Include="Rfc2047Encoding\ParseException.cs" />
-    <Compile Include="Rfc2047Encoding\ParserOptions.cs" />
-    <Compile Include="Rfc2047Encoding\QEncodeMode.cs" />
-    <Compile Include="Rfc2047Encoding\QEncoder.cs" />
-    <Compile Include="Rfc2047Encoding\QuotedPrintableDecoder.cs" />
-    <Compile Include="Rfc2047Encoding\QuotedPrintableEncoder.cs" />
-    <Compile Include="Rfc2047Encoding\Rfc2047.cs" />
-    <Compile Include="Rfc2047Encoding\RfcComplianceMode.cs" />
-    <Compile Include="RuntimeExtensions\CollectionExtensions.cs" />
-    <Compile Include="RuntimeExtensions\DateTimeExtensions.cs" />
-    <Compile Include="RuntimeExtensions\NameValueCollectionExtensions.cs" />
-    <Compile Include="RuntimeExtensions\RandomExtensions.cs" />
-    <Compile Include="Cryptography\ASN1.cs" />
-    <Compile Include="Cryptography\ASN1Convert.cs" />
-    <Compile Include="Cryptography\BitConverterLE.cs" />
-    <Compile Include="Cryptography\CryptoHelper.cs" />
-    <Compile Include="Cryptography\PKCS8.cs" />
-    <Compile Include="DesignPatterns\IService.cs" />
-    <Compile Include="Drawing\ImageFormatDetector.cs" />
-    <Compile Include="Globalization\CultureScope.cs" />
-    <Compile Include="RuntimeExtensions\ExceptionExtensions.cs" />
-    <Compile Include="RuntimeExtensions\GenericExtensions.cs" />
-    <Compile Include="RuntimeExtensions\GuidExtensions.cs" />
-    <Compile Include="RuntimeExtensions\IDictionaryExtensions.cs" />
-    <Compile Include="RuntimeExtensions\LinqExtensions.cs" />
-    <Compile Include="RuntimeExtensions\ReflectionExtensions.cs" />
-    <Compile Include="RuntimeExtensions\StreamExtensions.cs" />
-    <Compile Include="RuntimeExtensions\SysDateOffset.cs" />
-    <Compile Include="RuntimeExtensions\SysDate.cs" />
-    <Compile Include="RuntimeExtensions\TypeExtensions.cs" />
-    <Compile Include="Text\EncodingConverter.cs" />
-    <Compile Include="Text\IEncodingResolver.cs" />
-    <Compile Include="Utils\BackOffWaiter.cs" />
-    <Compile Include="Utils\AdvancedGuidParser.cs" />
-    <Compile Include="Utils\EnvironmentHelper.cs" />
-    <Compile Include="X509Certificates\CertificateString.cs" />
-    <Compile Include="ServiceLocation\ServiceLocator.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RuntimeExtensions\Converter.cs" />
-    <Compile Include="RuntimeExtensions\EnumExtensions.cs" />
-    <Compile Include="RuntimeExtensions\IEnumerableExtensions.cs" />
-    <Compile Include="RuntimeExtensions\StringExtensions.cs" />
-    <Compile Include="Text\Base32Encoder.cs" />
-    <Compile Include="Text\ZBase32Encoder.cs" />
-    <Compile Include="Threading\LockHelpers.cs" />
-    <Compile Include="RuntimeExtensions\Disposable.cs" />
-    <Compile Include="Utils\AdvancedGuidGenerator.cs" />
-    <Compile Include="Diagnostics\ObjectDumper.cs" />
-    <Compile Include="IO\TempFile.cs" />
-    <Compile Include="IO\StreamWrapper.cs" />
-    <Compile Include="IO\TempFileStream.cs" />
+    <PackageReference Include="LibLog" Version="5.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="HermaFx.Foundation.nuspec" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup />
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-			 Other similar extension points exist, see Microsoft.Common.targets.
-	<Target Name="BeforeBuild">
-	</Target>
-	<Target Name="AfterBuild">
-	</Target>
-  -->
-  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
 </Project>
