@@ -2,22 +2,13 @@ version: 1.3.{build}
 skip_tags: true
 image: Visual Studio 2022
 configuration: Release
-assembly_info:
+dotnet_csproj:
   patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: $(APPVEYOR_REPO_BRANCH):$(APPVEYOR_REPO_COMMIT)
-#install:
-#  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/install-nuget-3-3-0.ps1'))
-before_build:
-  - cmd: |
-      setlocal enabledelayedexpansion
-      setlocal EnableExtensions
-            
-      REM Set version attributes..
-      FOR /R %%F IN (*.targets) DO (Tools\UnixUtils\sed.exe -i -e "s|0\.0\.0\.0|%APPVEYOR_BUILD_VERSION%|g" %%F)
-      FOR /R %%F IN (*.targets) DO (Tools\UnixUtils\sed.exe -i -e "s|GIT_COMMIT|%APPVEYOR_REPO_COMMIT%|g" %%F)
+  file: '.msbuild\custom.targets'
+  version: '{version}'
+  file_version: '{version}'
+  package_version: '{version}'
+  informational_version: $(APPVEYOR_REPO_BRANCH):$(APPVEYOR_REPO_COMMIT)
 build:
   publish_nuget: true
   publish_nuget_symbols: true
