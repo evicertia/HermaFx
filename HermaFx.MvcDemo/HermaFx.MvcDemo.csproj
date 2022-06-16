@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <!-- Project Sdk="MSBuild.SDK.SystemWeb.RazorLibrary/4.0.79" -->
   <PropertyGroup>
+    <Title>HermaFx.MvcDemo</Title>
+    <Description>HermaFx Mvc Demo project</Description>
     <OutputType>Library</OutputType>
     <StartupObject />
     <TargetFramework>net472</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\</OutputPath>
     <UseRazorV4Editor>false</UseRazorV4Editor>
     <PrecompileRazorFiles>true</PrecompileRazorFiles>
@@ -107,4 +108,5 @@
   <ItemGroup>
     <PackageReference Update="Microsoft.AspNet.Mvc" Version="5.2.7" />
   </ItemGroup>
+  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
 </Project>

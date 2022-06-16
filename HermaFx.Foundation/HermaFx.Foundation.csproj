@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Title>HermaFx.Foundation</Title>
+    <Description>HermaFx foundation assembly</Description>
     <OutputType>Library</OutputType>
     <RootNamespace>HermaFx</RootNamespace>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
 	  <TargetFramework>netstandard2.0</TargetFramework>
-	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>TRACE;LIBLOG_PUBLIC</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -25,4 +26,8 @@
     </PackageReference>
     <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)\.msbuild\custom.targets"/>
 </Project>

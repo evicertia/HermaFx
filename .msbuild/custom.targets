@@ -1,4 +1,17 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Product>HermaFx Library</Product>
+    <Company>EVICERTIA S.L.</Company>
+    <Copyright>Copyright © EVICERTIA S.L. 2010-2022</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version Condition=" '$(Version)' == '' ">0.0.0.0</Version>
+    <FileVersion Condition=" '$(FileVersion)' == '' ">0.0.0.0</FileVersion>
+    <AssemblyVersion Condition=" '$(AssemblyVersion)' == '' ">0.0.0.0</AssemblyVersion>
+    <InformationalVersion Condition=" '$(InformationalVersion)' == '' ">VERSION_STRING</InformationalVersion>
+    <PackageProjectUrl>https://github.com/evicertia/hermafx</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/evicertia/hermafx</RepositoryUrl>
+    <RepositoryCommit>GIT_COMMIT</RepositoryCommit>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>portable</DebugType>
     <EmbedAllSources>true</EmbedAllSources>

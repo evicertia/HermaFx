@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Title>HermaFx.SettingsAdapter</Title>
+    <Description>HermaFx SettingsAdapter assembly</Description>
     <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>HermaFx.Settings</RootNamespace>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\HermaFx.Foundation\HermaFx.Foundation.csproj" />
@@ -12,9 +13,12 @@
     <PackageReference Include="Castle.Core" Version="5.0.0">
       <PrivateAssets Condition=" '$(Configuration)' == 'Release' ">contentfiles;analyzers;build;compile</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="ILMerge.Tools.MSBuildToolTask" Version="2.14.1208.49"  PrivateAssets="All" />
-    <PackageReference Include="ILRepack" Version="2.0.18"  PrivateAssets="All" />
+    <PackageReference Include="ILMerge.Tools.MSBuildToolTask" Version="2.14.1208.49" PrivateAssets="All" />
+    <PackageReference Include="ILRepack" Version="2.0.18" PrivateAssets="All" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <UsingTask AssemblyFile="$(SolutionDir)packages\ILMerge.Tools.MSBuildToolTask.2.14.1208.49\tools\ILMerge.Tools.MSBuildToolTask.dll" TaskName="ILMerge.Tools.MSBuildToolTask.ILMergeTool" />
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
@@ -23,4 +27,5 @@
     </ItemGroup>
     <ILMergeTool ToolPath="$(ILRepack)" Internalize="true" SearchDirectories="$(MSBuildProjectDirectory)\$(OutputPath.TrimEnd('\'))" InputAssemblies="@(IntermediateAssembly);@(InputAssemblies)" ExcludeFile="$(MSBuildProjectDirectory)\ILMerge.excludes" OutputFile="$(OutputPath)\$(AssemblyName).dll" />
   </Target>
+  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
 </Project>

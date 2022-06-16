@@ -1,8 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Title>HermaFx.SimpleConfig</Title>
+    <Description>HermaFx SimpleConfig assembly</Description>
+    <Copyright>Copyright © Piotr Mionskowski 2016, evicertia 2020+</Copyright>
     <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>TRACE;</DefineConstants>
@@ -21,7 +23,7 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
-
+    <Folder Include="Properties\" />
   </ItemGroup>
   <UsingTask AssemblyFile="$(SolutionDir)packages\ILMerge.Tools.MSBuildToolTask.2.14.1208.49\tools\ILMerge.Tools.MSBuildToolTask.dll" TaskName="ILMerge.Tools.MSBuildToolTask.ILMergeTool" />
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
@@ -30,4 +32,5 @@
     </ItemGroup>
     <ILMergeTool ToolPath="$(ILRepack)" Internalize="true" SearchDirectories="$(MSBuildProjectDirectory)\$(OutputPath.TrimEnd('\'))" InputAssemblies="@(IntermediateAssembly);@(InputAssemblies)" ExcludeFile="$(MSBuildProjectDirectory)\ILMerge.excludes" OutputFile="$(OutputPath)\$(AssemblyName).dll" />
   </Target>
+  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
 </Project>
