@@ -28,5 +28,5 @@
     </ItemGroup>
     <ILMergeTool ToolPath="$(ILRepack)" Internalize="true" SearchDirectories="$(MSBuildProjectDirectory)\$(OutputPath.TrimEnd('\'))" InputAssemblies="@(IntermediateAssembly);@(InputAssemblies)" ExcludeFile="$(MSBuildProjectDirectory)\ILMerge.excludes" OutputFile="$(OutputPath)\$(AssemblyName).dll" />
   </Target>
-  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
+  <Import Project="$(ProjectDir)..\.msbuild\custom.targets"/>
 </Project>

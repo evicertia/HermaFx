@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Title>HermaFx.Rebus.CastleExtensions</Title>
     <Description>HermaFx Rebus Castle extensions assembly</Description>
@@ -17,5 +17,5 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
+  <Import Project="$(ProjectDir)..\.msbuild\custom.targets"/>
 </Project>

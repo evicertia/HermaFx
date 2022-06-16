@@ -109,5 +109,5 @@
   <ItemGroup>
     <PackageReference Update="Microsoft.AspNet.Mvc" Version="5.2.7" />
   </ItemGroup>
-  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
+  <Import Project="$(ProjectDir)..\.msbuild\custom.targets"/>
 </Project>

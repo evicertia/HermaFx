@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Title>HermaFx.SettingsAdapter.Tests</Title>
     <Description>HermaFx SettingsAdapter unit tests</Description>
@@ -26,5 +26,5 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
+  <Import Project="$(ProjectDir)..\.msbuild\custom.targets"/>
 </Project>
