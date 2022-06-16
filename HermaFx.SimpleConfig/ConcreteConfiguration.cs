@@ -18,11 +18,10 @@ namespace HermaFx.SimpleConfig
             _configValue = configValue;
         }
 
-
         public void Intercept(IInvocation invocation)
         {
             if(invocation.Method.DeclaringType.IsInterface ||
-                invocation.Method.HasAttribute<CompilerGeneratedAttribute>()
+                invocation.Method. HasAttribute<CompilerGeneratedAttribute>()
                 )
             {
                 var propertyInfo = invocation.Method.GetPropertyInfo();
@@ -32,7 +31,6 @@ namespace HermaFx.SimpleConfig
                 invocation.Proceed();
             }
         }
-
 
         public object ClientValue(Type definingType)
         {

@@ -1,110 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\ILRepack.2.0.18\build\ILRepack.props" Condition="Exists('..\packages\ILRepack.2.0.18\build\ILRepack.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{19AC67C4-812A-4473-A78B-B1760C32C324}</ProjectGuid>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HermaFx.SimpleConfig</RootNamespace>
-    <AssemblyName>HermaFx.SimpleConfig</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>TRACE;</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Prefer32Bit>false</Prefer32Bit>
-    <NoWarn>NU5128</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BasicExtensions\BasicExtensions.cs" />
-    <Compile Include="Cache.cs" />
-    <Compile Include="CacheCallback.cs" />
-    <Compile Include="CacheStrategy.cs" />
-    <Compile Include="ClientValueResolver.cs" />
-    <Compile Include="CompositeConfigurationValidator.cs" />
-    <Compile Include="ConcreteConfiguration.cs" />
-    <Compile Include="Configuration.cs" />
-    <Compile Include="ConfigurationElementCollectionForInterface.cs" />
-    <Compile Include="ConfigurationElementForInterface.cs" />
-    <Compile Include="ConfigurationElementRegistrar.Mono.cs" />
-    <Compile Include="ConfigurationElementRegistrar.DotNet.cs" />
-    <Compile Include="ConfigurationElementRegistrar.cs" />
-    <Compile Include="ConfigurationPropertyCollection.cs" />
-    <Compile Include="ConfigurationPropertyFactory.cs" />
-    <Compile Include="ConfigurationPropertyFactory.DotNet.cs" />
-    <Compile Include="ConfigurationPropertyFactory.Mono.cs" />
-    <Compile Include="ConfigurationSection.cs" />
-    <Compile Include="ConfigurationSectionForInterface.cs" />
-    <Compile Include="ConfigurationSource.cs" />
-    <Compile Include="DefaultAttribute.cs" />
-    <Compile Include="IBaseValueProvider.cs" />
-    <Compile Include="IConfigurationPropertyFactory.cs" />
-    <Compile Include="IConfigValue.cs" />
-    <Compile Include="INamingConvention.cs" />
-    <Compile Include="NamingConvention.cs" />
-    <Compile Include="ReflectionHelpers.cs" />
-    <Compile Include="SectionIdentity.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EnhancedNamingConvention.cs" />
+    <PackageReference Include="Castle.Core" Version="5.0.0">
+      <PrivateAssets Condition=" '$(Configuration)' == 'Release' ">contentfiles;analyzers;build;compile</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="ILMerge.Tools.MSBuildToolTask" Version="2.14.1208.49" PrivateAssets="All" />
+    <PackageReference Include="ILRepack" Version="2.0.18" PrivateAssets="All" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.XML" />
-    <Reference Include="System.Core" />
-    <Reference Include="Castle.Core">
-      <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <None Include="HermaFx.SimpleConfig.nuspec" />
-    <None Include="packages.config" />
-    <None Include="ILMerge.excludes" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  -->
-  <!-- ILMerge -->
   <UsingTask AssemblyFile="$(SolutionDir)packages\ILMerge.Tools.MSBuildToolTask.2.14.1208.49\tools\ILMerge.Tools.MSBuildToolTask.dll" TaskName="ILMerge.Tools.MSBuildToolTask.ILMergeTool" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\ILRepack.2.0.18\build\ILRepack.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\packages\ILRepack.2.0.18\build\ILRepack.props'))" />
-  </Target>
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
       <InputAssemblies Include="$(OutputPath)\Castle.Core.dll" />
     </ItemGroup>
     <ILMergeTool ToolPath="$(ILRepack)" Internalize="true" SearchDirectories="$(MSBuildProjectDirectory)\$(OutputPath.TrimEnd('\'))" InputAssemblies="@(IntermediateAssembly);@(InputAssemblies)" ExcludeFile="$(MSBuildProjectDirectory)\ILMerge.excludes" OutputFile="$(OutputPath)\$(AssemblyName).dll" />
   </Target>
-  <!-- /ILMerge -->
-  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
 </Project>
