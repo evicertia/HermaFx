@@ -11,10 +11,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Rebus" Version="[0.84.0,0.90)" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-  <Import Project="$(ProjectDir)..\.msbuild\custom.targets"/>
+  <Import Project="$(ProjectDir)..\.msbuild\custom.targets" />
 </Project>

@@ -16,7 +16,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="LibLog" Version="5.0.8">
@@ -28,5 +28,5 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-  <Import Project="$(ProjectDir)..\.msbuild\custom.targets"/>
+  <Import Project="$(ProjectDir)..\.msbuild\custom.targets" />
 </Project>

@@ -5,6 +5,8 @@
     <Copyright>Copyright © Piotr Mionskowski 2016, evicertia 2020+</Copyright>
     <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <ILRepackInternalize>true</ILRepackInternalize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>TRACE;</DefineConstants>
@@ -14,24 +16,23 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <ILRepackMergeAssemblies Include="Castle.Core.dll" />
+    <DoNotInternalizePatterns Include="Castle.DynamicProxy.AbstractInvocation" />
+    <DoNotInternalizePatterns Include="Castle.DynamicProxy.IProxyTargetAccessor" />
+    <DoNotInternalizePatterns Include="Castle.DynamicProxy.Internal.CompositionInvocation" />
+    <DoNotInternalizePatterns Include="Castle.DynamicProxy.Internal.InheritanceInvocation" />
+    <DoNotInternalizePatterns Include="Castle.DynamicProxy.Internal.InterfaceMethodWithoutTargetInvocation" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Castle.Core" Version="5.0.0">
-      <PrivateAssets Condition=" '$(Configuration)' == 'Release' ">all</PrivateAssets>
-      <IncludeAssets Condition=" '$(Configuration)' == 'Release' ">contentfiles;analyzers;build;compile</IncludeAssets>
+      <PrivateAssets Condition=" '$(Configuration)' == 'Release' ">All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="ILMerge.Tools.MSBuildToolTask" Version="2.14.1208.49" PrivateAssets="All" />
-    <PackageReference Include="ILRepack" Version="2.0.18" PrivateAssets="All" />
+    <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.18" PrivateAssets="All" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-  <UsingTask AssemblyFile="$(SolutionDir)packages\ILMerge.Tools.MSBuildToolTask.2.14.1208.49\tools\ILMerge.Tools.MSBuildToolTask.dll" TaskName="ILMerge.Tools.MSBuildToolTask.ILMergeTool" />
-  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
-    <ItemGroup>
-      <InputAssemblies Include="$(OutputPath)\Castle.Core.dll" />
-    </ItemGroup>
-    <ILMergeTool ToolPath="$(ILRepack)" Internalize="true" SearchDirectories="$(MSBuildProjectDirectory)\$(OutputPath.TrimEnd('\'))" InputAssemblies="@(IntermediateAssembly);@(InputAssemblies)" ExcludeFile="$(MSBuildProjectDirectory)\ILMerge.excludes" OutputFile="$(OutputPath)\$(AssemblyName).dll" />
-  </Target>
-  <Import Project="$(ProjectDir)..\.msbuild\custom.targets"/>
+  <Import Project="$(ProjectDir)..\.msbuild\custom.targets" />
 </Project>
