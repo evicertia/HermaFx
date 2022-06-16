@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Title>HermaFx.SettingsAdapter.Tests</Title>
     <Description>HermaFx SettingsAdapter unit tests</Description>
     <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
+    <IsPackable>false</IsPackable>
     <RootNamespace>HermaFx.Settings</RootNamespace>
   </PropertyGroup>
   <ItemGroup>

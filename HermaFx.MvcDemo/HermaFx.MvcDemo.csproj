@@ -4,6 +4,7 @@
     <Title>HermaFx.MvcDemo</Title>
     <Description>HermaFx Mvc Demo project</Description>
     <OutputType>Library</OutputType>
+    <IsPackable>false</IsPackable>
     <StartupObject />
     <TargetFramework>net472</TargetFramework>
     <OutputPath>bin\</OutputPath>

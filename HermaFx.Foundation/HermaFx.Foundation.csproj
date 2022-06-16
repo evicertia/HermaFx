@@ -1,10 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Title>HermaFx.Foundation</Title>
-    <Description>HermaFx foundation assembly</Description>
+    <Description>HermaFx infrastructure &amp; fx extensions' foundation</Description>
     <OutputType>Library</OutputType>
     <RootNamespace>HermaFx</RootNamespace>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
 	  <TargetFramework>netstandard2.0</TargetFramework>
     <DefineConstants>TRACE;LIBLOG_PUBLIC</DefineConstants>
   </PropertyGroup>

@@ -5,6 +5,7 @@
     <Copyright>Copyright © Piotr Mionskowski 2016, evicertia 2020+</Copyright>
     <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
