@@ -9,6 +9,12 @@ dotnet_csproj:
   file_version: '{version}'
   package_version: '{version}'
   informational_version: $(APPVEYOR_REPO_BRANCH):$(APPVEYOR_REPO_COMMIT)
+before_build:
+  - cmd: |
+      setlocal enabledelayedexpansion
+      setlocal EnableExtensions
+
+      appveyor-retry nuget restore
 build:
   publish_nuget: true
   publish_nuget_symbols: true
