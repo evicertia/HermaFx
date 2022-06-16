@@ -14,12 +14,10 @@ before_build:
   - cmd: |
       setlocal enabledelayedexpansion
       setlocal EnableExtensions
-      
-      appveyor-retry nuget restore
-      
+            
       REM Set version attributes..
-      FOR /R %%F IN (*.nuspec) DO (Tools\UnixUtils\sed.exe -i -e "s|0\.0\.0\.0|%APPVEYOR_BUILD_VERSION%|g" %%F)
-      FOR /R %%F IN (*.nuspec) DO (Tools\UnixUtils\sed.exe -i -e "s|GIT_COMMIT|%APPVEYOR_REPO_COMMIT%|g" %%F)
+      FOR /R %%F IN (*.targets) DO (Tools\UnixUtils\sed.exe -i -e "s|0\.0\.0\.0|%APPVEYOR_BUILD_VERSION%|g" %%F)
+      FOR /R %%F IN (*.targets) DO (Tools\UnixUtils\sed.exe -i -e "s|GIT_COMMIT|%APPVEYOR_REPO_COMMIT%|g" %%F)
 build:
   publish_nuget: true
   publish_nuget_symbols: true

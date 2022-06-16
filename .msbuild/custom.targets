@@ -12,6 +12,10 @@
     <PackageReleaseNotes>See changes for this revision at: https://github.com/evicertia/HermaFx/commit/GIT_COMMIT </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/evicertia/hermafx</RepositoryUrl>
     <RepositoryCommit>GIT_COMMIT</RepositoryCommit>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>portable</DebugType>
