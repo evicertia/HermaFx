@@ -3,3 +3,5 @@ Generator: MvcView
 GeneratePrettyNames : true
 GenerateAbsolutePathLinePragmas : true
 ExcludeForCodeCoverage : true
+ClassSuffix: View
+Namespace: HermaFx.MvcDemo.Features
