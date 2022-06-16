@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="MSBuild.SDK.SystemWeb.RazorLibrary/4.0.79">
   <PropertyGroup>
     <OutputType>Library</OutputType>
   </PropertyGroup>
@@ -102,5 +102,8 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.AspNet.Mvc" Version="5.2.7" />
   </ItemGroup>
 </Project>

@@ -14,7 +14,7 @@
     <ProjectReference Include="..\HermaFx.Foundation\HermaFx.Foundation.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.9" />
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.9" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
