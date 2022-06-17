@@ -34,8 +34,8 @@ namespace HermaFx.Text
 		{
 			var model = new SettingsAdapter().Create<DataCoding>(_dict);
 
-			Assert.That(model.Encoding1, Is.TypeOf(typeof(UTF8Encoding)));
-			Assert.That(model.Encoding2, Is.TypeOf(typeof(ASCIIEncoding)));
+			Assert.That(model.Encoding1, Is.AssignableTo<UTF8Encoding>());
+			Assert.That(model.Encoding2, Is.AssignableTo<ASCIIEncoding>());
 		}
 	}
 }

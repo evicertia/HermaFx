@@ -23,18 +23,10 @@ using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using T4MVC;
-
-
-
 namespace T4MVC
 {
-
     public class SharedController
     {
-
-
-
-
 
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -42,24 +34,17 @@ namespace T4MVC
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ViewsClass
         {
-
-static readonly _ViewNamesClass s_ViewNames = new _ViewNamesClass();
-public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
-public class _ViewNamesClass
-{
-public readonly string _Layout = "_Layout";
-            
-}
-public readonly string _Layout = "~/Features/Shared/_Layout.cshtml";
-
+            static readonly _ViewNamesClass s_ViewNames = new _ViewNamesClass();
+            public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
+            public class _ViewNamesClass
+            {
+                public readonly string _Layout = "_Layout";
+            }
+            public readonly string _Layout = "~/Features/Shared/_Layout.cshtml";
         }
     }
 
-
-
 }
-
-
 
 #endregion T4MVC
 #pragma warning restore 1591, 3008, 3009, 0108, 0114

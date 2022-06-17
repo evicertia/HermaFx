@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 // Copyright 2010 Buu Nguyen, Morten Mertner
 // 
@@ -27,8 +27,8 @@ using Castle.Core.Internal;
 
 namespace HermaFx.SimpleConfig
 {
-#if true // DOT_NET_4
-    using System;
+#if NETSTANDARD || NET40_OR_GREATER
+	using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
@@ -148,7 +148,7 @@ namespace HermaFx.SimpleConfig
 		/// <returns>The number of live cache entries still in the cache.</returns>
 		private int ClearCollected()
 		{
-			IList<TKey> keys = entries.Where(kvp => kvp.Value is WeakReference && !(kvp.Value as WeakReference).IsAlive).Select(kvp => kvp.Key).ToList();
+			List<TKey> keys = entries.Where(kvp => kvp.Value is WeakReference && !(kvp.Value as WeakReference).IsAlive).Select(kvp => kvp.Key).ToList();
 			keys.ForEach(k => entries.Remove(k));
 			return entries.Count;
 		}
@@ -165,7 +165,7 @@ namespace HermaFx.SimpleConfig
 		}
 		#endregion
     }
-#elif DOT_NET_35
+#elif NET35
     
     [DebuggerStepThrough]
 	internal sealed class Cache<TKey,TValue>
@@ -173,7 +173,7 @@ namespace HermaFx.SimpleConfig
 		private readonly Dictionary<TKey, object> entries;
 		private int owner;
 
-        #region Constructors
+	#region Constructors
 		public Cache()
 		{
 			entries = new Dictionary<TKey,object>();
@@ -182,9 +182,9 @@ namespace HermaFx.SimpleConfig
 		{
 			entries = new Dictionary<TKey,object>( equalityComparer );
 		}
-        #endregion
+	#endregion
 
-        #region Properties
+	#region Properties
 		/// <summary>
 		/// Returns the number of entries currently stored in the cache. Accessing this property
 		/// causes a check of all entries in the cache to ensure collected entries are not counted.
@@ -193,9 +193,9 @@ namespace HermaFx.SimpleConfig
 		{
 			get { return ClearCollected(); }
 		}
-        #endregion
+	#endregion
 
-        #region Indexers
+	#region Indexers
 		/// <summary>
 		/// Indexer for accessing or adding cache entries.
 		/// </summary>
@@ -212,9 +212,9 @@ namespace HermaFx.SimpleConfig
 		{
 			set { Insert( key, value, strategy ); }
 		}
-        #endregion
+	#endregion
 
-    #region Insert Methods
+	#region Insert Methods
 		/// <summary>
 		/// Insert a collectible object into the cache.
 		/// </summary>
@@ -241,9 +241,9 @@ namespace HermaFx.SimpleConfig
 			if( current != Interlocked.Exchange( ref owner, 0 ) )
 				throw new UnauthorizedAccessException( "Thread had access to cache even though it shouldn't have." );
 		}
-        #endregion
+	#endregion
 
-        #region GetValue Methods
+	#region GetValue Methods
 		/// <summary>
 		/// Retrieves an entry from the cache using the given key.
 		/// </summary>
@@ -260,9 +260,9 @@ namespace HermaFx.SimpleConfig
 			var wr = entry as WeakReference;
 			return (TValue) (wr != null ? wr.Target : entry);
 		}
-        #endregion
+	#endregion
 
-        #region Remove Methods
+	#region Remove Methods
 		/// <summary>
 		/// Removes the object associated with the given key from the cache.
 		/// </summary>
@@ -277,9 +277,9 @@ namespace HermaFx.SimpleConfig
 				throw new UnauthorizedAccessException( "Thread had access to cache even though it shouldn't have." );
 			return found;
 		}
-        #endregion
+	#endregion
 
-        #region Clear Methods
+	#region Clear Methods
 		/// <summary>
 		/// Removes all entries from the cache.
 		/// </summary>
@@ -307,9 +307,9 @@ namespace HermaFx.SimpleConfig
 				throw new UnauthorizedAccessException( "Thread had access to cache even though it shouldn't have." );
 			return count;
 		}
-        #endregion
+	#endregion
 
-        #region ToString
+	#region ToString
         /// <summary>
 		/// This method returns a string with information on the cache contents (number of contained objects).
 		/// </summary>
@@ -318,9 +318,9 @@ namespace HermaFx.SimpleConfig
 			int count = ClearCollected();
 			return count > 0 ? String.Format( "Cache contains {0} live objects.", count ) : "Cache is empty.";
 		}
-        #endregion
+	#endregion
 	}
 #else
-	#error At least one of the compilation symbols DOT_NET_4 or DOT_NET_35 must be defined. 
+#error At least one of the compilation symbols (NETSTANDARD || NET40_OR_GRATER) or NET35 must be defined. 
 #endif
 }

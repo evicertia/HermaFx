@@ -1,88 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ED809BC3-F42C-4FDF-AA09-1D3C71C6F953}</ProjectGuid>
+    <Title>HermaFx.Rebus</Title>
+    <Description>HermaFx Rebus extensions assembly</Description>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HermaFx.Rebus</RootNamespace>
-    <AssemblyName>HermaFx.Rebus</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rebus">
-      <HintPath>..\packages\Rebus.0.84.0\lib\NET45\Rebus.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\HermaFx.DataAnnotations\HermaFx.DataAnnotations.csproj" />
+    <ProjectReference Include="..\HermaFx.Foundation\HermaFx.Foundation.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ConfigurerExtensions.cs" />
-    <Compile Include="Configuration\IncomingMessageLogger.cs" />
-    <Compile Include="Configuration\MessageLoggerHelper.cs" />
-    <Compile Include="Configuration\OutgoingMessageLogger.cs" />
-    <Compile Include="ISubscribeTo.cs" />
-    <Compile Include="MessageContextExtensions.cs" />
-    <Compile Include="MessageDateExtensions.cs" />
-    <Compile Include="Configuration\MulticastOutgoingMessageLogger.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RebusExtensions.cs" />
-    <Compile Include="SagaPersisters\DualSagaExtensions.cs" />
-    <Compile Include="SagaPersisters\DualSagaPersister.cs" />
-    <Compile Include="SagaPersisters\DualSagaTimeoutStorage.cs" />
-    <Compile Include="Sagas\ISagaLock.cs" />
-    <Compile Include="Sagas\SagaLockingExtensions.cs" />
-    <Compile Include="Sagas\ISagaLockingProvider.cs" />
-    <Compile Include="Sagas\SagaLockingManager.cs" />
-    <Compile Include="SimpleContainerAdapter.cs" />
-    <Compile Include="TimeToBeReceivedExtensions.cs" />
-    <Compile Include="ValidatingExtensions.cs" />
-    <Compile Include="MessageRunningTimeExtensions.cs" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Rebus" Version="[0.84.0,0.90)" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="HermaFx.Rebus.nuspec" />
-    <None Include="packages.config" />
+    <Folder Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HermaFx.DataAnnotations\HermaFx.DataAnnotations.csproj">
-      <Project>{e51dd98e-73c8-4af8-ae37-3a59937b630c}</Project>
-      <Name>HermaFx.DataAnnotations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HermaFx.Foundation\HermaFx.Foundation.csproj">
-      <Project>{0c13f477-7360-4831-9d62-9c5b183224c8}</Project>
-      <Name>HermaFx.Foundation</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <Import Project="$(SolutionDir)\.msbuild\custom.targets" />
+  <Import Project="$(ProjectDir)..\.msbuild\custom.targets" />
 </Project>

@@ -34,7 +34,7 @@ namespace HermaFx.Rfc2047Encoding
 		{
 			int gb2312;
 
-#if NETSTANDARD
+#if NET461_OR_GREATER || NETSTANDARD
 			Encoding.RegisterProvider (CodePagesEncodingProvider.Instance);
 #endif
 

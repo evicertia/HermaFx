@@ -20,7 +20,7 @@ namespace HermaFx.MediatR
 		//   request:
 		//     Command object
 		//
-		public static void Invoke(this IMediator mediator, ICommand request)
+		public static void Invoke(this ISender mediator, ICommand request)
 		{
 			mediator.Send<Unit>(request);
 		}
@@ -33,7 +33,7 @@ namespace HermaFx.MediatR
 		//   request:
 		//     Command object
 		//
-		public static void InvokeSync(this IMediator mediator, ICommand request)
+		public static void InvokeSync(this ISender mediator, ICommand request)
 		{
 			mediator.Send<Unit>(request).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
@@ -52,7 +52,7 @@ namespace HermaFx.MediatR
 		//
 		// Returns:
 		//     Response
-		public static Task<TResponse> Invoke<TResponse>(this IMediator mediator, ICommand<TResponse> request)
+		public static Task<TResponse> Invoke<TResponse>(this ISender mediator, ICommand<TResponse> request)
 		{
 			return mediator.Send<TResponse>(request);
 		}
@@ -71,7 +71,7 @@ namespace HermaFx.MediatR
 		//
 		// Returns:
 		//     Response
-		public static TResponse InvokeSync<TResponse>(this IMediator mediator, ICommand<TResponse> request)
+		public static TResponse InvokeSync<TResponse>(this ISender mediator, ICommand<TResponse> request)
 		{
 			return mediator.Send<TResponse>(request).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
@@ -93,7 +93,7 @@ namespace HermaFx.MediatR
 		//
 		// Returns:
 		//     Response
-		public static Task<TResponse> Execute<TResponse>(this IMediator mediator, IQuery<TResponse> request)
+		public static Task<TResponse> Execute<TResponse>(this ISender mediator, IQuery<TResponse> request)
 		{
 			return mediator.Send<TResponse>(request);
 		}
@@ -112,7 +112,7 @@ namespace HermaFx.MediatR
 		//
 		// Returns:
 		//     Response
-		public static TResponse ExecuteSync<TResponse>(this IMediator mediator, IQuery<TResponse> request)
+		public static TResponse ExecuteSync<TResponse>(this ISender mediator, IQuery<TResponse> request)
 		{
 			return mediator.Send<TResponse>(request).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
@@ -133,7 +133,7 @@ namespace HermaFx.MediatR
 		//
 		// Returns:
 		//     Response
-		public static Task Publish<TEvent>(this IMediator mediator, TEvent @event)
+		public static Task Publish<TEvent>(this IPublisher mediator, TEvent @event)
 			where TEvent : INotification
 		{
 			return mediator.Publish<TEvent>(@event);
@@ -153,7 +153,7 @@ namespace HermaFx.MediatR
 		//
 		// Returns:
 		//     Response
-		public static void ExecuteSync<TEvent>(this IMediator mediator, TEvent request)
+		public static void ExecuteSync<TEvent>(this IPublisher mediator, TEvent request)
 			where TEvent : INotification
 		{
 			mediator.Publish<TEvent>(request).ConfigureAwait(false).GetAwaiter().GetResult();

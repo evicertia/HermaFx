@@ -15,6 +15,10 @@ namespace HermaFx.Utils
 		private static readonly Lazy<bool> _RunningOnMono = new Lazy<bool>(DetectMono);
 		private static readonly Lazy<bool> _RunningOnMkbundle = new Lazy<bool>(DetectMkbundle);
 		private static readonly Lazy<bool> _RunningOnWindows = new Lazy<bool>(DetectWindows);
+		private static readonly Lazy<bool> _RunningOnDotNet = new Lazy<bool>(DetectDotNet);
+		private static readonly Lazy<bool> _RunningOnNetFx = new Lazy<bool>(() => RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework"));
+		private static readonly Lazy<bool> _RunningOnNetCore = new Lazy<bool>(() => RuntimeInformation.FrameworkDescription == ".NET Core");
+		private static readonly Lazy<bool> _RunningOnNetNative = new Lazy<bool>(() => RuntimeInformation.FrameworkDescription == ".NET Native");
 
 		static bool runningOnUnix, runningOnMacOS, runningOnLinux;
 		volatile static bool initialized;
@@ -22,6 +26,14 @@ namespace HermaFx.Utils
 
 		/// <summary>Gets a System.Boolean indicating whether running on a Windows platform.</summary>
 		public static bool RunningOnWindows => _RunningOnWindows.Value;
+		/// <summary>Gets a System.Boolean indicating wheter running under .NET 5+ runtime.</summary>
+		public static bool RunningOnDotNet => _RunningOnDotNet.Value;
+		/// <summary>Gets a System.Boolean indicating wheter running under .NET Framework runtime.</summary>
+		public static bool RunningOnNetFx => _RunningOnNetFx.Value;
+		/// <summary>Gets a System.Boolean indicating wheter running under .NET Core (1.0 ~ 3.1) runtime.</summary>
+		public static bool RunningOnNetCore => _RunningOnNetCore.Value;
+		/// <summary>Gets a System.Boolean indicating wheter running under .NET Native runtime.</summary>
+		public static bool RunningOnNetNative => _RunningOnNetNative.Value;
 		/// <summary> Gets a System.Boolean indicating whether running on the Mono runtime. </summary>
 		public static bool RunningOnMono => _RunningOnMono.Value;
 		/// <summary> Gets a System.Boolean indicating whether running on an mkbundle package under the Mono runtime. </summary>
@@ -44,6 +56,13 @@ namespace HermaFx.Utils
 				System.Environment.OSVersion.Platform == PlatformID.Win32S ||
 				System.Environment.OSVersion.Platform == PlatformID.Win32Windows ||
 				System.Environment.OSVersion.Platform == PlatformID.WinCE;
+		}
+
+		private static bool DetectDotNet()
+		{
+			return RuntimeInformation.FrameworkDescription.StartsWith(".NET ")
+				&& RuntimeInformation.FrameworkDescription[5] > '0'
+				&& RuntimeInformation.FrameworkDescription[5] < '9';
 		}
 
 		private static bool DetectMono()

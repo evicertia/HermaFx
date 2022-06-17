@@ -81,7 +81,7 @@ namespace HermaFx.Cryptography
 		{
 			// Select target CSP
 			var cspParams = new CspParameters();
-#if NET_4_0
+#if NETSTANDARD || NET40_OR_GREATER
 			cspParams.Flags |= CspProviderFlags.CreateEphemeralKey;
 #endif
 

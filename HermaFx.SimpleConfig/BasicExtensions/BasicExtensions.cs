@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -21,8 +21,20 @@ namespace HermaFx.SimpleConfig.BasicExtensions
 
             return type.GetProperty(method.Name.Substring(4), BindingFlags.Instance | BindingFlags.Public);
         }
+		public static bool HasAttribute<TAttribute>(this MemberInfo memberInfo)
+		{
+#if NETSTANDARD1_0
+            return memberInfo
+                .CustomAttributes
+                .Any(a => a.AttributeType == typeof(TAttribute));
+#else
+			return memberInfo
+				.GetCustomAttributes(typeof(TAttribute), inherit: false)
+				.Any();
+#endif
+		}
 
-        internal static void Each<T>(this IEnumerable<T> sequence, Action<T> job)
+		internal static void Each<T>(this IEnumerable<T> sequence, Action<T> job)
         {
             foreach (var obj in sequence)
             {

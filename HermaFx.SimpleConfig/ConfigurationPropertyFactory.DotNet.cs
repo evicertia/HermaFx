@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -17,10 +17,16 @@ namespace HermaFx.SimpleConfig
 
             static DotNetFactory()
             {
-                SetAddElementName = ReflectionHelpers.MakeSetterForPrivateField<ConfigurationProperty, string>("_addElementName");
-                SetRemoveElementName = ReflectionHelpers.MakeSetterForPrivateField<ConfigurationProperty, string>("_removeElementName");
-                SetClearElementName = ReflectionHelpers.MakeSetterForPrivateField<ConfigurationProperty, string>("_clearElementName");
-            }
+				SetAddElementName
+					= ReflectionHelpers.MakeSetterForPrivateField<ConfigurationProperty, string>("_addElementName")						// NetFX
+					?? ReflectionHelpers.MakeSetterForPrivateField<ConfigurationProperty, string>("<AddElementName>k__BackingField");	// .NET5+
+                SetRemoveElementName
+					= ReflectionHelpers.MakeSetterForPrivateField<ConfigurationProperty, string>("_removeElementName")					// NetFX
+					?? ReflectionHelpers.MakeSetterForPrivateField<ConfigurationProperty, string>("<RemoveElementName>k__BackingField");// .NET5+
+				SetClearElementName
+					= ReflectionHelpers.MakeSetterForPrivateField<ConfigurationProperty, string>("_clearElementName")					// NetFX
+					?? ReflectionHelpers.MakeSetterForPrivateField<ConfigurationProperty, string>("<ClearElementName>k__BackingField");	// .NET5+
+			}
 
             public ConfigurationProperty Collection(PropertyInfo propertyInfo, Type elementType)
             {
