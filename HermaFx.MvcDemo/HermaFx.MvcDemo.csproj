@@ -85,7 +85,7 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
     <PackageReference Include="Antlr" Version="3.5.0.2" />
-    <PackageReference Include="bootstrap" Version="3.3.6" />
+    <PackageReference Include="bootstrap" Version="3.4.1" />
     <PackageReference Include="Common.Logging" Version="3.3.1" />
     <PackageReference Include="Common.Logging.Core" Version="3.3.1" />
     <PackageReference Include="FluentBootstrap" Version="3.3.5.3" />
