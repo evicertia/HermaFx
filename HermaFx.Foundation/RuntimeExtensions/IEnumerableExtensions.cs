@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Collections.Generic;
 
 namespace HermaFx
 {
@@ -97,7 +96,7 @@ namespace HermaFx
 		}
 
 		/// <summary>
-		/// Returns an empty enumeration if the <paramref name="source"/> is null. 
+		/// Returns an empty enumeration if the <paramref name="source"/> is null.
 		/// Otherwise, returns the <paramref name="source"/>.
 		/// </summary>
 		/// <nuget id="netfx-System.Collections.Generic.IEnumerable.EmptyIfNull" />
@@ -143,6 +142,63 @@ namespace HermaFx
 		public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
 		{
 			return source.Shuffle(new Random());
+		}
+
+		/// <summary>
+		/// Split the elements of a sequence into chunks of size at most <paramref name="size"/>.
+		/// Taken from: https://github.com/dotnet/runtime/blob/main/src/libraries/System.Linq/src/System/Linq/Chunk.cs
+		/// </summary>
+		/// <remarks>
+		/// Every chunk except the last will be of size <paramref name="size"/>.
+		/// The last chunk will contain the remaining elements and may be of a smaller size.
+		/// </remarks>
+		/// <param name="source">
+		/// An <see cref="IEnumerable{T}"/> whose elements to chunk.
+		/// </param>
+		/// <param name="size">
+		/// Maximum size of each chunk.
+		/// </param>
+		/// <typeparam name="TSource">
+		/// The type of the elements of source.
+		/// </typeparam>
+		/// <returns>
+		/// An <see cref="IEnumerable{T}"/> that contains the elements the input sequence split into chunks of size <paramref name="size"/>.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="source"/> is null.
+		/// </exception>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// <paramref name="size"/> is below 1.
+		/// </exception>
+		public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int size)
+		{
+			Guard.IsNotNull(source, nameof(source));
+			Guard.Against<ArgumentOutOfRangeException>(size < 1, nameof(size));
+
+			using (IEnumerator<T> e = source.GetEnumerator())
+			{
+				if (e.MoveNext())
+				{
+					var chunkBuilder = new List<T>();
+					while (true)
+					{
+						do
+						{
+							chunkBuilder.Add(e.Current);
+						}
+						while (chunkBuilder.Count < size && e.MoveNext());
+
+						yield return chunkBuilder.ToArray();
+
+						if (chunkBuilder.Count < size || !e.MoveNext())
+						{
+							yield break;
+						}
+
+						chunkBuilder.Clear();
+					}
+				}
+			}
 		}
 	}
 }
