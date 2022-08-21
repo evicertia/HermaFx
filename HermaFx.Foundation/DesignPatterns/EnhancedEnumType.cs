@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,10 @@ namespace HermaFx.DesignPatterns
 	{
 		#region Fields
 		private static T[] _entries = GetFields<L>();
+		#endregion
+
+		#region Properties
+		protected static IEnumerable<T> Entries => _entries;
 		#endregion
 
 		#region .ctors
