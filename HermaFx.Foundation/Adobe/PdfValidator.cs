@@ -23,6 +23,7 @@ namespace HermaFx.Adobe
 		private static byte[] PDFBEGINBYTES = new byte[] { 0x25, 0x50, 0x44, 0x46, 0x2d }; // %PDF-
 		private static byte[] PDF12ENDBYTES1 = new byte[] { 0x25, 0x25, 0x45, 0x4F, 0x46, 0x0D, 0x0A }; // %%EOF{CR}{EOL}
 		private static byte[] PDF12ENDBYTES2 = new byte[] { 0x25, 0x25, 0x45, 0x4F, 0x46, 0x0D }; // %%EOF{CR}
+		private static byte[] PDF12ENDBYTES3 = new byte[] { 0x25, 0x25, 0x45, 0x4F, 0x46, 0x0A }; // %%EOF{EOL}
 		private static byte[] PDF13ENDBYTES1 = new byte[] { 0x25, 0x25, 0x45, 0x4F, 0x46, 0x20, 0x0A }; // %%EOF {EOL}
 		private static byte[] PDF14ENDBYTES1 = new byte[] { 0x25, 0x25, 0x45, 0x4F, 0x46, 0x0A }; // %%EOF{EOL}
 		private static byte[] PDF14ENDBYTES2 = new byte[] { 0x25, 0x25, 0x45, 0x4F, 0x46 }; // %%EOF
@@ -30,7 +31,7 @@ namespace HermaFx.Adobe
 
 		private static IEnumerable<byte[]> PDF_EOFS = new[]
 		{
-			PDF12ENDBYTES1, PDF12ENDBYTES2, PDF13ENDBYTES1, PDF14ENDBYTES1, PDF14ENDBYTES2, PDF16ENDBYTES1
+			PDF12ENDBYTES1, PDF12ENDBYTES2, PDF12ENDBYTES3, PDF13ENDBYTES1, PDF14ENDBYTES1, PDF14ENDBYTES2, PDF16ENDBYTES1
 		};
 
 		public static bool IsValid(byte[] bytes, out PdfVersion version, out string errorMessage)
@@ -66,7 +67,8 @@ namespace HermaFx.Adobe
 				version = PdfVersion.Pdf1_2;
 
 				if (!bytes.Skip(bytes.Length - 7).SequenceEqual(PDF12ENDBYTES1)
-					&& !bytes.Skip(bytes.Length - 6).SequenceEqual(PDF12ENDBYTES2))
+					&& !bytes.Skip(bytes.Length - 6).SequenceEqual(PDF12ENDBYTES2)
+					&& !bytes.Skip(bytes.Length - 6).SequenceEqual(PDF12ENDBYTES3))
 				{
 					errorMessage = "PDF-1.2 missing End-Of-File mark.";
 					return false;
