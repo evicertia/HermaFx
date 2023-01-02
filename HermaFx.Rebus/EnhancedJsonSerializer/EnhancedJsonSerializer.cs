@@ -30,7 +30,7 @@ namespace HermaFx.Rebus
 			public const string SerializerVersion = "serializer-version"; //< Header intended for backwards/forwards compatibility
 			public const string MessageType = "message-type";
 		}
-		private const uint SerializerVersion = 230101;
+		private const int SerializerVersion = 230101;
 
 		private readonly JsonMessageSerializer _inner;
 
