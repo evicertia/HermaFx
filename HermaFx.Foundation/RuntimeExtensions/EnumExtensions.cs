@@ -131,5 +131,19 @@ namespace HermaFx
 
 			return defaultValue;
 		}
+
+		public static bool AnyFlag(this Enum @enum, params Enum[] flags)
+		{
+			Guard.IsNotNull(@enum, nameof(@enum));
+			Guard.IsNotNull(flags, nameof(flags));
+
+			foreach (var flag in flags)
+			{
+				if (@enum.HasFlag(flag)) //< Checks if same type.
+					return true;
+			}
+
+			return false;
+		}
 	}
 }
