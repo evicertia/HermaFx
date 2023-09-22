@@ -1,4 +1,5 @@
-﻿/**********************************************************************
+﻿#region License
+/**********************************************************************
  * Copyright (c) 2010, j. montgomery                                  *
  * All rights reserved.                                               *
  *                                                                    *
@@ -32,10 +33,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED*
  * OF THE POSSIBILITY OF SUCH DAMAGE.                                 *
  **********************************************************************/
-using System;
+#endregion
+
 using System.Collections.Generic;
-//using System.Reflection.Emit;
-using System.Text;
 
 using HermaFx.Net.Dns.Enums;
 using HermaFx.Net.Dns.Records;

@@ -1,4 +1,5 @@
-﻿/**********************************************************************
+﻿#region License
+/**********************************************************************
  * Copyright (c) 2010, j. montgomery                                  *
  * All rights reserved.                                               *
  *                                                                    *
@@ -32,6 +33,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED*
  * OF THE POSSIBILITY OF SUCH DAMAGE.                                 *
  **********************************************************************/
+#endregion
 
 namespace HermaFx.Net.Dns.Enums
 {
