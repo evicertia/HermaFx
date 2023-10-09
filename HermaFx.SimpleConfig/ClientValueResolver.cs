@@ -26,9 +26,20 @@ namespace HermaFx.SimpleConfig
             var obj = _source[property];
             if (obj is IConfigValue)
             {
-                return
-                    new ConcreteConfiguration((IConfigValue)obj).ClientValue(
-                        _sourceInterfaceType.GetProperty(property.Name).PropertyType);
+                var accessor = _sourceInterfaceType.GetProperty(property.Name);
+                if (accessor == null) //< ie. IEnumerable<> defined on impl interface?
+                {
+                    foreach (var iface in _sourceInterfaceType.GetInterfaces())
+                    {
+                        accessor = iface.GetProperty(property.Name);
+                        if (accessor != null) break;
+                    }
+
+                    if (accessor == null)
+                        throw new ArgumentOutOfRangeException($"Could not load accessor for property {property.Name}");
+                }
+
+                return new ConcreteConfiguration((IConfigValue)obj).ClientValue(accessor.PropertyType);
             }
             else if (obj == null && property.PropertyType.IsValueType)
             {

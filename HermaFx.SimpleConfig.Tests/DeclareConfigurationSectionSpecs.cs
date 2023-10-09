@@ -39,6 +39,9 @@ namespace HermaFx.SimpleConfig.Tests
 
     public interface IDeclareAppConfiguration
     {
+        string Text { get; set; }
+        IEnumerable<string> Texts { get; set; }
+
         int IntProperty { get; set; }
         double DoubleProperty { get; set; }
     }

@@ -97,6 +97,12 @@ namespace HermaFx.SimpleConfig.Tests
     {
         It should_read_custom_children_section_properly =
             () => section.CustomChildren.ShouldHaveCount(3);
+
+        It should_have_two_with_text_as_null = () => section.CustomChildren.Where(x => x.Text == null).ShouldHaveCount(2);
+
+        It should_have_one_with_text_populated = () => section.CustomChildren.Where(x => x.Text != null).ShouldHaveCount(1);
+
+        It should_have_all_with_texts_as_null = () => section.CustomChildren.Where(x => x.Texts == null).ShouldHaveCount(3);
     }
 
 
