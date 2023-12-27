@@ -13,7 +13,7 @@ namespace HermaFx.DataAnnotations
 		public Type ElementType { get; }
 		public DistinctElementsAttribute(string property)
 		{
-			ErrorMessage = "The property {0} must be unique in the collection.";
+			ErrorMessage = "The property {0} must be unique in the {1} collection.";
 			UniqueProperty = property;
 		}
 
@@ -66,7 +66,7 @@ namespace HermaFx.DataAnnotations
 				return ValidationResult.Success;
 			}
 
-			return new ValidationResult(FormatErrorMessage(UniqueProperty));
+			return new ValidationResult(string.Format(ErrorMessage, UniqueProperty, context.MemberName));
 		}
 	}
 }

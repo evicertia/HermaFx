@@ -1,5 +1,5 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace HermaFx.DataAnnotations
@@ -22,6 +22,8 @@ namespace HermaFx.DataAnnotations
 			[DistinctElements("Property1")]
 			public IEnumerable<_Item> Values { get; set; }
 
+			[DistinctElements("Property1", ErrorMessage = "New error message")]
+			public IEnumerable<_Item> ValuesErrorMessageChanged { get; set; }
 		}
 
 		[Test]
@@ -36,11 +38,13 @@ namespace HermaFx.DataAnnotations
 			};
 
 			Assert.That(ExtendedValidator.IsValid(model), Is.True);
+			Assert.DoesNotThrow(() => ExtendedValidator.EnsureIsValid(model));
 		}
 
 		[Test]
 		public void IsNotValidTest()
 		{
+			//setup
 			var model = new Model();
 
 			model.Values = new List<Model._Item>()
@@ -49,7 +53,17 @@ namespace HermaFx.DataAnnotations
 					new Model._Item() { Property1 = "hello", Property2 = "world" },
 			};
 
+			//asserts
 			Assert.That(ExtendedValidator.IsValid(model), Is.False);
+			var exception = Assert.Throws<AggregateValidationException>(
+				() => ExtendedValidator.EnsureIsValid(model),
+				"Object of type Model has some invalid values."
+			);
+			Assert.That(exception.ValidationResults.Count, Is.EqualTo(1));
+			Assert.That(
+				exception.ValidationResults.ElementAt(0).ErrorMessage,
+				Is.EqualTo("The property Property1 must be unique in the Values collection.")
+			);
 		}
 
 		[Test]
@@ -64,6 +78,7 @@ namespace HermaFx.DataAnnotations
 			};
 
 			Assert.That(ExtendedValidator.IsValid(model), Is.True);
+			Assert.DoesNotThrow(() => ExtendedValidator.EnsureIsValid(model));
 		}
 
 		[Test]
@@ -78,6 +93,38 @@ namespace HermaFx.DataAnnotations
 			};
 
 			Assert.That(ExtendedValidator.IsValid(model), Is.False);
+			var exception = Assert.Throws<AggregateValidationException>(
+				() => ExtendedValidator.EnsureIsValid(model),
+				"Object of type Model has some invalid values."
+			);
+			Assert.That(exception.ValidationResults.Count, Is.EqualTo(1));
+			Assert.That(
+				exception.ValidationResults.ElementAt(0).ErrorMessage,
+				Is.EqualTo("The property Property1 must be unique in the Values collection.")
+			);
+		}
+
+		[Test]
+		public void IsNotValidAndErrorMessageIsChanged()
+		{
+			var model = new Model();
+
+			model.ValuesErrorMessageChanged = new List<Model._Item>()
+			{
+					new Model._Item() { Property1 = "hello", Property2 = "world" },
+					new Model._Item() { Property1 = "hello", Property2 = "world" },
+			};
+
+			Assert.That(ExtendedValidator.IsValid(model), Is.False);
+			var exception = Assert.Throws<AggregateValidationException>(
+				() => ExtendedValidator.EnsureIsValid(model),
+				"Object of type Model has some invalid values."
+			);
+			Assert.That(exception.ValidationResults.Count, Is.EqualTo(1));
+			Assert.That(
+				exception.ValidationResults.ElementAt(0).ErrorMessage,
+				Is.EqualTo("New error message")
+			);
 		}
 
 	}
