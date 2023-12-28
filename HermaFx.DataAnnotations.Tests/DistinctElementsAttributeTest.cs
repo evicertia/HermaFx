@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
@@ -24,6 +25,12 @@ namespace HermaFx.DataAnnotations
 
 			[DistinctElements("Property1", ErrorMessage = "New error message")]
 			public IEnumerable<_Item> ValuesErrorMessageChanged { get; set; }
+		}
+
+		public class ModelWithWrongProperty
+		{
+			[DistinctElements("Property")]
+			public int Value { get; set; }
 		}
 
 		[Test]
@@ -127,5 +134,16 @@ namespace HermaFx.DataAnnotations
 			);
 		}
 
+		[Test]
+		public void InvalidOperationWithWrongProperty()
+		{
+			var model = new ModelWithWrongProperty();
+			model.Value = 1;
+
+			var exception = Assert.Throws<InvalidOperationException>(
+				() => ExtendedValidator.EnsureIsValid(model),
+				"The property being validated must be an IEnumerable."
+			);
+		}
 	}
 }

@@ -66,7 +66,11 @@ namespace HermaFx.DataAnnotations
 				return ValidationResult.Success;
 			}
 
-			return new ValidationResult(string.Format(ErrorMessage, UniqueProperty, context.MemberName));
+			return new ValidationResult(FormatErrorMessage(context.MemberName));
+		}
+		public override string FormatErrorMessage(string name)
+		{
+			return string.Format(ErrorMessageString, UniqueProperty, name);
 		}
 	}
 }
