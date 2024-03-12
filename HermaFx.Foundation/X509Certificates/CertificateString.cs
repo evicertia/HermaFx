@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+
+using HermaFx.Utils;
 
 using SysX509 = System.Security.Cryptography.X509Certificates;
 
@@ -171,6 +172,14 @@ namespace HermaFx.X509Certificates
 				// See: https://github.com/mono/mono/commit/b52404b35394c9941b521622564e3dc061c95118
 				if (!string.IsNullOrEmpty(this.KeyContainerName))
 				{
+					// RSACryptoServiceProvider's ctor accepting CspParameters is only
+					// supported on windows or mono.. (ie. not in net-core linux/osx, etc.)
+					// As KeyContainerName support was just a workaround for an old mono bug
+					// where certificate selected may not reference it's privatekey..
+					// we can just stop supporting KCN on newer .net environments.
+					if (!EnvironmentHelper.RunningOnWindows && !EnvironmentHelper.RunningOnMono)
+						throw new InvalidOperationException($"{nameof(this.KeyContainerName)} is not supported in non-windows OS without using Mono. Value: {this.KeyContainerName}");
+
 					var csp = new CspParameters();
 					csp.KeyContainerName = this.KeyContainerName;
 					csp.Flags = CspProviderFlags.UseExistingKey;
