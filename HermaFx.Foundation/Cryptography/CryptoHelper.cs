@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Text;
 using System.Security.Cryptography;
+using System.Text;
+
+using HermaFx.Utils;
 
 namespace HermaFx.Cryptography
 {
@@ -79,17 +81,28 @@ namespace HermaFx.Cryptography
 		#region Common RSA methods
 		private static TResult ExecUsingEphemeralRsaCsp<TResult>(RSAParameters keyParameters, Func<RSACryptoServiceProvider,TResult> action)
 		{
-			// Select target CSP
-			var cspParams = new CspParameters();
-#if NETSTANDARD || NET40_OR_GREATER
-			cspParams.Flags |= CspProviderFlags.CreateEphemeralKey;
-#endif
-
-			using (var rsa = new RSACryptoServiceProvider(cspParams))
+			if (EnvironmentHelper.RunningOnWindows || EnvironmentHelper.RunningOnMono)
 			{
-				rsa.ImportParameters(keyParameters);
-				rsa.PersistKeyInCsp = false;
-				return action(rsa);
+				// Select target CSP
+				var cspParams = new CspParameters();
+#if NETSTANDARD || NET40_OR_GREATER
+				cspParams.Flags |= CspProviderFlags.CreateEphemeralKey;
+#endif
+				using (var rsa = new RSACryptoServiceProvider(cspParams))
+				{
+					rsa.ImportParameters(keyParameters);
+					rsa.PersistKeyInCsp = false;
+					return action(rsa);
+				}
+			}
+			else
+			{
+				using (var rsa = new RSACryptoServiceProvider())
+				{
+					rsa.ImportParameters(keyParameters);
+					rsa.PersistKeyInCsp = false;
+					return action(rsa);
+				}
 			}
 		}
 
@@ -102,25 +115,45 @@ namespace HermaFx.Cryptography
 		/// </returns>
 		public static RSAParameters GenerateRsaKeyPair(int keySize)
 		{
-			var cspParams = new CspParameters() { };
+			if (EnvironmentHelper.RunningOnWindows || EnvironmentHelper.RunningOnMono)
+			{
+				var cspParams = new CspParameters() { };
 
 #if NET_4_0
 			cspParams.Flags |= CspProviderFlags.CreateEphemeralKey;
 #endif
 
-			using (var rsa = new RSACryptoServiceProvider(keySize, cspParams))
-			{
-				try
+				using (var rsa = new RSACryptoServiceProvider(keySize, cspParams))
 				{
-					// Do something with the key...
-					// Encrypt, export, etc.
-				}
-				finally
-				{
-					rsa.PersistKeyInCsp = false;
-				}
+					try
+					{
+						// Do something with the key...
+						// Encrypt, export, etc.
+					}
+					finally
+					{
+						rsa.PersistKeyInCsp = false;
+					}
 
-				return rsa.ExportParameters(true);
+					return rsa.ExportParameters(true);
+				}
+			}
+			else
+			{
+				using (var rsa = new RSACryptoServiceProvider(keySize))
+				{
+					try
+					{
+						// Do something with the key...
+						// Encrypt, export, etc.
+					}
+					finally
+					{
+						rsa.PersistKeyInCsp = false; //< XXX: This is useless in Unix, but we maintain for retro-compatibility with legacy code "just in case"...
+					}
+
+					return rsa.ExportParameters(true);
+				}
 			}
 		}
 

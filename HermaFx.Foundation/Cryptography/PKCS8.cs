@@ -33,6 +33,8 @@ using System;
 using System.Collections;
 using System.Security.Cryptography;
 
+using HermaFx.Utils;
+
 namespace HermaFx.Cryptography
 {
 	internal sealed class PKCS8
@@ -295,19 +297,24 @@ namespace HermaFx.Cryptography
 				}
 				catch (CryptographicException)
 				{
-#if MONOTOUCH
-					// there's no machine-wide store available for iOS so we can drop the dependency on
-					// CspParameters (which drops other things, like XML key persistance, unless used elsewhere)
-					throw;
-#else
-					// this may cause problem when this code is run under
-					// the SYSTEM identity on Windows (e.g. ASP.NET). See
-					// http://bugzilla.ximian.com/show_bug.cgi?id=77559
-					CspParameters csp = new CspParameters();
-					csp.Flags = CspProviderFlags.UseMachineKeyStore;
-					rsa = new RSACryptoServiceProvider(csp);
+					// RSACryptoServiceProvider's ctor accepting CspParameters is only
+					// supported on windows or mono.. (ie. not in net-core linux/osx, etc.)
+					// Also, UseMachineKeyStore does not have any effect on .NET Core running under linux (https://github.com/dotnet/runtime/blob/07b705b6c3a826f4517428a5159a992f825f18fc/src/libraries/System.Security.Cryptography/src/System/Security/Cryptography/RSACryptoServiceProvider.Unix.cs#L332)
+					if (EnvironmentHelper.RunningOnWindows || EnvironmentHelper.RunningOnMono)
+					{
+						// this may cause problem when this code is run under
+						// the SYSTEM identity on Windows (e.g. ASP.NET). See
+						// http://bugzilla.ximian.com/show_bug.cgi?id=77559
+						CspParameters csp = new CspParameters();
+						csp.Flags = CspProviderFlags.UseMachineKeyStore;
+						rsa = new RSACryptoServiceProvider(csp);
+					}
+					else
+					{
+						rsa = new RSACryptoServiceProvider();
+					}
+
 					rsa.ImportParameters(param);
-#endif
 				}
 				return rsa;
 			}
