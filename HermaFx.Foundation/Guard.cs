@@ -105,7 +105,7 @@ namespace HermaFx
 		/// <typeparam name="TType">The Type that the <paramref name="instance"/> is expected to be.</typeparam>
 		/// <param name="instance">The object instance whose type is checked.</param>
 		/// <param name="message">The message of the <see cref="InvalidOperationException"/> exception.</param>
-		public static void TypeOf<TType> (object instance, string message, params object[] args)
+		public static void TypeOf<TType>(object instance, string message, params object[] args)
 		{
 			if (!(instance is TType))
 			{
@@ -201,5 +201,21 @@ namespace HermaFx
 			}
 		}
 
+		public static string ThrowIfNullOrWhiteSpace(this string @this, string message, params object[] args)
+		{
+			if (string.IsNullOrWhiteSpace(@this))
+				throw new ArgumentNullException(args != null ? string.Format(message, args) : message);
+
+			return @this;
+		}
+
+		public static T ThrowIfDefault<T>(this T @this, string message, params object[] args)
+			where T : struct
+		{
+			if (Equals(@this, default))
+				throw new ArgumentNullException(args != null ? string.Format(message, args) : message);
+
+			return @this;
+		}
 	}
 }

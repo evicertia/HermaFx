@@ -7,7 +7,7 @@ namespace HermaFx.DataAnnotations
 	/// <summary>
 	/// Can be used with parameter target..
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
+	[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
 	public class MinAttribute : ValidationAttribute
 	{
 		#region Fields

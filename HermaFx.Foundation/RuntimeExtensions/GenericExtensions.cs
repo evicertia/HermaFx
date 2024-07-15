@@ -135,22 +135,5 @@ namespace HermaFx
 
 			return source;
 		}
-
-		public static string ThrowIfNullOrWhiteSpace(this string @this, string message, params object[] args)
-		{
-			if (string.IsNullOrWhiteSpace(@this))
-				throw new ArgumentNullException(args != null ? string.Format(message, args) : message);
-
-			return @this;
-		}
-
-		public static T ThrowIfDefault<T>(this T @this, string message, params object[] args)
-			where T : struct
-		{
-			if (Equals(@this, default))
-				throw new ArgumentNullException(args != null ? string.Format(message, args) : message);
-
-			return @this;
-		}
 	}
 }
