@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations;
-
-using HermaFx;
 
 namespace HermaFx.DataAnnotations
 {
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+	[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 	public class NotDefaultAttribute : ValidationAttribute
 	{
 		private const string _defaultErrorMessage = "The field {0} requires a non-default value";

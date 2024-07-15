@@ -42,7 +42,7 @@ namespace HermaFx
 		/// <param name="item">The item.</param>
 		/// <param name="lambda">The lambda.</param>
 		/// <returns></returns>
-		public static T IfNotNull<T, U>(this U item, Func<U, T> lambda) 
+		public static T IfNotNull<T, U>(this U item, Func<U, T> lambda)
 			where U : class
 		{
 			if (item == null)
