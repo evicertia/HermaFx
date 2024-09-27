@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace HermaFx.Utils
 {
-	internal static class AsyncHelpers
+	public static class AsyncHelpers
 	{
 		#region Inner Types
 
