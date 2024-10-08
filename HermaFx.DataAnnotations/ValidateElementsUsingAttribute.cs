@@ -45,6 +45,14 @@ namespace HermaFx.DataAnnotations
 
 		#endregion
 
+		protected virtual void CheckTargetType(object value, string memberName)
+		{
+			if (!(value is IEnumerable))
+				throw new ValidationException($"Property {memberName} is not enumerable.");
+		}
+
+		protected virtual IEnumerable GetEnumerable(object value) => value as IEnumerable;
+
 		private IEnumerable<ValidationResult> ValidateClass(object value, ValidationContext context, IEnumerable<ValidationAttribute> attributes)
 		{
 			var results = new List<ValidationResult>();
@@ -107,10 +115,7 @@ namespace HermaFx.DataAnnotations
 				return ValidationResult.Success;
 			}
 
-			if (!(value is IEnumerable))
-			{
-				throw new ValidationException("Property {0} is not enumerable.".Format(context.MemberName as object));
-			}
+			CheckTargetType(value, context.MemberName);
 
 			var property = MetadataType.GetRuntimeProperties().SingleOrDefault(x => x.Name == Property);
 
@@ -125,7 +130,7 @@ namespace HermaFx.DataAnnotations
 			if (attributes.Any())
 			{
 				var idx = 0;
-				var valueAsEnumerable = value as IEnumerable;
+				var valueAsEnumerable = GetEnumerable(value);
 				foreach (var item in valueAsEnumerable)
 				{
 					var idx2 = idx++;

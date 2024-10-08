@@ -7,23 +7,23 @@ using NUnit.Framework;
 namespace HermaFx.DataAnnotations
 {
 	[TestFixture]
-	public class ValidateElementsUsingTests
+	public class ValidateKeysUsingTests
 	{
 		public class TestDtoMetadata
 		{
-			[MinLength(5)]
-			private string StringProperty { get; set; }
+			[Regex(@"^[a-z]{4,10}$")]
+			private string KeyProperty { get; set; }
 		}
 
 		public class TestDto
 		{
-			[ValidateElementsUsing(typeof(TestDtoMetadata), "StringProperty")]
-			public IEnumerable<string> StringList { get; set; }
+			[ValidateKeysUsing(typeof(TestDtoMetadata), "KeyProperty")]
+			public Dictionary<string, string> TestProperty { get; set; }
 		}
 
 		public class BadTypeDto
 		{
-			[ValidateElementsUsing(typeof(TestDtoMetadata), "StringProperty")]
+			[ValidateKeysUsing(typeof(TestDtoMetadata), "KeyProperty")]
 			public TestDto TestProperty { get; set; }
 		}
 
@@ -32,23 +32,21 @@ namespace HermaFx.DataAnnotations
 		{
 			var @null = new TestDto()
 			{
-				StringList = null
+				TestProperty = null
 			};
 			var empty = new TestDto()
 			{
-				StringList = new string[] { }
+				TestProperty = new Dictionary<string, string>()
 			};
 			var good = new TestDto()
 			{
-				StringList = new[] { "abcde" }
+				TestProperty = new Dictionary<string, string>(new[] { new KeyValuePair<string, string>("good", "dummy") })
 			};
 			var bad = new TestDto()
 			{
-				StringList = new[] { "a" }
+				TestProperty = new Dictionary<string, string>(new[] { new KeyValuePair<string, string>("bad", "dummy") })
 			};
 
-			ExtendedValidator.EnsureIsValid(@null);
-			ExtendedValidator.EnsureIsValid(empty);
 			ExtendedValidator.EnsureIsValid(good);
 			Assert.Throws<AggregateValidationException>(() => ExtendedValidator.EnsureIsValid(bad));
 		}
@@ -58,7 +56,7 @@ namespace HermaFx.DataAnnotations
 		{
 			var good = new TestDto()
 			{
-				StringList = new[] { "abcde" }
+				TestProperty = new Dictionary<string, string>(new[] { new KeyValuePair<string, string>("success", "dummy") })
 			};
 
 			var results = new List<ValidationResult>();
@@ -66,7 +64,7 @@ namespace HermaFx.DataAnnotations
 		}
 
 		[Test]
-		public void BadTypeNullTest()
+		public void ValidateBadTypeTest()
 		{
 			var ignore = new BadTypeDto()
 			{
@@ -77,13 +75,12 @@ namespace HermaFx.DataAnnotations
 			{
 				TestProperty = new TestDto()
 				{
-					StringList = new[] { "aaaaaa" }
+					TestProperty = new Dictionary<string, string>(new[] { new KeyValuePair<string, string>("ïgnore", "ïgnore") })
 				}
 			};
 
 			ExtendedValidator.EnsureIsValid(ignore);
 			Assert.Throws<ValidationException>(() => ExtendedValidator.EnsureIsValid(bad));
 		}
-
 	}
 }
