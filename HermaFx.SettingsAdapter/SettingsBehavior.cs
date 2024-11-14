@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Configuration;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Reflection;
+using System.Threading;
 
 using Castle.Components.DictionaryAdapter;
 
+using HermaFx.Threading;
+
 using PropertyDescriptor = Castle.Components.DictionaryAdapter.PropertyDescriptor;
-using System.Globalization;
 
 namespace HermaFx.Settings
 {
@@ -95,6 +97,9 @@ namespace HermaFx.Settings
 
 		#region IDictionaryPropertyGetter
 
+		private readonly IDictionary<string, object> _valuesCache = new Dictionary<string, object>();
+		private readonly ReaderWriterLockSlim _valuesCacheLock = new ReaderWriterLockSlim();
+
 		private static bool IsRequired(PropertyDescriptor property, bool ifExists)
 		{
 			return property.Annotations.Any(x => x is RequiredAttribute) && ifExists == false;
@@ -107,7 +112,7 @@ namespace HermaFx.Settings
 				: value == null;
 		}
 
-		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, object storedValue,
+		private object _GetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, object storedValue,
 				PropertyDescriptor descriptor, bool ifExists)
 		{
 			var attr = descriptor.Property.GetCustomAttribute<SettingsAttribute>();
@@ -163,6 +168,34 @@ namespace HermaFx.Settings
 			}
 #endif
 			return storedValue;
+		}
+
+		public object GetPropertyValue(
+			IDictionaryAdapter dictionaryAdapter,
+			string key,
+			object storedValue,
+			PropertyDescriptor descriptor,
+			bool ifExists
+		)
+		{
+			using (_valuesCacheLock.GetReadOnlyLock())
+			{
+				if (_valuesCache.TryGetValue(key, out var cachedValue))
+					return cachedValue;
+			}
+
+			using (_valuesCacheLock.GetReadLock())
+			{
+				if (_valuesCache.TryGetValue(key, out var cachedValue))
+				{
+					return cachedValue;
+				}
+				else
+				{
+					using (_valuesCacheLock.GetWriteLock())
+						return _valuesCache[key] = _GetPropertyValue(dictionaryAdapter, key, storedValue, descriptor, ifExists);
+				}
+			}
 		}
 
 		#endregion
