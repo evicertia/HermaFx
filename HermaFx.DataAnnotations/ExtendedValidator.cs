@@ -70,7 +70,7 @@ namespace HermaFx.DataAnnotations
 				// Get the value assigned to the property and recurse into it
 				var value2 = property.GetValue(value, null);
 				var reqattrs = property.GetCustomAttributes<RequiredAttribute>();
-				var newctx = new ValidationContext(value2 ?? "", context.Items)
+				var newctx = new ValidationContext(value2 ?? "", context, context.Items)
 				{
 					DisplayName = context.DisplayName.IfNotNull(x => string.Join(":", x, property.Name)) ?? property.Name,
 					MemberName = context.MemberName.IfNotNull(x => string.Join(".", x, property.Name)) ?? property.Name
