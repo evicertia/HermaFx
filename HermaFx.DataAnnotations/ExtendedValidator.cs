@@ -188,9 +188,10 @@ namespace HermaFx.DataAnnotations
 		/// If <c>true</c>, evaluates all the properties, otherwise just checks that
 		/// ones marked with <see cref="RequiredAttribute"/> are not null.
 		/// </param>
+		/// <param name="serviceProvider">The service provider.</param>
 		/// <returns></returns>
 		/// <exception cref="System.NotImplementedException"></exception>
-		public static IEnumerable<ValidationResult> Validate(object obj, bool validateAllProperties)
+		public static IEnumerable<ValidationResult> Validate(object obj, bool validateAllProperties, IServiceProvider serviceProvider)
 		{
 			var items = CreateContextItems(validateAllProperties);
 			var context = new ValidationContext(obj, serviceProvider: null, items: items);
@@ -213,10 +214,51 @@ namespace HermaFx.DataAnnotations
 		/// Determines whether the specified object is valid and returns an list of ValidationResults.
 		/// </summary>
 		/// <param name="obj">The object.</param>
+		/// <param name="validateAllProperties">
+		/// If <c>true</c>, evaluates all the properties, otherwise just checks that
+		/// ones marked with <see cref="RequiredAttribute"/> are not null.
+		/// </param>
+		/// <returns></returns>
+		/// <exception cref="System.NotImplementedException"></exception>
+		public static IEnumerable<ValidationResult> Validate(object obj, bool validateAllProperties)
+		{
+			return Validate(obj, validateAllProperties, null);
+		}
+
+		/// <summary>
+		/// Determines whether the specified object is valid and returns an list of ValidationResults.
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		/// <param name="serviceProvider">The service provider.</param>
+		/// <returns></returns>
+		public static IEnumerable<ValidationResult> Validate(object obj, IServiceProvider serviceProvider)
+		{
+			return Validate(obj, true, serviceProvider);
+		}
+
+		/// <summary>
+		/// Determines whether the specified object is valid and returns an list of ValidationResults.
+		/// </summary>
+		/// <param name="obj">The object.</param>
 		/// <returns></returns>
 		public static IEnumerable<ValidationResult> Validate(object obj)
 		{
-			return Validate(obj, true);
+			return Validate(obj, true, null);
+		}
+
+		/// <summary>
+		/// Determines whether the specified object passes validation without errors.
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		/// <param name="validateAllProperties">
+		/// If <c>true</c>, evaluates all the properties, otherwise just checks that
+		/// ones marked with <see cref="RequiredAttribute"/> are not null.
+		/// </param>
+		/// <param name="serviceProvider">The service provider.</param>
+		/// <returns></returns>
+		public static bool IsValid(object obj, bool validateAllProperties, IServiceProvider serviceProvider)
+		{
+			return !Validate(obj, validateAllProperties, serviceProvider).Any();
 		}
 
 		/// <summary>
@@ -251,16 +293,42 @@ namespace HermaFx.DataAnnotations
 		/// If <c>true</c>, evaluates all the properties, otherwise just checks that
 		/// ones marked with <see cref="RequiredAttribute"/> are not null.
 		/// </param>
+		/// <param name="serviceProvider">The service provider.</param>
 		/// <exception cref="AggregateValidationException">Validation failed</exception>
-		public static void EnsureIsValid(object obj, bool validateAllProperties)
+		public static void EnsureIsValid(object obj, bool validateAllProperties, IServiceProvider serviceProvider)
 		{
-			var results = Validate(obj, validateAllProperties);
+			var results = Validate(obj, validateAllProperties, serviceProvider);
 
 			if (results.Any() && results.First() != ValidationResult.Success)
 			{
 				var type = (obj ?? new object()).GetType();
 				throw AggregateValidationException.CreateFor(type, results);
 			}
+		}
+
+		/// <summary>
+		/// Ensures the object is valid.
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		/// <param name="validateAllProperties">
+		/// If <c>true</c>, evaluates all the properties, otherwise just checks that
+		/// ones marked with <see cref="RequiredAttribute"/> are not null.
+		/// </param>
+		/// <exception cref="AggregateValidationException">Validation failed</exception>
+		public static void EnsureIsValid(object obj, bool validateAllProperties)
+		{
+			EnsureIsValid(obj, validateAllProperties, null);
+		}
+
+		/// <summary>
+		/// Ensures the object is valid.
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		/// <param name="serviceProvider">The service provider.</param>
+		/// <exception cref="AggregateValidationException">Validation failed</exception>
+		public static void EnsureIsValid(object obj, IServiceProvider serviceProvider)
+		{
+			EnsureIsValid(obj, true, serviceProvider);
 		}
 
 		/// <summary>
