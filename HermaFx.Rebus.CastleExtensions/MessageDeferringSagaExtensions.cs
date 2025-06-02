@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using Castle.Windsor;
 using Castle.MicroKernel.Registration;
+using Castle.Windsor;
 
 using Rebus;
-using Rebus.Configuration;
 using Rebus.Castle.Windsor;
+using Rebus.Configuration;
 
 namespace HermaFx.Rebus
 {
@@ -24,7 +20,8 @@ namespace HermaFx.Rebus
 		public static RebusSagasConfigurer WithDeferredLocking(
 			this RebusSagasConfigurer configurer,
 			TimeSpan lockedSagasDeferInterval,
-			Func<Exception, bool> sagaLockedExceptionFilter
+			Func<Exception, bool> sagaLockedExceptionFilter,
+			Action<IBus, TimeSpan, object> deferCallback = null
 			)
 		{
 			var container = GetContainer(configurer.Backbone.ActivateHandlers);
@@ -34,7 +31,8 @@ namespace HermaFx.Rebus
 				Component.For<MessageDeferringSagaSettings>().Instance(
 					new MessageDeferringSagaSettings()
 					{
-						LockedSagasDeferInterval = lockedSagasDeferInterval
+						LockedSagasDeferInterval = lockedSagasDeferInterval,
+						DeferCallback = deferCallback
 					})
 			);
 
