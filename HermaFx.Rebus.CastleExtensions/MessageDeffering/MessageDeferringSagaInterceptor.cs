@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Reflection;
+
+using Castle.DynamicProxy;
 
 using HermaFx.Logging;
 
 using Rebus;
 using Rebus.Shared;
-
-using Castle.DynamicProxy;
 
 namespace HermaFx.Rebus
 {
@@ -26,13 +26,17 @@ namespace HermaFx.Rebus
 		private readonly ConcurrentDictionary<Type, PropertyInfo> _sagaDataCache = new ConcurrentDictionary<Type, PropertyInfo>();
 
 		private readonly IBus _bus;
-		private MessageDeferringSagaSettings _settings;
+		private readonly MessageDeferringSagaSettings _settings;
+		private readonly Action<IBus, TimeSpan, object> _deferCallback;
 
 		public MessageDeferringSagaInterceptor(IBus bus, MessageDeferringSagaSettings settings)
 		{
 			_bus = bus.ThrowIfNull(nameof(bus));
 			_settings = settings;
+			_deferCallback = settings?.DeferCallback ?? Defer;
 		}
+
+		private static void Defer(IBus bus, TimeSpan delay, object message) => bus.Defer(delay, message);
 
 		private bool IsLockedSaga(Saga saga)
 		{
@@ -82,7 +86,7 @@ namespace HermaFx.Rebus
 					}
 				}
 
-				_bus.Defer(_settings.LockedSagasDeferInterval, message);
+				_deferCallback(_bus, _settings.LockedSagasDeferInterval, message);
 
 				MessageContext.GetCurrent().Abort();
 
