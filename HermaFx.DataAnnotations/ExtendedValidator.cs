@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
+using HermaFx.Diagnostics;
+
 namespace HermaFx.DataAnnotations
 {
 	public static class ExtendedValidator
@@ -44,6 +46,13 @@ namespace HermaFx.DataAnnotations
 			Validator.TryValidateValue(value, context, results, attributes);
 
 			return results;
+		}
+
+		private static ValidationResult CreateValidationResult(ValidationResult item, string parentName)
+		{
+			var mnames = item.MemberNames ?? Enumerable.Empty<string>();
+			mnames = mnames.Select(x => string.Join(".", parentName, x)).ToArray();
+			return new ValidationResult(item.ErrorMessage, mnames);
 		}
 
 		private static IEnumerable<ValidationResult> ValidateProperties(object value, ValidationContext context)
@@ -111,12 +120,17 @@ namespace HermaFx.DataAnnotations
 						{
 							foreach (var result in results2)
 							{
-								var mnames = (result.MemberNames ?? Enumerable.Empty<string>());
-								mnames = mnames.Select(x => string.Join(".", context.MemberName, x)).ToArray();
-
-								// FIXME: Handle AggregateValidationResults too?
-
-								results.Add(new ValidationResult(result.ErrorMessage, mnames));
+								if (result is AggregateValidationResult aggregateResult)
+								{
+									foreach (var item in aggregateResult.Flatten())
+									{
+										results.Add(CreateValidationResult(item, context.MemberName));
+									}
+								}
+								else
+								{
+									results.Add(CreateValidationResult(result, context.MemberName));
+								}
 							}
 						}
 						else

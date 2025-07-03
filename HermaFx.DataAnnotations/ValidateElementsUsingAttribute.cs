@@ -16,8 +16,13 @@ namespace HermaFx.DataAnnotations
 		#endregion
 
 		#region Public Properties
+		public static MemberTypes DefaultMemberTypes { get; } = MemberTypes.Property;
+		public static BindingFlags DefaultBindingFlags { get; } = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance;
+
 		public Type MetadataType { get; private set; }
 		public string Property { get; private set; }
+		public MemberTypes MemberTypes { get; }
+		public BindingFlags BindingFlags { get; }
 
 		/// <summary>
 		/// A flag indicating that the attribute requires a non-null <see cref=System.ComponentModel.DataAnnotations.ValidationContext /> to perform validation.
@@ -37,10 +42,21 @@ namespace HermaFx.DataAnnotations
 			: this(metadataType, propertyName, DefaultErrorMessage) { }
 
 		public ValidateElementsUsingAttribute(Type metadataType, string propertyName, string errorMessage)
+			: this(metadataType, propertyName, DefaultBindingFlags, DefaultMemberTypes, errorMessage)
+		{
+		}
+		public ValidateElementsUsingAttribute(Type metadataType, string propertyName, BindingFlags bindingFlags, MemberTypes memberTypes)
+			: this(metadataType, propertyName, bindingFlags, memberTypes, DefaultErrorMessage)
+		{
+		}
+
+		public ValidateElementsUsingAttribute(Type metadataType, string propertyName, BindingFlags bindingFlags, MemberTypes memberTypes, string errorMessage)
 			: base(() => errorMessage)
 		{
 			MetadataType = metadataType;
 			Property = propertyName;
+			BindingFlags = bindingFlags;
+			MemberTypes = memberTypes;
 		}
 
 		#endregion
@@ -60,6 +76,13 @@ namespace HermaFx.DataAnnotations
 
 			return results;
 		}
+
+		protected virtual MemberInfo GetMember(string name)
+		{
+			var member = MetadataType.GetMember(name, BindingFlags).SingleOrDefault(x => MemberTypes.HasFlag(x.MemberType));
+			return member;
+		}
+
 
 		private IEnumerable<ValidationResult> ValidateProperties(object value, ValidationContext context)
 		{
@@ -117,14 +140,14 @@ namespace HermaFx.DataAnnotations
 
 			CheckTargetType(value, context.MemberName);
 
-			var property = MetadataType.GetRuntimeProperties().SingleOrDefault(x => x.Name == Property);
+			var member = GetMember(Property);
 
-			if (property == null)
+			if (member == null)
 			{
 				throw new ValidationException("Metadata Object of type {0} is missing property: {1}".Format(MetadataType.FullName as object, Property));
 			}
 
-			var attributes = property.GetCustomAttributes<ValidationAttribute>(true);
+			var attributes = member.GetCustomAttributes<ValidationAttribute>(true);
 			var results = new List<ValidationResult>();
 
 			if (attributes.Any())
