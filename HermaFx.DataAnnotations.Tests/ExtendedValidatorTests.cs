@@ -1,7 +1,8 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 
 using NUnit.Framework;
 
@@ -12,11 +13,25 @@ namespace HermaFx.DataAnnotations
 	{
 		public class InnerDto
 		{
+			private const BindingFlags BindingFlagsPrivateField = BindingFlags.NonPublic | BindingFlags.Instance;
+			private const MemberTypes MemberTypesPrivateField = MemberTypes.Field;
+
+			[MaxLength(10)]
+			[RegularExpression("^[a-zA-Z0-9]+$")]
+			private string Metadata;
+
 			[Required]
 			public string Field { get; set; }
 
 			[MaxLength(10)]
+			[RegularExpression("^[a-zA-Z0-9]+$")]
 			public string Field2 { get; set; }
+
+			[ValidateUsing(typeof(InnerDto), nameof(Metadata), bindingFlags: BindingFlagsPrivateField, memberTypes: MemberTypesPrivateField)]
+			public string Field3 { get; set; }
+
+			[ValidateElementsUsing(typeof(InnerDto), nameof(Metadata), bindingFlags: BindingFlagsPrivateField, memberTypes: MemberTypesPrivateField)]
+			public IEnumerable<string> Field4 { get; set; }
 		}
 
 		public class OutterDto
@@ -54,6 +69,7 @@ namespace HermaFx.DataAnnotations
 				}
 			};
 		}
+
 
 		[Test]
 		public void ValidObjectPassesValidation()
@@ -162,13 +178,75 @@ namespace HermaFx.DataAnnotations
 			var dto = BuildDto(true);
 
 			dto.Inner.Field = "hello";
-			dto.Inner.Field2 = "123456789012345";  // Try to fire MaxLengthAttribute..
+			dto.Inner.Field2 = "1234567 89012345";  // Try to fire MaxLengthAttribute  && RegularExpressionAttribute....
 
 			var result = ExtendedValidator.Validate(dto);
 
 			Assert.IsNotNull(result);
-			Assert.That(result, Has.Length.EqualTo(1));
-			Assert.That(result, Has.Exactly(1).Property("MemberNames").Contains("Inner.Field2"));
+			Assert.That(result, Has.Length.EqualTo(2));
+			Assert.That(result, Has.Exactly(2).Property("MemberNames").Contains("Inner.Field2"));
+		}
+
+		[Test]
+		public void ValidateUsing_Field_With_Multiple_Validation_Attributes_Returns_Multiple_ValidationResults()
+		{
+			var dto = BuildDto(true);
+
+			dto.Inner.Field3 = "1234567 89012345";  // Try to fire MaxLengthAttribute && RegularExpressionAttribute..
+
+			var result = ExtendedValidator.Validate(dto);
+
+			Assert.IsNotNull(result);
+			Assert.That(result, Has.Exactly(2).Items);
+			Assert.That(result, Has.Exactly(2).Property("MemberNames").Contains("Inner.Field3"));
+		}
+
+		[Test]
+		public void ValidateUsing_Field_With_Multiple_Validation_Attributes_Throws_AggregateValidationException()
+		{
+			var dto = BuildDto(true);
+
+			dto.Inner.Field3 = "1234567 89012345";  // Try to fire MaxLengthAttribute && RegularExpressionAttribute..
+
+			var ex = Assert.Throws<AggregateValidationException>(() =>
+			{
+				ExtendedValidator.EnsureIsValid(dto);
+			});
+
+			Assert.IsNotNull(ex);
+			Assert.That(ex, Has.Property("ValidationResults").Exactly(2).Items);
+			Assert.That(ex, Has.Property("ValidationResults").Exactly(2).Property("MemberNames").Contains("Inner.Field3"));
+		}
+
+		[Test]
+		public void ValidateElementsUsing_Array_With_Invalid_Element_Returns_ValidationResults_With_Index()
+		{
+			var dto = BuildDto(true);
+
+			dto.Inner.Field4 = new[] { "GOOD", "INVALID VALUE" };  // Try to fire MaxLengthAttribute && RegularExpressionAttribute at index 1..
+
+			var result = ExtendedValidator.Validate(dto);
+
+			Assert.IsNotNull(result);
+			Assert.That(result, Has.Exactly(2).Items);
+			Assert.That(result, Has.Exactly(2).Property("MemberNames").Contains("Inner.Field4[1]"));
+		}
+
+		[Test]
+		public void ValidateElementsUsing_Array_With_Invalid_Element_Throws_AggregateValidationException_With_Index()
+		{
+			var dto = BuildDto(true);
+
+			dto.Inner.Field4 = new[] { "GOOD", "INVALID VALUE" };  // Try to fire MaxLengthAttribute && RegularExpressionAttribute at index 1..
+
+			var ex = Assert.Throws<AggregateValidationException>(() =>
+			{
+				ExtendedValidator.EnsureIsValid(dto);
+			});
+
+			Assert.IsNotNull(ex);
+			Assert.That(ex, Has.Property("ValidationResults").Exactly(2).Items);
+			Assert.That(ex, Has.Property("ValidationResults").Exactly(2).Property("MemberNames").Contains("Inner.Field4[1]"));
 		}
 	}
 }

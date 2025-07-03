@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace HermaFx.DataAnnotations
 {
@@ -10,10 +11,22 @@ namespace HermaFx.DataAnnotations
 		#region .ctor
 
 		public ValidateValuesUsingAttribute(Type metadataType, string propertyName)
-			: base(metadataType, propertyName) { }
+			: base(metadataType, propertyName)
+		{
+		}
 
 		public ValidateValuesUsingAttribute(Type metadataType, string propertyName, string errorMessage)
 			: base(metadataType, propertyName, errorMessage)
+		{
+		}
+
+		public ValidateValuesUsingAttribute(Type metadataType, string propertyName, BindingFlags bindingFlags, MemberTypes memberTypes)
+			: base(metadataType, propertyName, bindingFlags, memberTypes)
+		{
+		}
+
+		public ValidateValuesUsingAttribute(Type metadataType, string propertyName, BindingFlags bindingFlags, MemberTypes memberTypes, string errorMessage)
+			: base(metadataType, propertyName, bindingFlags, memberTypes, errorMessage)
 		{
 		}
 
