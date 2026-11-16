@@ -51,7 +51,13 @@ namespace HermaFx.SimpleConfig
                 }                
             }else
             {
-                if(propertyType.IsClass && false == TypeDescriptor.GetConverter(propertyType).CanConvertFrom(typeof(string)))
+                // Honor [TypeConverter] declared on the property itself (ie. StringArrayConverter<T> on
+                // an array property), otherwise the property is mapped as a child element and any
+                // [DefaultValue] is lost when the attribute is omitted (refs HERMA-15243).
+                var converter = TypeDescriptor.GetProperties(pi.DeclaringType)[pi.Name]?.Converter
+                    ?? TypeDescriptor.GetConverter(propertyType);
+
+                if(propertyType.IsClass && false == converter.CanConvertFrom(typeof(string)))
                 {
                     result = _configurationPropertyFactory.Class(pi);
                 }
