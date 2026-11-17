@@ -19,9 +19,7 @@ jobs:
     runs-on: windows-2022
     timeout-minutes: 60
     env:
-      PACKAGE_VERSION: 1.4.${{ github.run_number - 1 }}
       ASSEMBLY_VERSION: 1.4.0.0
-      FILE_VERSION: 1.4.${{ github.run_number - 1 }}.0
       INFORMATIONAL_VERSION: "${{ github.ref_name }}:${{ github.sha }}"
       PACKAGE_RELEASE_NOTES: "See changes for this revision at: https://github.com/evicertia/HermaFx/commit/${{ github.sha }}"
 
@@ -44,6 +42,13 @@ jobs:
           dotnet-version: |
             6.0.x
             9.0.x
+
+      - name: Set package version
+        shell: pwsh
+        run: |
+          $build = [int]$env:GITHUB_RUN_NUMBER - 1
+          "PACKAGE_VERSION=1.4.$build" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "FILE_VERSION=1.4.$build.0" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Restore
         shell: pwsh
