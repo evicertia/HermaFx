@@ -47,6 +47,8 @@ jobs:
 
       - name: Restore
         shell: pwsh
+        env:
+          Configuration: Release
         run: |
           nuget restore HermaFx.sln -NonInteractive
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
@@ -134,6 +136,10 @@ jobs:
             dotnet @packArgs
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
+
+      - name: Validate embedded Castle dependencies
+        shell: pwsh
+        run: ./.github/scripts/validate-embedded-castle.ps1
 
       - name: Upload test results
         if: always()
