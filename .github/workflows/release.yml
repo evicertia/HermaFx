@@ -1,0 +1,192 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-master
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build
+    runs-on: windows-2022
+    timeout-minutes: 60
+    env:
+      ASSEMBLY_VERSION: 1.4.0.0
+      INFORMATIONAL_VERSION: "${{ github.ref_name }}:${{ github.sha }}"
+      PACKAGE_RELEASE_NOTES: "See changes for this revision at: https://github.com/evicertia/HermaFx/commit/${{ github.sha }}"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            6.0.x
+            9.0.x
+
+      - name: Set package version
+        shell: pwsh
+        run: |
+          $build = [int]$env:GITHUB_RUN_NUMBER - 1
+          "PACKAGE_VERSION=1.4.$build" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "FILE_VERSION=1.4.$build.0" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Restore
+        shell: pwsh
+        run: |
+          nuget restore HermaFx.sln -NonInteractive
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Build
+        shell: pwsh
+        run: |
+          $msbuildArgs = @(
+            "HermaFx.sln",
+            "/m",
+            "/p:Configuration=Release",
+            "/p:Platform=Any CPU",
+            "/p:Version=$env:PACKAGE_VERSION",
+            "/p:PackageVersion=$env:PACKAGE_VERSION",
+            "/p:AssemblyVersion=$env:ASSEMBLY_VERSION",
+            "/p:FileVersion=$env:FILE_VERSION",
+            "/p:InformationalVersion=$env:INFORMATIONAL_VERSION",
+            "/p:RepositoryCommit=$env:GITHUB_SHA",
+            "/p:PackageReleaseNotes=$env:PACKAGE_RELEASE_NOTES",
+            "/verbosity:minimal"
+          )
+          msbuild @msbuildArgs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Test
+        shell: pwsh
+        run: |
+          $simpleConfigOutput = "HermaFx.SimpleConfig.Tests/bin/Release/net6.0"
+          if (Test-Path $simpleConfigOutput) {
+            Get-ChildItem $simpleConfigOutput -File |
+              Where-Object { $_.Name -like "Machine.*" -or $_.Name -like "Mono.*" -or $_.Name -like "Castle.*" } |
+              Remove-Item -Force
+          }
+
+          $testProjects = @(
+            "HermaFx.Foundation.Tests/HermaFx.Foundation.Tests.csproj",
+            "HermaFx.DataAnnotations.Tests/HermaFx.DataAnnotations.Tests.csproj",
+            "HermaFx.Castle.Tests/HermaFx.Castle.Tests.csproj",
+            "HermaFx.SettingsAdapter.Tests/HermaFx.SettingsAdapter.Tests.csproj",
+            "HermaFx.SimpleConfig.Tests/HermaFx.SimpleConfig.Tests.csproj",
+            "HermaFx.Rebus.Tests/HermaFx.Rebus.Tests.csproj"
+          )
+
+          New-Item -ItemType Directory -Path TestResults -Force | Out-Null
+          foreach ($project in $testProjects) {
+            $name = [System.IO.Path]::GetFileNameWithoutExtension($project)
+            dotnet test $project --configuration Release --no-build --logger "trx;LogFileName=$name.trx" --results-directory TestResults
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+      - name: Pack
+        shell: pwsh
+        run: |
+          $packProjects = @(
+            "HermaFx.Foundation/HermaFx.Foundation.csproj",
+            "HermaFx.DataAnnotations/HermaFx.DataAnnotations.csproj",
+            "HermaFx.Rebus/HermaFx.Rebus.csproj",
+            "HermaFx.Castle/HermaFx.Castle.csproj",
+            "HermaFx.Mvc/HermaFx.Mvc.csproj",
+            "HermaFx.SettingsAdapter/HermaFx.SettingsAdapter.csproj",
+            "HermaFx.MediatR/HermaFx.MediatR.csproj",
+            "HermaFx.Rebus.CastleExtensions/HermaFx.Rebus.CastleExtensions.csproj",
+            "HermaFx.SimpleConfig/HermaFx.SimpleConfig.csproj",
+            "HermaFx.Net/HermaFx.Net.csproj"
+          )
+
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          foreach ($project in $packProjects) {
+            $packArgs = @(
+              "pack",
+              $project,
+              "--configuration", "Release",
+              "--no-build",
+              "--include-symbols",
+              "-p:SymbolPackageFormat=snupkg",
+              "--output", "artifacts",
+              "-p:Version=$env:PACKAGE_VERSION",
+              "-p:PackageVersion=$env:PACKAGE_VERSION",
+              "-p:AssemblyVersion=$env:ASSEMBLY_VERSION",
+              "-p:FileVersion=$env:FILE_VERSION",
+              "-p:InformationalVersion=$env:INFORMATIONAL_VERSION",
+              "-p:RepositoryCommit=$env:GITHUB_SHA",
+              "-p:PackageReleaseNotes=$env:PACKAGE_RELEASE_NOTES"
+            )
+            dotnet @packArgs
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/**/*.trx
+          if-no-files-found: ignore
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: |
+            artifacts/*.nupkg
+            artifacts/*.snupkg
+          if-no-files-found: error
+
+  publish:
+    name: publish
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    runs-on: windows-2022
+    timeout-minutes: 15
+    environment: nuget
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          name: packages
+          path: artifacts
+
+      - name: NuGet login (OIDC to temporary API key)
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      - name: Publish packages
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        run: |
+          Get-ChildItem artifacts -Filter *.nupkg | ForEach-Object {
+            dotnet nuget push $_.FullName --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
