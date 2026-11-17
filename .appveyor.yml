@@ -41,7 +41,7 @@ after_test:
 deploy:
   - provider: NuGet
     api_key:
-      secure: 9KkW6zvhDTGsJuXI70tXZznNwskIqnYj3l0iF84UcOdYV4oQRzPytdw2nDQZGk7r
+      secure: DtFEcb24Ppv5nXVDr/Bby+ycoLX1OwbR+vbpvx3GJxgRvySehe4rXcSY0EVM9ILh
     on:
       branch: master
 notifications:
